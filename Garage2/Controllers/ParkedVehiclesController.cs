@@ -86,15 +86,20 @@ namespace Garage2.Controllers
             {
                 _context.Add(parkedVehicle);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                //return RedirectToAction(nameof(Index));
+               
+                return View("ShowParkedInfo", parkedVehicle);
             }
             return View(parkedVehicle);
         }
 
         // GET: ParkedVehicles/Edit/5
         public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null)
+        
+        {{
+ 
+            }
+;            if (id == null)
             {
                 return NotFound();
             }
