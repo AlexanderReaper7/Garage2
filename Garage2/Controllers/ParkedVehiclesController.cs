@@ -133,12 +133,7 @@ namespace Garage2.Controllers
 
                     //only edit the properties we want the user to be able to edit
 
-                    existingParkedVehicle.RegistrationNumber = parkedVehicle.RegistrationNumber;
-                    existingParkedVehicle.Brand = parkedVehicle.Brand;
-                    existingParkedVehicle.Color = parkedVehicle.Color;
-                    existingParkedVehicle.Model = parkedVehicle.Model;
-                    existingParkedVehicle.NumberOfWheels = parkedVehicle.NumberOfWheels;
-                    existingParkedVehicle.VehicleType = parkedVehicle.VehicleType;
+                    EditableProperties(parkedVehicle, existingParkedVehicle);
 
                     await _context.SaveChangesAsync();
                 }
@@ -156,6 +151,16 @@ namespace Garage2.Controllers
                 return RedirectToAction(nameof(Index));
             }
             return View(parkedVehicle);
+        }
+
+        private static void EditableProperties(ParkedVehicle parkedVehicle, ParkedVehicle? existingParkedVehicle)
+        {
+	        existingParkedVehicle.RegistrationNumber = parkedVehicle.RegistrationNumber;
+	        existingParkedVehicle.Brand = parkedVehicle.Brand;
+	        existingParkedVehicle.Color = parkedVehicle.Color;
+	        existingParkedVehicle.Model = parkedVehicle.Model;
+	        existingParkedVehicle.NumberOfWheels = parkedVehicle.NumberOfWheels;
+	        existingParkedVehicle.VehicleType = parkedVehicle.VehicleType;
         }
 
         // GET: ParkedVehicles/Delete/5

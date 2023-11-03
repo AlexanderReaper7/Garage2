@@ -1,65 +1,65 @@
 ﻿@model Garage2.Models.ParkedVehicle
 
 @{
-    ViewData["Title"] = "Index";
+	ViewData["Title"] = "Index";
 }
 
 <h1>You Have Parked This Car</h1>
 
 <table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.RegistrationNumber)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.VehicleType)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Color)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Brand)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Model)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.NumberOfWheels)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ArrivalTime)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-  <tbody>
-            <tr>
-                <td>
-	                @Html.DisplayFor(model => model.RegistrationNumber)
-                </td>
-                <td>
-                    @Html.DisplayFor(model => model.VehicleType)
-                </td>
-                <td>
-                    @Html.DisplayFor(model => model.Color)
-                </td>
-                <td>
-                @Html.DisplayFor(model => model.Brand)
-                </td>
-                <td>
-                @Html.DisplayFor(model => model.Model)
-                </td>
-                <td>
-                @Html.DisplayFor(model => model.NumberOfWheels)
-                </td>
-                <td>
-                @Html.DisplayFor(model => model.ArrivalTime)
-                </td>
-              
-            </tr>
-    </tbody> 
-    <div>
-	    <a asp-action="Index">Back to List</a>
-    </div>
+	<thead>
+		<tr>
+			<th>
+				@Html.DisplayNameFor(model => model.RegistrationNumber)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.VehicleType)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.Color)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.Brand)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.Model)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.NumberOfWheels)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.ArrivalTime)
+			</th>
+			<th></th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td>
+				@Html.DisplayFor(model => model.RegistrationNumber)
+			</td>
+			<td>
+				@Html.DisplayFor(model => model.VehicleType)
+			</td>
+			<td>
+				@Html.DisplayFor(model => model.Color)
+			</td>
+			<td>
+				@Html.DisplayFor(model => model.Brand)
+			</td>
+			<td>
+				@Html.DisplayFor(model => model.Model)
+			</td>
+			<td>
+				@Html.DisplayFor(model => model.NumberOfWheels)
+			</td>
+			<td>
+				@Html.DisplayFor(model => model.ArrivalTime)
+			</td>
+
+		</tr>
+	</tbody>
+	<div>
+		<a asp-action="Index">Back to List</a>
+	</div>
 </table>
