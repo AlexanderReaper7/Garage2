@@ -113,10 +113,11 @@ namespace Garage2.Controllers
             {
                 try
                 {
-                    //retrive existing vechicles on database
+                    //retrive existing vehicle in database
                     var existingParkedVehicle = await _context.ParkedVehicle.FindAsync(id);
 
                     //only edit the properties we want the user to be able to edit
+
                     existingParkedVehicle.RegistrationNumber = parkedVehicle.RegistrationNumber;
                     existingParkedVehicle.Brand = parkedVehicle.Brand;
                     existingParkedVehicle.Color = parkedVehicle.Color;

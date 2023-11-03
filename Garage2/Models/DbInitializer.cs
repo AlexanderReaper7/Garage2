@@ -5,8 +5,10 @@ namespace Garage2.Models
 {
     public static class DbInitializer
     {
+
         public static void Seed(IApplicationBuilder applicationBuilder)
         {
+
             Garage2Context _context = applicationBuilder.ApplicationServices.CreateScope().ServiceProvider.GetRequiredService<Garage2Context>();
 
             if (!_context.ParkedVehicle.Any())
