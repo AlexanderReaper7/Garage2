@@ -20,3 +20,8 @@ html {
 body {
   margin-bottom: 60px;
 }
+.logo {
+    display: flex;
+    justify-content: center;
+    align-items:center;
+}

@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Garage2.Data;
 using Garage2.Models;
+using Garage2.Models.ViewModels;
 
 namespace Garage2.Controllers
 {
@@ -22,15 +23,28 @@ namespace Garage2.Controllers
         // GET: ParkedVehicles
         public async Task<IActionResult> Index()
         {
-              return _context.ParkedVehicle != null ? 
-                          View(await _context.ParkedVehicle.ToListAsync()) :
-                          Problem("Entity set 'Garage2Context.ParkedVehicle'  is null.");
+            var model = _context.ParkedVehicle.Select(v => new ParkedVehiclesViewModel
+            {
+                Id = v.Id,
+                RegistrationNumber = v.RegistrationNumber,
+                VehicleType = v.VehicleType,
+                ArrivalTime = v.ArrivalTime
+            });
+
+            return View("ParkedVehiclesIndex", await model.ToListAsync());
         }
+
+        //public async Task<IActionResult> Index()
+        //{
+        //    return _context.ParkedVehicle != null ?
+        //        View(await _context.ParkedVehicle.ToListAsync()) :
+        //        Problem("Entity set 'Garage2Context.ParkedVehicle'  is null.");
+        //}
 
         // GET: ParkedVehicles/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null || _context.ParkedVehicle == null)
+            if (id == null)
             {
                 return NotFound();
             }
@@ -70,7 +84,7 @@ namespace Garage2.Controllers
         // GET: ParkedVehicles/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null || _context.ParkedVehicle == null)
+            if (id == null)
             {
                 return NotFound();
             }
@@ -99,7 +113,18 @@ namespace Garage2.Controllers
             {
                 try
                 {
-                    _context.Update(parkedVehicle);
+                    //retrive existing vehicle in database
+                    var existingParkedVehicle = await _context.ParkedVehicle.FindAsync(id);
+
+                    //only edit the properties we want the user to be able to edit
+
+                    existingParkedVehicle.RegistrationNumber = parkedVehicle.RegistrationNumber;
+                    existingParkedVehicle.Brand = parkedVehicle.Brand;
+                    existingParkedVehicle.Color = parkedVehicle.Color;
+                    existingParkedVehicle.Model = parkedVehicle.Model;
+                    existingParkedVehicle.NumberOfWheels = parkedVehicle.NumberOfWheels;
+                    existingParkedVehicle.VehicleType = parkedVehicle.VehicleType;
+
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -121,7 +146,7 @@ namespace Garage2.Controllers
         // GET: ParkedVehicles/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.ParkedVehicle == null)
+            if (id == null)
             {
                 return NotFound();
             }
@@ -141,10 +166,7 @@ namespace Garage2.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (_context.ParkedVehicle == null)
-            {
-                return Problem("Entity set 'Garage2Context.ParkedVehicle'  is null.");
-            }
+            
             var parkedVehicle = await _context.ParkedVehicle.FindAsync(id);
             if (parkedVehicle != null)
             {
