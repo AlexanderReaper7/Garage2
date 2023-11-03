@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -8,16 +9,19 @@ using Microsoft.EntityFrameworkCore;
 using Garage2.Data;
 using Garage2.Models;
 using Garage2.Models.ViewModels;
+using NuGet.Protocol;
 
 namespace Garage2.Controllers
 {
     public class ParkedVehiclesController : Controller
     {
         private readonly Garage2Context _context;
+		private readonly CheckOutVehicleViewModel checkOutModel;
 
         public ParkedVehiclesController(Garage2Context context)
         {
             _context = context;
+            checkOutModel = new CheckOutVehicleViewModel();
         }
 
         // GET: ParkedVehicles
@@ -34,15 +38,16 @@ namespace Garage2.Controllers
             return View("ParkedVehiclesIndex", await model.ToListAsync());
         }
 
-        //public async Task<IActionResult> Index()
-        //{
-        //    return _context.ParkedVehicle != null ?
-        //        View(await _context.ParkedVehicle.ToListAsync()) :
-        //        Problem("Entity set 'Garage2Context.ParkedVehicle'  is null.");
-        //}
 
-        // GET: ParkedVehicles/Details/5
-        public async Task<IActionResult> Details(int? id)
+		//public async Task<IActionResult> Index()
+		//{
+		//    return _context.ParkedVehicle != null ?
+		//        View(await _context.ParkedVehicle.ToListAsync()) :
+		//        Problem("Entity set 'Garage2Context.ParkedVehicle'  is null.");
+		//}
+
+		// GET: ParkedVehicles/Details/5
+		public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
             {
@@ -62,8 +67,13 @@ namespace Garage2.Controllers
         // GET: ParkedVehicles/Create
         public IActionResult Create()
         {
-            return View();
-        }
+            var model = new ParkedVehicle
+            {
+                ArrivalTime = DateTime.Now,
+			};
+
+            return View(model);
+		}
 
         // POST: ParkedVehicles/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
@@ -151,18 +161,45 @@ namespace Garage2.Controllers
                 return NotFound();
             }
 
+            
+
             var parkedVehicle = await _context.ParkedVehicle
                 .FirstOrDefaultAsync(m => m.Id == id);
+
+            CheckOutDetails(parkedVehicle);
+
+
             if (parkedVehicle == null)
             {
                 return NotFound();
             }
 
-            return View(parkedVehicle);
+            return View(checkOutModel);
         }
 
-        // POST: ParkedVehicles/Delete/5
-        [HttpPost, ActionName("Delete")]
+		private void CheckOutDetails(ParkedVehicle? parkedVehicle)
+		{
+			if (parkedVehicle != null)
+			{
+				checkOutModel.ArrivalTime = parkedVehicle.ArrivalTime;
+				checkOutModel.Id = parkedVehicle.Id;
+				checkOutModel.RegistrationNumber = parkedVehicle.RegistrationNumber;
+				checkOutModel.CheckOutTime = DateTime.Now;
+				checkOutModel.TotalTime = checkOutModel.CheckOutTime - checkOutModel.ArrivalTime;
+
+				int totalHours = (int)checkOutModel.TotalTime.TotalHours;
+				int totalMin = checkOutModel.TotalTime.Minutes;
+
+				checkOutModel.Price = (10 * totalHours) + (10 * (decimal)totalMin / 60.0m);
+			}
+			else
+			{
+				// Show error if vehicle is null?
+			}
+		}
+
+		// POST: ParkedVehicles/Delete/5
+		[HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
@@ -172,9 +209,12 @@ namespace Garage2.Controllers
             {
                 _context.ParkedVehicle.Remove(parkedVehicle);
             }
+
+            CheckOutDetails(parkedVehicle);
             
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+			//return RedirectToAction(nameof(Index));
+			return View("Receipt",  checkOutModel);
         }
 
         private bool ParkedVehicleExists(int id)
