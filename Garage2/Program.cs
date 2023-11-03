@@ -17,6 +17,7 @@ public class Program
         builder.Services.AddControllersWithViews();
 
         var app = builder.Build();
+        DbInitializer.Seed(app);
 
         // Configure the HTTP request pipeline.
         if (!app.Environment.IsDevelopment())
@@ -37,7 +38,6 @@ public class Program
             name: "default",
             pattern: "{controller=ParkedVehicles}/{action=Index}/{id?}");
 
-        DbInitializer.Seed(app);
 
         app.Run();
         app.request();

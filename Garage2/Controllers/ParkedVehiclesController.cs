@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Garage2.Data;
 using Garage2.Models;
 using Garage2.Models.ViewModels;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace Garage2.Controllers
 {
@@ -72,8 +73,24 @@ namespace Garage2.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,RegistrationNumber,VehicleType,Color,Brand,Model,NumberOfWheels,ArrivalTime")] ParkedVehicle parkedVehicle)
         {
+            // normalize the registration number
+            string[] parts = parkedVehicle.RegistrationNumber.ToUpperInvariant().Split(' ');
+            if (parts.Length == 1)
+            {
+                // if there is no explicit nationality then assume it is Swedish
+                parts = new string[] { "SE", parts[0] };
+            }
+            parkedVehicle.RegistrationNumber = $"{parts[0]} {parts[1]}";
+            ModelState.SetModelValue("RegistrationNumber", new ValueProviderResult(parkedVehicle.RegistrationNumber));
+
             if (ModelState.IsValid)
             {
+                // Check for duplicate registration number
+                if (_context.ParkedVehicle.Any(v => v.RegistrationNumber == parkedVehicle.RegistrationNumber))
+                {
+                    ModelState.AddModelError("RegistrationNumber", "Registration number already exists");
+                    return View(parkedVehicle);
+                }
                 _context.Add(parkedVehicle);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
