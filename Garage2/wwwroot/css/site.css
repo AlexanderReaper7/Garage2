@@ -31,9 +31,6 @@ body {
 a {
     color: #F9B572;
 }
-    a:hover {
-        color: #748E63;
-    }
-   /* a:selection {
-        color: #FAF8ED;
-    }*/
+a:hover {
+    color: #748E63;
+}
