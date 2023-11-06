@@ -26,3 +26,13 @@ body {
     align-items: center;
     background-color: blueviolet;
 }
+.bg-company-red {
+    background-color: orange;
+}
+.navbar-brand {
+    position: absolute;
+    width: 100%;
+    left: 0;
+    text-align: center;
+    margin: 0 auto;
+}
