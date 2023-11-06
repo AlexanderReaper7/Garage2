@@ -1,0 +1,42 @@
+﻿@model Garage2.Models.ViewModels.VehicleStatics
+
+@{
+	ViewData["Title"] = "Index";
+}
+
+<h1>You Have Parked This Car</h1>
+
+<table class="table">
+	<thead>
+	<tr>
+		<th>
+			@Html.DisplayNameFor(model => model.VehicleType)
+		</th>
+		<th>
+			@Html.DisplayNameFor(model => model.NumberOfWheels)
+		</th>
+		<th>
+			@Html.DisplayNameFor(model => model.Price)
+		</th>
+
+		<th></th>
+	</tr>
+	</thead>
+	<tbody>
+	<tr>
+		<td>
+			@Html.DisplayFor(model => model.VehicleType)
+		</td>
+		<td>
+			@Html.DisplayFor(model => model.NumberOfWheels)
+		</td>
+		<td>
+			@Html.DisplayFor(model => model.Price)
+		</td>
+
+	</tr>
+	</tbody>
+	<div>
+		<a asp-action="Index">Back to List</a>
+	</div>
+</table>

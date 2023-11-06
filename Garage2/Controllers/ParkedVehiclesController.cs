@@ -247,5 +247,10 @@ namespace Garage2.Controllers
         {
           return (_context.ParkedVehicle?.Any(e => e.Id == id)).GetValueOrDefault();
         }
+
+        public async Task<IActionResult> Statics()
+        {
+	        return View("ShowStatics");
+        }
     }
 }
