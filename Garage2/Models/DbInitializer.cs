@@ -1,14 +1,17 @@
 ﻿using Garage2.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.CodeAnalysis.Elfie.Diagnostics;
+using Microsoft.EntityFrameworkCore;
 
-namespace Garage2.Models
+namespace Garage2.Models;
+
+public static class DbInitializer
 {
-	public static class DbInitializer
-	{
-
-		public static void Seed(IApplicationBuilder applicationBuilder)
-		{
+    public static void Seed(WebApplication applicationBuilder)
+    {
+        using (var scope = applicationBuilder.Services.CreateScope())
+        {
+            var context = scope.ServiceProvider.GetRequiredService<Garage2Context>();
 
 			Garage2Context _context = applicationBuilder.ApplicationServices.CreateScope().ServiceProvider.GetRequiredService<Garage2Context>();
 
@@ -88,7 +91,7 @@ namespace Garage2.Models
 				);
 			}
 
-			_context.SaveChanges();
-		}
-	}
+            context.SaveChanges();
+        }
+    }
 }

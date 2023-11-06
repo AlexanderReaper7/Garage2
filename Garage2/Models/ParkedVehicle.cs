@@ -3,56 +3,13 @@ using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 
 namespace Garage2.Models;
-public enum  VehicleType
+public enum VehicleType
 {
     Car = 1,
     Motorcycle,
     Bus,
     Truck,
 }
-
-public static class RegistryNumber
-{
-	//public RegistryNumber(NationCode Nationality, string SerialNumber)
-	//{
-	//    this.Nationality = Nationality;
-	//    // ensure serial number contains only letters, digits and hyphens
-	//    if (SerialNumber.Any(c => !(char.IsLetterOrDigit(c) || c == '-')))
-	//    {
-	//        throw new ArgumentException("Serial number must contain only letters, digits and hyphens");
-	//    }
-	//    this.SerialNumber = SerialNumber.ToUpperInvariant();
-	//}
-
-	//public RegistryNumber()
-	//{
-		
-	//}
-	//public NationCode Nationality { get; }
-	//public string SerialNumber { get; }
-
-	//[Key]
-	//public string RegNum => ToString();
-
-	//public static ToRegistryNumber(string registryNumberString)
-	//{
-	//    string[] parts = registryNumberString.ToUpperInvariant().Split(' ');
-	//    if (parts.Length != 2)
-	//    {
-	//        throw new ArgumentException("Invalid registry number string format");
-	//    }
-	//    NationCode nationality = Enum.Parse<NationCode>(parts[0]);
-	//    string serialNumber = parts[1];
-	//    return $"{nationality} {serialNumber}";
-	//}
-
-	//public override string ToString()
-	//{
-	//    return $"{Nationality} {SerialNumber}";
-	//}
-
-}
-
 
 public class ParkedVehicle
 {
@@ -74,11 +31,10 @@ public class ParkedVehicle
     [Display(Name = "Number Of Wheels")]
     [Range(0, 99)]
     public int NumberOfWheels { get; set; }
-    [Display(Name="Arrival Time")]
+    [Display(Name = "Arrival Time")]
     public DateTime ArrivalTime { get; set; }
 
 }
-
 
 public class RegistryNumberValidator : ValidationAttribute
 {
