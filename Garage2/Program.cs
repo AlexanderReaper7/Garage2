@@ -4,7 +4,7 @@ using Garage2.Data;
 using Garage2.Models;
 
 namespace Garage2;
-
+using Garage2.Models;
 public class Program
 {
     public static void Main(string[] args)
@@ -38,8 +38,6 @@ public class Program
             name: "default",
             pattern: "{controller=ParkedVehicles}/{action=Index}/{id?}");
 
-
         app.Run();
-        app.request();
     }
 }
