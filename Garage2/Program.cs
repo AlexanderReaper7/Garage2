@@ -38,10 +38,6 @@ public class Program
             name: "default",
             pattern: "{controller=ParkedVehicles}/{action=Index}/{id?}");
 
-
-        //DbInitializer.Seed(app);
-
         app.Run();
-        //app.request();
     }
 }
