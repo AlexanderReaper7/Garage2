@@ -1,10 +1,10 @@
-﻿@model Garage2.Models.ViewModels.VehicleStatics
+﻿@model IEnumerable<Garage2.Models.ViewModels.VehicleStatics>
 
 @{
-	ViewData["Title"] = "Index";
+	ViewData["Title"] = "Statics";
 }
 
-<h1>You Have Parked This Car</h1>
+<h2><strong>Statics</strong></h2>
 
 <table class="table">
 	<thead>
@@ -23,18 +23,23 @@
 	</tr>
 	</thead>
 	<tbody>
-	<tr>
-		<td>
-			@Html.DisplayFor(model => model.VehicleType)
-		</td>
-		<td>
-			@Html.DisplayFor(model => model.NumberOfWheels)
-		</td>
-		<td>
-			@Html.DisplayFor(model => model.Price)
-		</td>
+		@foreach (var items in Model)
+		{
+			<tr>
+				<td>
+					@Html.DisplayFor(model => items.VehicleType)
+				</td>
+				<td>
+					@Html.DisplayFor(model => items.NumberOfWheels)
+				</td>
+				<td>
+					@Html.DisplayFor(model => items.Price)
+				</td>
 
-	</tr>
+			</tr>
+
+		}
+	
 	</tbody>
 	<div>
 		<a asp-action="Index">Back to List</a>

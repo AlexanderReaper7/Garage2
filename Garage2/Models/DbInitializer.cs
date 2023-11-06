@@ -17,7 +17,7 @@ namespace Garage2.Models
 				_context.AddRange(
 					new ParkedVehicle
 					{
-						RegistrationNumber = "XTV213",
+						RegistrationNumber = "XTV 213",
 						VehicleType = VehicleType.Car,
 						Color = "Silver",
 						Brand = "Volkswagen",
@@ -27,7 +27,7 @@ namespace Garage2.Models
 					},
 					new ParkedVehicle
 					{
-						RegistrationNumber = "ABC123",
+						RegistrationNumber = "ABC 123",
 						VehicleType = VehicleType.Car,
 						Color = "Blue",
 						Brand = "Ford",
@@ -37,7 +37,7 @@ namespace Garage2.Models
 					},
 					new ParkedVehicle
 					{
-						RegistrationNumber = "XYZ789",
+						RegistrationNumber = "XYZ 789",
 						VehicleType = VehicleType.Car,
 						Color = "Red",
 						Brand = "Toyota",
@@ -47,7 +47,7 @@ namespace Garage2.Models
 					},
 					new ParkedVehicle
 					{
-						RegistrationNumber = "MOT456",
+						RegistrationNumber = "MOT 456",
 						VehicleType = VehicleType.Motorcycle,
 						Color = "Black",
 						Brand = "Honda",
@@ -57,7 +57,7 @@ namespace Garage2.Models
 					},
 					new ParkedVehicle
 					{
-						RegistrationNumber = "TRK001",
+						RegistrationNumber = "TRK 001",
 						VehicleType = VehicleType.Truck,
 						Color = "White",
 						Brand = "Ford",
@@ -67,7 +67,7 @@ namespace Garage2.Models
 					},
 					new ParkedVehicle
 					{
-						RegistrationNumber = "TRK002",
+						RegistrationNumber = "TRK 002",
 						VehicleType = VehicleType.Bus,
 						Color = "Blue",
 						Brand = "Chevrolet",
@@ -77,7 +77,7 @@ namespace Garage2.Models
 					},
 					new ParkedVehicle
 					{
-						RegistrationNumber = "BUS001",
+						RegistrationNumber = "BUS 001",
 						VehicleType = VehicleType.Truck,
 						Color = "Red",
 						Brand = "Volvo",

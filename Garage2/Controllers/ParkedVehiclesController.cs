@@ -17,11 +17,13 @@ namespace Garage2.Controllers
     {
         private readonly Garage2Context _context;
 		private readonly CheckOutVehicleViewModel checkOutModel;
+        private readonly VehicleStatics vehicleStatics;
 
         public ParkedVehiclesController(Garage2Context context)
         {
             _context = context;
             checkOutModel = new CheckOutVehicleViewModel();
+            vehicleStatics = new VehicleStatics();
         }
 
         // GET: ParkedVehicles
@@ -248,9 +250,24 @@ namespace Garage2.Controllers
           return (_context.ParkedVehicle?.Any(e => e.Id == id)).GetValueOrDefault();
         }
 
-        public async Task<IActionResult> Statics()
-        {
-	        return View("ShowStatics");
-        }
-    }
+		//public async Task<IActionResult> Statics()
+		//{
+		//	var model = _context.ParkedVehicle.Select(v => new VehicleStatics
+		//	{
+		//		VehicleType = v.VehicleType,
+		//		NumberOfWheels = v.NumberOfWheels,
+		//	}).ToList(); // Materialize the query to a list
+
+		//	var vehicleTypeCounts = model
+		//		.GroupBy(v => v.VehicleType)
+		//		.ToDictionary(g => g.Key, g => g.Count());
+
+		//	var vehicleStatics = new VehicleStatics
+		//	{
+		//		VehicleTypeCounts = vehicleTypeCounts,
+		//	};
+
+		//	return View("ShowStatics", vehicleStatics);
+		//}
+	}
 }
