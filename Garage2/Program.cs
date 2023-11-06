@@ -42,6 +42,6 @@ public class Program
         //DbInitializer.Seed(app);
 
         app.Run();
-        app.request();
+        //app.request();
     }
 }

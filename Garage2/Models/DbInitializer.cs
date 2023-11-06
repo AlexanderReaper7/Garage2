@@ -18,7 +18,7 @@ namespace Garage2.Models
 					new ParkedVehicle
 					{
 						RegistrationNumber = "XTV213",
-						VehicleType = VehicleType.B,
+						VehicleType = VehicleType.Car,
 						Color = "Silver",
 						Brand = "Volkswagen",
 						Model = "Golf",
@@ -28,7 +28,7 @@ namespace Garage2.Models
 					new ParkedVehicle
 					{
 						RegistrationNumber = "ABC123",
-						VehicleType = VehicleType.B,
+						VehicleType = VehicleType.Car,
 						Color = "Blue",
 						Brand = "Ford",
 						Model = "Mustang",
@@ -38,7 +38,7 @@ namespace Garage2.Models
 					new ParkedVehicle
 					{
 						RegistrationNumber = "XYZ789",
-						VehicleType = VehicleType.B,
+						VehicleType = VehicleType.Car,
 						Color = "Red",
 						Brand = "Toyota",
 						Model = "Camry",
@@ -48,7 +48,7 @@ namespace Garage2.Models
 					new ParkedVehicle
 					{
 						RegistrationNumber = "MOT456",
-						VehicleType = VehicleType.A,
+						VehicleType = VehicleType.Motorcycle,
 						Color = "Black",
 						Brand = "Honda",
 						Model = "CBR600RR",
@@ -58,7 +58,7 @@ namespace Garage2.Models
 					new ParkedVehicle
 					{
 						RegistrationNumber = "TRK001",
-						VehicleType = VehicleType.C,
+						VehicleType = VehicleType.Truck,
 						Color = "White",
 						Brand = "Ford",
 						Model = "F-150",
@@ -68,7 +68,7 @@ namespace Garage2.Models
 					new ParkedVehicle
 					{
 						RegistrationNumber = "TRK002",
-						VehicleType = VehicleType.C,
+						VehicleType = VehicleType.Bus,
 						Color = "Blue",
 						Brand = "Chevrolet",
 						Model = "Silverado",
@@ -78,7 +78,7 @@ namespace Garage2.Models
 					new ParkedVehicle
 					{
 						RegistrationNumber = "BUS001",
-						VehicleType = VehicleType.C,
+						VehicleType = VehicleType.Truck,
 						Color = "Red",
 						Brand = "Volvo",
 						Model = "XC90",
