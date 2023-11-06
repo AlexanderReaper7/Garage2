@@ -12,11 +12,10 @@
 
 @* Search bar *@
 <form asp-action="Search" method="get">
-    <div class="form-group">
-        <label for="searchString">Search:</label>
-        <input type="text" class="form-control" id="searchString" name="searchString">
+    <div class="form-group d-flex flex-row">
+        <input type="text" class="form-control" id="searchString" name="searchString" placeholder="Registration Number">
+        <button type="submit" class="btn btn-primary ">Search</button>
     </div>
-    <button type="submit" class="btn btn-primary">Search</button>
 </form>
 
 <table class="table">
