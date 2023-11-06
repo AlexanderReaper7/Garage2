@@ -13,14 +13,12 @@ public static class DbInitializer
         {
             var context = scope.ServiceProvider.GetRequiredService<Garage2Context>();
 
-			Garage2Context _context = applicationBuilder.ApplicationServices.CreateScope().ServiceProvider.GetRequiredService<Garage2Context>();
-
-			if (!_context.ParkedVehicle.Any())
+			if (!context.ParkedVehicle.Any())
 			{
-				_context.AddRange(
+				context.AddRange(
 					new ParkedVehicle
 					{
-						RegistrationNumber = "XTV 213",
+						RegistrationNumber = "XTV213",
 						VehicleType = VehicleType.Car,
 						Color = "Silver",
 						Brand = "Volkswagen",
@@ -30,7 +28,7 @@ public static class DbInitializer
 					},
 					new ParkedVehicle
 					{
-						RegistrationNumber = "ABC 123",
+						RegistrationNumber = "ABC123",
 						VehicleType = VehicleType.Car,
 						Color = "Blue",
 						Brand = "Ford",
@@ -40,7 +38,7 @@ public static class DbInitializer
 					},
 					new ParkedVehicle
 					{
-						RegistrationNumber = "XYZ 789",
+						RegistrationNumber = "XYZ789",
 						VehicleType = VehicleType.Car,
 						Color = "Red",
 						Brand = "Toyota",
@@ -50,7 +48,7 @@ public static class DbInitializer
 					},
 					new ParkedVehicle
 					{
-						RegistrationNumber = "MOT 456",
+						RegistrationNumber = "MOT456",
 						VehicleType = VehicleType.Motorcycle,
 						Color = "Black",
 						Brand = "Honda",
@@ -60,7 +58,7 @@ public static class DbInitializer
 					},
 					new ParkedVehicle
 					{
-						RegistrationNumber = "TRK 001",
+						RegistrationNumber = "TRK001",
 						VehicleType = VehicleType.Truck,
 						Color = "White",
 						Brand = "Ford",
@@ -70,7 +68,7 @@ public static class DbInitializer
 					},
 					new ParkedVehicle
 					{
-						RegistrationNumber = "TRK 002",
+						RegistrationNumber = "TRK002",
 						VehicleType = VehicleType.Bus,
 						Color = "Blue",
 						Brand = "Chevrolet",
@@ -80,7 +78,7 @@ public static class DbInitializer
 					},
 					new ParkedVehicle
 					{
-						RegistrationNumber = "BUS 001",
+						RegistrationNumber = "BUS001",
 						VehicleType = VehicleType.Truck,
 						Color = "Red",
 						Brand = "Volvo",
