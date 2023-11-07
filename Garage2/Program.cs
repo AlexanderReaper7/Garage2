@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Garage2.Data;
 using Garage2.Models;
+using Garage2.Services;
 
 namespace Garage2;
 using Garage2.Models;
@@ -15,9 +16,12 @@ public class Program
 
         // Add services to the container.
         builder.Services.AddControllersWithViews();
-        builder.Services.AddSingleton<ParkingSlotManager>();
+      //  builder.Services.AddSingleton<ParkingLotManager>();
+       
+        builder.Services.AddScoped<IListOfAvailableLotsService, ListOfAvailableLotsService>();
+        builder.Services.AddScoped<IParkingLotManager, ParkingLotManager>();
 
-		var app = builder.Build();
+        var app = builder.Build();
 
 		var serviceProvider = app.Services;
 		DbInitializer.Seed(app, serviceProvider);

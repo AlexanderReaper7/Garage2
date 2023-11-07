@@ -15,288 +15,281 @@ namespace Garage2.Controllers;
 
 public class ParkedVehiclesController : Controller
 {
-	private readonly Garage2Context context;
-	private readonly CheckOutVehicleViewModel checkOutModel;
-	private readonly VehicleStatistics vehicleStatistics;
-	private readonly ParkingSlotManager parkingSlotManager;
-	public ParkedVehiclesController(Garage2Context context, ParkingSlotManager parkingSlotManager)
-	{
-		this.context = context;
-		checkOutModel = new CheckOutVehicleViewModel();
-		vehicleStatistics = new VehicleStatistics();
-		this.parkingSlotManager = parkingSlotManager;
-	}
+    private readonly IParkingLotManager parkingLotManager;
+    private readonly Garage2Context context;
+    private readonly CheckOutVehicleViewModel checkOutModel;
+    private readonly VehicleStatistics vehicleStatistics;
 
-	// GET: ParkedVehicles
-	public async Task<IActionResult> Index()
-	{
-		var model = context.ParkedVehicle.Select(v => new ParkedVehiclesViewModel
-		{
-			Id = v.Id,
-			RegistrationNumber = v.RegistrationNumber,
-			VehicleType = v.VehicleType,
-			ArrivalTime = v.ArrivalTime
-		});
+    public ParkedVehiclesController(Garage2Context context, IParkingLotManager parkingLotManager)
+    {
+        this.parkingLotManager = parkingLotManager;
+        this.context = context;
+        checkOutModel = new CheckOutVehicleViewModel();
+        vehicleStatistics = new VehicleStatistics();
 
+    }
 
-
-		return View("ParkedVehiclesIndex", await model.ToListAsync());
-	}
-
-	// GET: ParkedVehicles/Details/5
-	public async Task<IActionResult> Details(int? id)
-	{
-		if (id == null)
-		{
-			return NotFound();
-		}
-
-		var parkedVehicle = await context.ParkedVehicle
-			.FirstOrDefaultAsync(m => m.Id == id);
-		if (parkedVehicle == null)
-		{
-			return NotFound();
-		}
-
-		return View(parkedVehicle);
-	}
-
-	// GET: ParkedVehicles/Create
-	public IActionResult Create()
-	{
-		var model = new ParkedVehicle
-		{
-			ArrivalTime = DateTime.Now,
-		};
-
-		return View(model);
-	}
-
-	// POST: ParkedVehicles/Create
-	// To protect from overposting attacks, enable the specific properties you want to bind to.
-	// For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-	[HttpPost]
-	[ValidateAntiForgeryToken]
-	public async Task<IActionResult> Create([Bind("Id,RegistrationNumber,VehicleType,Color,Brand,Model,NumberOfWheels,ArrivalTime")] ParkedVehicle parkedVehicle)
-	{
-		// normalize the registration number
-		string[] parts = parkedVehicle.RegistrationNumber.ToUpperInvariant().Split(' ');
-		if (parts.Length == 1)
-		{
-			// if there is no explicit nationality then assume it is Swedish
-			parts = new string[] { "SE", parts[0] };
-		}
-		parkedVehicle.RegistrationNumber = $"{parts[0]} {parts[1]}";
-		ModelState.SetModelValue("RegistrationNumber", new ValueProviderResult(parkedVehicle.RegistrationNumber));
-
-		if (ModelState.IsValid)
-		{
-			// Check for duplicate registration number
-			if (context.ParkedVehicle.Any(v => v.RegistrationNumber == parkedVehicle.RegistrationNumber))
-			{
-				ModelState.AddModelError("RegistrationNumber", "Registration number already exists");
-				return View(parkedVehicle);
-			}
+    // GET: ParkedVehicles
+    public async Task<IActionResult> Index()
+    {
+        var model = context.ParkedVehicle.Select(v => new ParkedVehiclesViewModel
+        {
+            Id = v.Id,
+            RegistrationNumber = v.RegistrationNumber,
+            VehicleType = v.VehicleType,
+            ArrivalTime = v.ArrivalTime,
+            ParkingSpace = v.ParkingSpace,
+            ParkingSubSpace = v.ParkingSubSpace
+        });
 
 
-			context.Add(parkedVehicle);
-			await context.SaveChangesAsync();
-			//return RedirectToAction(nameof(Index));
 
-			AddParkingSlot(parkedVehicle);
+        return View("ParkedVehiclesIndex", await model.ToListAsync());
+    }
 
-			return View("ShowParkedInfo", parkedVehicle);
-		}
-		return View(parkedVehicle);
-	}
+    // GET: ParkedVehicles/Details/5
+    public async Task<IActionResult> Details(int? id)
+    {
+        if (id == null)
+        {
+            return NotFound();
+        }
 
-	private void AddParkingSlot(ParkedVehicle parkedVehicle)
-	{
-		// Find the highest existing ParkingSlot value
-		int highestParkingSlot = context.ParkedVehicle.Max(v => (int?)v.ParkingslotNr) ?? 0;
+        var parkedVehicle = await context.ParkedVehicle
+            .FirstOrDefaultAsync(m => m.Id == id);
+        if (parkedVehicle == null)
+        {
+            return NotFound();
+        }
 
-		// Increment it by 1 for the new car
-		parkedVehicle.ParkingslotNr = highestParkingSlot + 1;
+        return View(parkedVehicle);
+    }
 
-		parkingSlotManager.AddVehicleToSlot(parkedVehicle.ParkingslotNr);
-	}
+    // GET: ParkedVehicles/Create
+    public IActionResult Create()
+    {
+        var model = new ParkedVehicle
+        {
+            ArrivalTime = DateTime.Now,
 
-	// GET: ParkedVehicles/Edit/5
-	public async Task<IActionResult> Edit(int? id)
+        };
 
-	{
-		if (id == null)
-		{
-			return NotFound();
-		}
+        return View(model);
+    }
 
-		var parkedVehicle = await context.ParkedVehicle.FindAsync(id);
-		if (parkedVehicle == null)
-		{
-			return NotFound();
-		}
-		return View(parkedVehicle);
-	}
+    // POST: ParkedVehicles/Create
+    // To protect from overposting attacks, enable the specific properties you want to bind to.
+    // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Create([Bind("Id,RegistrationNumber,VehicleType,Color,Brand,Model,NumberOfWheels,ArrivalTime")] ParkedVehicle parkedVehicle)
+    {
+        // normalize the registration number
+        string[] parts = parkedVehicle.RegistrationNumber.ToUpperInvariant().Split(' ');
+        if (parts.Length == 1)
+        {
+            // if there is no explicit nationality then assume it is Swedish
+            parts = new string[] { "SE", parts[0] };
+        }
+        parkedVehicle.RegistrationNumber = $"{parts[0]} {parts[1]}";
+        ModelState.SetModelValue("RegistrationNumber", new ValueProviderResult(parkedVehicle.RegistrationNumber));
 
-	// POST: ParkedVehicles/Edit/5
-	// To protect from overposting attacks, enable the specific properties you want to bind to.
-	// For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-	[HttpPost]
-	[ValidateAntiForgeryToken]
-	public async Task<IActionResult> Edit(int id, [Bind("Id,RegistrationNumber,VehicleType,Color,Brand,Model,NumberOfWheels,ArrivalTime")] ParkedVehicle parkedVehicle)
-	{
-		if (id != parkedVehicle.Id)
-		{
-			return NotFound();
-		}
+        if (ModelState.IsValid)
+        {
+            // Check for duplicate registration number
+            if (context.ParkedVehicle.Any(v => v.RegistrationNumber == parkedVehicle.RegistrationNumber))
+            {
+                ModelState.AddModelError("RegistrationNumber", "Registration number already exists");
+                return View(parkedVehicle);
+            }
 
-		if (ModelState.IsValid)
-		{
-			try
-			{
-				// Retrieve existing vehicle in database
-				var existingParkedVehicle = await context.ParkedVehicle.FindAsync(id);
-				if (existingParkedVehicle == null)
-				{
-					return NotFound();
-				}
-				// Only edit the properties we want the user to be able to edit
-				EditableProperties(parkedVehicle, existingParkedVehicle);
 
-				await context.SaveChangesAsync();
-			}
-			catch (DbUpdateConcurrencyException)
-			{
-				if (!ParkedVehicleExists(parkedVehicle.Id))
-				{
-					return NotFound();
-				}
-				else
-				{
-					throw;
-				}
-			}
-			return RedirectToAction(nameof(Index));
-		}
-		return View(parkedVehicle);
-	}
+            context.Add(parkedVehicle);
+            await context.SaveChangesAsync();
 
-	private static void EditableProperties(ParkedVehicle parkedVehicle, ParkedVehicle existingParkedVehicle)
-	{
-		existingParkedVehicle.Brand = parkedVehicle.Brand;
-		existingParkedVehicle.Color = parkedVehicle.Color;
-		existingParkedVehicle.Model = parkedVehicle.Model;
-		existingParkedVehicle.NumberOfWheels = parkedVehicle.NumberOfWheels;
-		existingParkedVehicle.VehicleType = parkedVehicle.VehicleType;
-	}
+            parkingLotManager.AddVehicleToSlot(parkedVehicle.Id, parkedVehicle.VehicleType.GetVehicleSize());
 
-	// GET: ParkedVehicles/Delete/5
-	public async Task<IActionResult> Delete(int? id)
-	{
-		if (id == null)
-		{
-			return NotFound();
-		}
+            return View("ShowParkedInfo", parkedVehicle);
+        }
+        return View(parkedVehicle);
+    }
 
-		var parkedVehicle = await context.ParkedVehicle
-			.FirstOrDefaultAsync(m => m.Id == id);
+    // GET: ParkedVehicles/Edit/5
+    public async Task<IActionResult> Edit(int? id)
 
-		if (parkedVehicle == null)
-		{
-			return NotFound();
-		}
+    {
+        if (id == null)
+        {
+            return NotFound();
+        }
 
-		CheckOutDetails(parkedVehicle);
+        var parkedVehicle = await context.ParkedVehicle.FindAsync(id);
+        if (parkedVehicle == null)
+        {
+            return NotFound();
+        }
+        return View(parkedVehicle);
+    }
 
-		return View(checkOutModel);
-	}
+    // POST: ParkedVehicles/Edit/5
+    // To protect from overposting attacks, enable the specific properties you want to bind to.
+    // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Edit(int id, [Bind("Id,RegistrationNumber,VehicleType,Color,Brand,Model,NumberOfWheels,ArrivalTime")] ParkedVehicle parkedVehicle)
+    {
+        if (id != parkedVehicle.Id)
+        {
+            return NotFound();
+        }
 
-	private void CheckOutDetails(ParkedVehicle parkedVehicle)
-	{
-		checkOutModel.ArrivalTime = parkedVehicle.ArrivalTime;
-		checkOutModel.Id = parkedVehicle.Id;
-		checkOutModel.RegistrationNumber = parkedVehicle.RegistrationNumber;
-		checkOutModel.CheckOutTime = DateTime.Now;
-		checkOutModel.TotalTime = checkOutModel.CheckOutTime - checkOutModel.ArrivalTime;
+        if (ModelState.IsValid)
+        {
+            try
+            {
+                // Retrieve existing vehicle in database
+                var existingParkedVehicle = await context.ParkedVehicle.FindAsync(id);
+                if (existingParkedVehicle == null)
+                {
+                    return NotFound();
+                }
+                // Only edit the properties we want the user to be able to edit
+                EditableProperties(parkedVehicle, existingParkedVehicle);
 
-		int totalHours = (int)checkOutModel.TotalTime.TotalHours;
-		int totalMin = checkOutModel.TotalTime.Minutes;
+                await context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!ParkedVehicleExists(parkedVehicle.Id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+            return RedirectToAction(nameof(Index));
+        }
+        return View(parkedVehicle);
+    }
 
-		checkOutModel.Price = (10 * totalHours) + (10 * (decimal)totalMin / 60.0m);
-	}
+    private static void EditableProperties(ParkedVehicle parkedVehicle, ParkedVehicle existingParkedVehicle)
+    {
+        existingParkedVehicle.Brand = parkedVehicle.Brand;
+        existingParkedVehicle.Color = parkedVehicle.Color;
+        existingParkedVehicle.Model = parkedVehicle.Model;
+        existingParkedVehicle.NumberOfWheels = parkedVehicle.NumberOfWheels;
+        existingParkedVehicle.VehicleType = parkedVehicle.VehicleType;
+    }
 
-	private decimal CalculateCurrentEarnings(List<ParkedVehicle> parkedVehicle)
-	{
-		decimal price = 0;
+    // GET: ParkedVehicles/Delete/5
+    public async Task<IActionResult> Delete(int? id)
+    {
+        if (id == null)
+        {
+            return NotFound();
+        }
 
-		foreach (var item in parkedVehicle)
-		{
-			var arrivalTime = item.ArrivalTime;
-			var checkOutTime = DateTime.Now;
-			var totalTime = checkOutTime - arrivalTime;
+        var parkedVehicle = await context.ParkedVehicle
+            .FirstOrDefaultAsync(m => m.Id == id);
 
-			int totalHours = (int)totalTime.TotalHours;
-			int totalMinutes = totalTime.Minutes;
+        if (parkedVehicle == null)
+        {
+            return NotFound();
+        }
 
-			price += (10 * totalHours) + (10 * (decimal)totalMinutes / 60.0m);
-		}
+        CheckOutDetails(parkedVehicle);
 
-		return price;
-	}
+        return View(checkOutModel);
+    }
 
-	// POST: ParkedVehicles/Delete/5
-	[HttpPost, ActionName("Delete")]
-	[ValidateAntiForgeryToken]
-	public async Task<IActionResult> DeleteConfirmed(int id)
-	{
-		var parkedVehicle = await context.ParkedVehicle.FindAsync(id);
-		if (parkedVehicle == null)
-		{
-			return NotFound();
-		}
+    private void CheckOutDetails(ParkedVehicle parkedVehicle)
+    {
+        checkOutModel.ArrivalTime = parkedVehicle.ArrivalTime;
+        checkOutModel.Id = parkedVehicle.Id;
+        checkOutModel.RegistrationNumber = parkedVehicle.RegistrationNumber;
+        checkOutModel.CheckOutTime = DateTime.Now;
+        checkOutModel.TotalTime = checkOutModel.CheckOutTime - checkOutModel.ArrivalTime;
 
-		context.ParkedVehicle.Remove(parkedVehicle);
-		CheckOutDetails(parkedVehicle);
+        int totalHours = (int)checkOutModel.TotalTime.TotalHours;
+        int totalMin = checkOutModel.TotalTime.Minutes;
 
-		await context.SaveChangesAsync();
+        checkOutModel.Price = (10 * totalHours) + (10 * (decimal)totalMin / 60.0m);
+    }
 
-		parkingSlotManager.RemoveVehicleFromSlot(parkedVehicle.ParkingslotNr);
+    private decimal CalculateCurrentEarnings(List<ParkedVehicle> parkedVehicle)
+    {
+        decimal price = 0;
 
-		return View("Receipt", checkOutModel);
-	}
+        foreach (var item in parkedVehicle)
+        {
+            var arrivalTime = item.ArrivalTime;
+            var checkOutTime = DateTime.Now;
+            var totalTime = checkOutTime - arrivalTime;
 
-	private bool ParkedVehicleExists(int id)
-	{
-		return (context.ParkedVehicle?.Any(e => e.Id == id)).GetValueOrDefault();
-	}
+            int totalHours = (int)totalTime.TotalHours;
+            int totalMinutes = totalTime.Minutes;
 
-	public async Task<IActionResult> Statistics()
-	{
-		var parkedVehicle = await context.ParkedVehicle.ToListAsync();
+            price += (10 * totalHours) + (10 * (decimal)totalMinutes / 60.0m);
+        }
 
-		vehicleStatistics.NumberOfWheels = context.ParkedVehicle.Select(v => v.NumberOfWheels).Sum();
-		vehicleStatistics.Price = CalculateCurrentEarnings(parkedVehicle);
+        return price;
+    }
 
-		vehicleStatistics.VehicleCounts = VehicleCount();
-		//ParkingSlotManager parking = new ParkingSlotManager();
-		//parking.AddVehicleToSlot(1);
-		//parking.AddVehicleToSlot(2);
-		//parking.AddVehicleToSlot(3);
+    // POST: ParkedVehicles/Delete/5
+    [HttpPost, ActionName("Delete")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> DeleteConfirmed(int id)
+    {
+        var parkedVehicle = await context.ParkedVehicle.FindAsync(id);
+        if (parkedVehicle == null)
+        {
+            return NotFound();
+        }
 
-		//parking.RemoveVehicleFromSlot( 2);
+        context.ParkedVehicle.Remove(parkedVehicle);
+        CheckOutDetails(parkedVehicle);
 
-		return View("ShowStatistics", vehicleStatistics);
-	}
+        await context.SaveChangesAsync();
 
-	public Dictionary<VehicleType, int> VehicleCount()
-	{
-		var vehicleCount = context.ParkedVehicle
-			.GroupBy(p => p.VehicleType)
-			.ToDictionary(
-				group => group.Key,
-				group => group.Count()
-			);
+        parkingLotManager.RemoveVehicleFromLot(parkedVehicle.Id, (parkedVehicle.ParkingSpace, parkedVehicle.ParkingSubSpace), parkedVehicle.VehicleType.GetVehicleSize());
 
-		return vehicleCount;
-	}
+        return View("Receipt", checkOutModel);
+    }
+
+    private bool ParkedVehicleExists(int id)
+    {
+        return (context.ParkedVehicle?.Any(e => e.Id == id)).GetValueOrDefault();
+    }
+
+    public async Task<IActionResult> Statistics()
+    {
+        var parkedVehicle = await context.ParkedVehicle.ToListAsync();
+
+        vehicleStatistics.NumberOfWheels = context.ParkedVehicle.Select(v => v.NumberOfWheels).Sum();
+        vehicleStatistics.Price = CalculateCurrentEarnings(parkedVehicle);
+
+        vehicleStatistics.VehicleCounts = VehicleCount();
+        //ParkingSlotManager parking = new ParkingSlotManager();
+        //parking.AddVehicleToSlot(1);
+        //parking.AddVehicleToSlot(2);
+        //parking.AddVehicleToSlot(3);
+
+        //parking.RemoveVehicleFromSlot( 2);
+
+        return View("ShowStatistics", vehicleStatistics);
+    }
+
+    public Dictionary<VehicleType, int> VehicleCount()
+    {
+        var vehicleCount = context.ParkedVehicle
+            .GroupBy(p => p.VehicleType)
+            .ToDictionary(
+                group => group.Key,
+                group => group.Count()
+            );
+
+        return vehicleCount;
+    }
 }

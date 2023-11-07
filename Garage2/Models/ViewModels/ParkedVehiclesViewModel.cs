@@ -11,4 +11,7 @@ public class ParkedVehiclesViewModel
     public VehicleType VehicleType { get; set; }
     [Display(Name ="Arrival Time")]
     public DateTime ArrivalTime { get; set; }
+
+    public int ParkingSpace { get; set; }
+    public int ParkingSubSpace { get; set; }
 }

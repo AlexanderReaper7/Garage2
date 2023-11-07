@@ -18,9 +18,15 @@
             <th>
                 @Html.DisplayNameFor(model => model.VehicleType)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ArrivalTime)
-            </th>
+	        <th>
+		        @Html.DisplayNameFor(model => model.ArrivalTime)
+	        </th>
+	        <th>
+		        @Html.DisplayNameFor(model => model.ParkingSpace)
+	        </th>
+	        <th>
+		        @Html.DisplayNameFor(model => model.ParkingSubSpace)
+	        </th>
             <th></th>
         </tr>
     </thead>
@@ -34,9 +40,15 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.VehicleType)
                 </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ArrivalTime)
-                </td>
+	            <td>
+		            @Html.DisplayFor(modelItem => item.ArrivalTime)
+	            </td>
+	            <td>
+		            @Html.DisplayFor(modelItem => item.ParkingSpace)
+	            </td>
+	            <td>
+		            @Html.DisplayFor(modelItem => item.ParkingSubSpace)
+	            </td>
                 <td>
                     <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
                     <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
