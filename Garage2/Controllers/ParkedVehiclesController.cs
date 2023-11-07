@@ -250,4 +250,28 @@ public class ParkedVehiclesController : Controller
 
         return View("ShowStatistics", vehicleStatics);
     }
+
+    /// <summary>
+    /// GET: ParkedVehicles/Search/"searchString"
+    /// Search for parked vehicles by registration number
+    /// </summary>
+    /// <param name="searchString"></param>
+    /// <returns></returns>
+    public async Task<IActionResult> Search(string searchString)
+    {
+        var model = _context.ParkedVehicle.Select(v => new ParkedVehiclesViewModel
+        {
+            Id = v.Id,
+            RegistrationNumber = v.RegistrationNumber,
+            VehicleType = v.VehicleType,
+            ArrivalTime = v.ArrivalTime
+        });
+
+        if (!string.IsNullOrEmpty(searchString))
+        {
+            model = model.Where(v => v.RegistrationNumber.Contains(searchString));
+        }
+
+        return View("ParkedVehiclesIndex", await model.ToListAsync());
+    }
 }
