@@ -33,6 +33,7 @@ public class ParkedVehicle
     public int NumberOfWheels { get; set; }
     [Display(Name = "Arrival Time")]
     public DateTime ArrivalTime { get; set; }
+    public int ParkingslotNr { get; set; }
 
 }
 

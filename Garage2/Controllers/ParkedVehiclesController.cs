@@ -18,11 +18,13 @@ public class ParkedVehiclesController : Controller
 	private readonly Garage2Context context;
 	private readonly CheckOutVehicleViewModel checkOutModel;
 	private readonly VehicleStatistics vehicleStatistics;
-	public ParkedVehiclesController(Garage2Context context)
+	private readonly ParkingSlotManager parkingSlotManager;
+	public ParkedVehiclesController(Garage2Context context, ParkingSlotManager parkingSlotManager)
 	{
 		this.context = context;
 		checkOutModel = new CheckOutVehicleViewModel();
 		vehicleStatistics = new VehicleStatistics();
+		this.parkingSlotManager = parkingSlotManager;
 	}
 
 	// GET: ParkedVehicles
@@ -95,13 +97,28 @@ public class ParkedVehiclesController : Controller
 				ModelState.AddModelError("RegistrationNumber", "Registration number already exists");
 				return View(parkedVehicle);
 			}
+
+
 			context.Add(parkedVehicle);
 			await context.SaveChangesAsync();
 			//return RedirectToAction(nameof(Index));
 
+			AddParkingSlot(parkedVehicle);
+
 			return View("ShowParkedInfo", parkedVehicle);
 		}
 		return View(parkedVehicle);
+	}
+
+	private void AddParkingSlot(ParkedVehicle parkedVehicle)
+	{
+		// Find the highest existing ParkingSlot value
+		int highestParkingSlot = context.ParkedVehicle.Max(v => (int?)v.ParkingslotNr) ?? 0;
+
+		// Increment it by 1 for the new car
+		parkedVehicle.ParkingslotNr = highestParkingSlot + 1;
+
+		parkingSlotManager.AddVehicleToSlot(parkedVehicle.ParkingslotNr);
 	}
 
 	// GET: ParkedVehicles/Edit/5
@@ -243,6 +260,8 @@ public class ParkedVehiclesController : Controller
 
 		await context.SaveChangesAsync();
 
+		parkingSlotManager.RemoveVehicleFromSlot(parkedVehicle.ParkingslotNr);
+
 		return View("Receipt", checkOutModel);
 	}
 
@@ -259,6 +278,12 @@ public class ParkedVehiclesController : Controller
 		vehicleStatistics.Price = CalculateCurrentEarnings(parkedVehicle);
 
 		vehicleStatistics.VehicleCounts = VehicleCount();
+		//ParkingSlotManager parking = new ParkingSlotManager();
+		//parking.AddVehicleToSlot(1);
+		//parking.AddVehicleToSlot(2);
+		//parking.AddVehicleToSlot(3);
+
+		//parking.RemoveVehicleFromSlot( 2);
 
 		return View("ShowStatistics", vehicleStatistics);
 	}

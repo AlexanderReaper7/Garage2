@@ -15,9 +15,12 @@ public class Program
 
         // Add services to the container.
         builder.Services.AddControllersWithViews();
+        builder.Services.AddSingleton<ParkingSlotManager>();
 
-        var app = builder.Build();
-        DbInitializer.Seed(app);
+		var app = builder.Build();
+
+		var serviceProvider = app.Services;
+		DbInitializer.Seed(app, serviceProvider);
 
         // Configure the HTTP request pipeline.
         if (!app.Environment.IsDevelopment())
