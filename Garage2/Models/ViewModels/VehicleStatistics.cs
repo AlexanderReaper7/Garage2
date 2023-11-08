@@ -7,11 +7,10 @@ public class VehicleStatistics
     [Display(Name = "Total Vehicle Types")]
     public VehicleType VehicleType { get; set; }
     [Display(Name = "Total Number Of Wheels")]
-    [Range(0, 99)]
+    [Range(0, 30)]
     public int NumberOfWheels { get; set; }
+    [Display(Name ="Total Earnings")]
     [DisplayFormat(DataFormatString = "{0:N2}")]
-    [Display(Name ="Total Price")]
     public decimal Price { get; set; }
-
-    public Dictionary<VehicleType, int> VehicleTypeCounts { get; set; }
+    public Dictionary<VehicleType, int> VehicleCounts { get; set; } = new Dictionary<VehicleType, int>();
 }

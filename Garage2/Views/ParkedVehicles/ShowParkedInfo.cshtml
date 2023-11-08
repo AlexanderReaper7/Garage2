@@ -1,10 +1,11 @@
-﻿@model Garage2.Models.ParkedVehicle
+﻿@using Garage2.Garage2Helpers
+@model ParkedVehicle
 
 @{
 	ViewData["Title"] = "Index";
 }
 
-<h1>You Have Parked This Car</h1>
+<h2><strong>@Garage2Helpers.MessageToUser</strong></h2>
 
 <table class="table">
 	<thead>
@@ -29,6 +30,9 @@
 			</th>
 			<th>
 				@Html.DisplayNameFor(model => model.ArrivalTime)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.ParkingSpace)
 			</th>
 			<th></th>
 		</tr>
@@ -55,6 +59,9 @@
 			</td>
 			<td>
 				@Html.DisplayFor(model => model.ArrivalTime)
+			</td>
+			<td>
+				@Html.DisplayFor(model => model.ParkingSpace)
 			</td>
 
 		</tr>

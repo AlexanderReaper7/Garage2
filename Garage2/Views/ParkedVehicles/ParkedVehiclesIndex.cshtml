@@ -4,7 +4,8 @@
     ViewData["Title"] = "Index";
 }
 
-<h2><strong>Park Your Vehicle</strong></h2>
+<h2><strong>Currently Parked Vehicles:</strong></h2>
+<h5>Check In Your Vehicle By Clicking "Park Vehicle" Down Below</h5>
 
 <p>
     <a asp-action="Create">Park Vehicle</a>
@@ -27,9 +28,15 @@
             <th>
                 @Html.DisplayNameFor(model => model.VehicleType)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ArrivalTime)
-            </th>
+	        <th>
+		        @Html.DisplayNameFor(model => model.ArrivalTime)
+	        </th>
+	        <th>
+		        @Html.DisplayNameFor(model => model.ParkingSpace)
+	        </th>
+	        <th>
+		        @Html.DisplayNameFor(model => model.ParkingSubSpace)
+	        </th>
             <th></th>
         </tr>
     </thead>
@@ -43,9 +50,15 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.VehicleType)
                 </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ArrivalTime)
-                </td>
+	            <td>
+		            @Html.DisplayFor(modelItem => item.ArrivalTime)
+	            </td>
+	            <td>
+		            @Html.DisplayFor(modelItem => item.ParkingSpace)
+	            </td>
+	            <td>
+		            @Html.DisplayFor(modelItem => item.ParkingSubSpace)
+	            </td>
                 <td>
                     <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
                     <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
