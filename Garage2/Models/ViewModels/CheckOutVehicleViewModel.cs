@@ -20,4 +20,5 @@ public class CheckOutVehicleViewModel
     public TimeSpan TotalTime { get; set; }
     [Display(Name = "Parking Lot Nr")]
     public int ParkingSpace { get; set; }
+    public int ParkingSubSpace { get; set; }
 }

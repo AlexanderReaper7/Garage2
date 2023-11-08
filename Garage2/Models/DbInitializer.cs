@@ -31,7 +31,7 @@ public static class DbInitializer
                         Brand = "Volkswagen",
                         Model = "Golf",
                         NumberOfWheels = 4,
-                        ArrivalTime = new DateTime(2023, 11, 01, 12, 40, 13),
+                        ArrivalTime = new DateTime(2023, 11, 01, 15, 46, 25),
 
                     },
                     new ParkedVehicle
@@ -44,7 +44,7 @@ public static class DbInitializer
                         Brand = "Ford",
                         Model = "Mustang",
                         NumberOfWheels = 4,
-                        ArrivalTime = new DateTime(2023, 11, 02, 12, 40, 13)
+                        ArrivalTime = new DateTime(2023, 11, 02, 01, 56, 07)
                     },
                     new ParkedVehicle
                     {
@@ -56,7 +56,7 @@ public static class DbInitializer
                         Brand = "Toyota",
                         Model = "Camry",
                         NumberOfWheels = 4,
-                        ArrivalTime = new DateTime(2023, 11, 03, 12, 40, 13)
+                        ArrivalTime = new DateTime(2023, 11, 03, 10, 55, 19)
                     },
                     new ParkedVehicle
                     {
@@ -68,7 +68,7 @@ public static class DbInitializer
                         Brand = "Honda",
                         Model = "CBR600RR",
                         NumberOfWheels = 2,
-                        ArrivalTime = new DateTime(2023, 11, 01, 12, 40, 13)
+                        ArrivalTime = new DateTime(2023, 11, 04, 12, 40, 13)
                     },
                     new ParkedVehicle
                     {
@@ -80,7 +80,7 @@ public static class DbInitializer
                         Brand = "Yamaha",
                         Model = "CBR600RR",
                         NumberOfWheels = 2,
-                        ArrivalTime = new DateTime(2023, 10, 01, 12, 40, 13)
+                        ArrivalTime = new DateTime(2023, 11, 05, 23, 12, 25)
                     },
                     new ParkedVehicle
                     {
@@ -92,7 +92,7 @@ public static class DbInitializer
                         Brand = "Ford",
                         Model = "F-150",
                         NumberOfWheels = 6, // Trucks often have multiple wheels
-                        ArrivalTime = new DateTime(2023, 11, 01, 12, 40, 13)
+                        ArrivalTime = new DateTime(2023, 11, 05, 13, 10, 45)
                     },
                     new ParkedVehicle
                     {
@@ -104,7 +104,7 @@ public static class DbInitializer
                         Brand = "Chevrolet",
                         Model = "Silverado",
                         NumberOfWheels = 8, // Larger trucks might have more wheels
-                        ArrivalTime = new DateTime(2023, 11, 02, 12, 40, 13)
+                        ArrivalTime = new DateTime(2023, 11, 06, 22, 12, 17)
                     },
                     new ParkedVehicle
                     {
@@ -116,7 +116,7 @@ public static class DbInitializer
                         Brand = "Volvo",
                         Model = "XC90",
                         NumberOfWheels = 6, // Adjust this based on the specific bus type
-                        ArrivalTime = new DateTime(2023, 11, 03, 12, 40, 13)
+                        ArrivalTime = new DateTime(2023, 11, 07, 18, 10, 13)
                     },
                     new ParkedVehicle
                     {
@@ -128,7 +128,7 @@ public static class DbInitializer
                         Brand = "Airbus",
                         Model = "787",
                         NumberOfWheels = 24,
-                        ArrivalTime = new DateTime(2023, 11, 03, 12, 41, 16)
+                        ArrivalTime = new DateTime(2023, 11, 07, 02, 11, 16)
                     },
                     new ParkedVehicle
                     {
@@ -140,7 +140,7 @@ public static class DbInitializer
                         Brand = "Maxi",
                         Model = "77",
                         NumberOfWheels = 0,
-                        ArrivalTime = new DateTime(2023, 07, 03, 12, 41, 16)
+                        ArrivalTime = new DateTime(2023, 11, 07, 17, 01, 03)
                     }
                 );
             }
