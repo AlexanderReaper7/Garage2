@@ -100,8 +100,22 @@ namespace Garage2.Models
         /// <param name="slotSize"></param>
         private void Park((int, int) startIndex, int slotSize, int vehicleId)
         {
+            if (slotSize < 1)
+            {
+                throw new Exception("slotSize must be greater than 0");
+            }
+
+            if (vehicleId <= 0)
+            {
+                throw new Exception("vehicleId must be greater than 0");
+            }
             // deconstruct index into separate vars
             var (first, second) = startIndex;
+
+            if (first < 0 || second < 0)
+            {
+                throw new Exception("the startIndex must be in bounds of the ParkingLot array");
+            }
             var count = 0;
             for (int i = first; i < parkingLot.GetLength(0) && count < slotSize; i++)
             {
@@ -110,6 +124,11 @@ namespace Garage2.Models
                     count++;
                     parkingLot[i, j] = vehicleId;
                 }
+            }
+
+            if (count != slotSize)
+            {
+                throw new Exception("the startIndex and slotSize must be in bounds of the ParkingLot array");
             }
         }
 
