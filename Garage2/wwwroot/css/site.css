@@ -34,14 +34,6 @@ a {
     a:hover {
         color: #748E63;
     }
-   /* a:selection {
-        color: #FAF8ED;
-    }*/
-
-.bg-company-red {
-    background-color: #EFD595;
-}
-
 
 .navbar-nav {
     display: flex;
@@ -52,3 +44,28 @@ a {
     justify-content: center; 
     align-items: center; 
 }
+.footer {
+    text-align: center;
+}
+
+.my-button {
+    background-color: #F9B572;
+    color: white;
+    border: 1px solid rgba(0, 0, 0, 0.5);
+    padding: 5px 10px;
+    border-radius: 50px;
+    cursor: pointer;
+}
+
+    .my-button:hover {
+        background-color: rgba(116, 142, 99, 0.5);
+        
+    }
+
+a.nav-link.text-dark:hover {
+    background-color: rgba(116, 142, 99, 0.5);
+    
+}
+
+
+
