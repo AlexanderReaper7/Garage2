@@ -3,17 +3,19 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.CodeAnalysis.Elfie.Diagnostics;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
+using Garage2.Migrations;
 
 
 namespace Garage2.Models;
 
 public static class DbInitializer
 {
-
     public static void Seed(WebApplication applicationBuilder, IServiceProvider serviceProvider)
     {
         using (var scope = applicationBuilder.Services.CreateScope())
         {
+           // var parkingLotManager = serviceProvider.GetRequiredService<ParkingLotManager>();
+
             var context = scope.ServiceProvider.GetRequiredService<Garage2Context>();
 
             if (!context.ParkedVehicle.Any())
@@ -142,7 +144,7 @@ public static class DbInitializer
                     }
                 );
             }
-
+           
             context.SaveChanges();
         }
     }

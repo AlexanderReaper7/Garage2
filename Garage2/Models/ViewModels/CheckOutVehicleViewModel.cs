@@ -18,5 +18,6 @@ public class CheckOutVehicleViewModel
     //{0} represents the value of the property, and %d is used to display the days part of the TimeSpan.
     [DisplayFormat(DataFormatString = "{0:%d} days")]
     public TimeSpan TotalTime { get; set; }
-    public (int, int) ParkingSpace { get; set; }
+    [Display(Name = "Parking Lot Nr")]
+    public int ParkingSpace { get; set; }
 }

@@ -46,7 +46,7 @@ public static class VehicleTypeExtensions
         var output = new List<VehicleType>();
         foreach (var type in types)
         {
-            if (type.GetVehicleSize() >= spaceSize)
+            if (type.GetVehicleSize() <= spaceSize)
             {
                 output.Add(type);
             }
@@ -81,7 +81,9 @@ public class ParkedVehicle
     /// Where this vehicle is parked with the first int being index of whole parking slots and second the sub-slot.
     /// If the vehicle takes atleast 1 whole slot then the second int is always 0.
     /// </summary>
+    [Display(Name = "Parking Lot Nr")]
     public int ParkingSpace { get; set; }
+    [Display(Name = "Parking Sub Space")]
     public int ParkingSubSpace { get; set; }
 
 }

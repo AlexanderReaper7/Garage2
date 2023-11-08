@@ -1,26 +1,7 @@
-﻿namespace Garage2.Models
+﻿using Garage2.Data;
+
+namespace Garage2.Models
 {
-    public interface IParkingLotManager
-    {
-        int LargestParkingSpaceAvailable { get; }
-
-        /// <summary>
-        /// parks a vehicle
-        /// </summary>
-        /// <param name="id"></param>
-        /// <param name="subSlotSize">the number of partial spaces in the parking lot ex. 3 for a car, 1 for a motorcycle and 9 for boats and airplanes</param>
-        /// <exception cref="Exception"></exception>
-        /// <returns>the numbered parking lot position in (slot, sub-slot) format</returns>
-        (int, int) AddVehicleToSlot(int id, int subSlotSize);
-
-        /// <summary>
-        /// un-parks a vehicle
-        /// </summary>
-        /// <param name="id">the database id of the vehicle</param>
-        /// <param name="parkingSpace">starting location of the space in ParkingLot</param>
-        void RemoveVehicleFromLot(int id, (int, int) parkingSpace, int slotSize);
-    }
-
     public class ParkingLotManager : IParkingLotManager
     {
         /// <summary>
@@ -28,8 +9,9 @@
         /// </summary>
         private int[,] parkingLot = new int[50, 3];
 
-        public ParkingLotManager(Data.Garage2Context context)
+        public ParkingLotManager(Garage2Context context)
         {
+
             foreach (var vehicle in context.ParkedVehicle)
             {
                 var i = vehicle.ParkingSpace;
@@ -79,38 +61,38 @@
         /// <returns>the numbered parking lot position in (slot, sub-slot) format</returns>
         public (int, int) AddVehicleToSlot(int id, int subSlotSize)
         {
-            var currentSize = 0;
-
             for (int i = 0; i < parkingLot.GetLength(0); i++)
             {
                 for (int j = 0; j < parkingLot.GetLength(1); j++)
                 {
                     if (parkingLot[i, j] == 0)
                     {
-                        // Count slot
-                        currentSize += 1;
-                    }
-                    else
-                    {
-                        // Reset counter
-                        currentSize = 0;
-                        // if the subSlotSize is smaller than the remaining possible sub-slots in this parking slot then contine checking
-                        if (parkingLot.GetLength(1) < subSlotSize) continue;
-                        // Else, check next parkingSlot
-                        break;
-                    }
-                    // If the vehicle fits here, then park
-                    if (currentSize == subSlotSize)
-                    {
-                        // Park here by adding the vehicle Id to each slot, signifying that they´re taken
-                        Park((i, j), subSlotSize, id);
-                        return (i + 1, j);
+                        // If the current slot is empty, try to park the vehicle starting at this position
+                        if (CanParkAt(i, j, subSlotSize))
+                        {
+                            Park((i, j), subSlotSize, id);
+                            return (i, j);
+                        }
                     }
                 }
             }
+
             throw new Exception("Couldn't find anywhere to park.");
         }
-
+        private bool CanParkAt(int row, int col, int subSlotSize)
+        {
+            for (int i = row; i < row + subSlotSize && i < parkingLot.GetLength(0); i++) //parkingLot.GetLength(0) ensures that it stays within the bounds of the parking lot's columns.
+            {
+                for (int j = col; j < col + subSlotSize && j < parkingLot.GetLength(1); j++)
+                {
+                    if (parkingLot[i, j] != 0)
+                    {
+                        return false; // Vehicle can't be parked here as some slots are already occupied
+                    }
+                }
+            }
+            return true;
+        }
         /// <summary>
         /// fills the following parking slots with the database id
         /// </summary>
@@ -147,9 +129,9 @@
                 for (int j = subIndex; j < parkingLot.GetLength(1) && count < slotSize; j++)
                 {
                     count++;
-                    if (parkingLot[i,j] == id)
+                    if (parkingLot[i, j] == id)
                     {
-                        parkingLot[i,j] = 0;
+                        parkingLot[i, j] = 0;
                     }
                     else
                     {

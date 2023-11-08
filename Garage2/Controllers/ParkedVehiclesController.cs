@@ -82,7 +82,7 @@ public class ParkedVehiclesController : Controller
     // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create([Bind("Id,RegistrationNumber,VehicleType,Color,Brand,Model,NumberOfWheels,ArrivalTime")] ParkedVehicle parkedVehicle)
+    public async Task<IActionResult> Create([Bind("Id,RegistrationNumber,VehicleType,Color,Brand,Model,NumberOfWheels,ArrivalTime,ParkingSpace,ParkingSubSpace")] ParkedVehicle parkedVehicle)
     {
         // normalize the registration number
         string[] parts = parkedVehicle.RegistrationNumber.ToUpperInvariant().Split(' ');
@@ -103,12 +103,14 @@ public class ParkedVehiclesController : Controller
                 return View(parkedVehicle);
             }
 
-
+            
             context.Add(parkedVehicle);
+            //await context.SaveChangesAsync();
+
+            var parkingSlot = parkingLotManager.AddVehicleToSlot(parkedVehicle.Id, parkedVehicle.VehicleType.GetVehicleSize());
+            parkedVehicle.ParkingSpace = parkingSlot.Item1;
+            parkedVehicle.ParkingSubSpace = parkingSlot.Item2;
             await context.SaveChangesAsync();
-
-            parkingLotManager.AddVehicleToSlot(parkedVehicle.Id, parkedVehicle.VehicleType.GetVehicleSize());
-
             return View("ShowParkedInfo", parkedVehicle);
         }
         return View(parkedVehicle);
@@ -211,6 +213,7 @@ public class ParkedVehiclesController : Controller
         checkOutModel.RegistrationNumber = parkedVehicle.RegistrationNumber;
         checkOutModel.CheckOutTime = DateTime.Now;
         checkOutModel.TotalTime = checkOutModel.CheckOutTime - checkOutModel.ArrivalTime;
+        checkOutModel.ParkingSpace = parkedVehicle.ParkingSpace;
 
         int totalHours = (int)checkOutModel.TotalTime.TotalHours;
         int totalMin = checkOutModel.TotalTime.Minutes;
@@ -271,12 +274,6 @@ public class ParkedVehiclesController : Controller
         vehicleStatistics.Price = CalculateCurrentEarnings(parkedVehicle);
 
         vehicleStatistics.VehicleCounts = VehicleCount();
-        //ParkingSlotManager parking = new ParkingSlotManager();
-        //parking.AddVehicleToSlot(1);
-        //parking.AddVehicleToSlot(2);
-        //parking.AddVehicleToSlot(3);
-
-        //parking.RemoveVehicleFromSlot( 2);
 
         return View("ShowStatistics", vehicleStatistics);
     }

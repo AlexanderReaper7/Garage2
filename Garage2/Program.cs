@@ -16,7 +16,6 @@ public class Program
 
         // Add services to the container.
         builder.Services.AddControllersWithViews();
-      //  builder.Services.AddSingleton<ParkingLotManager>();
        
         builder.Services.AddScoped<IListOfAvailableLotsService, ListOfAvailableLotsService>();
         builder.Services.AddScoped<IParkingLotManager, ParkingLotManager>();
