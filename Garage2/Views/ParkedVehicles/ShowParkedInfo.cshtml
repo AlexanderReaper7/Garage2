@@ -1,10 +1,11 @@
-﻿@model ParkedVehicle
+﻿@using Garage2.Garage2Helpers
+@model ParkedVehicle
 
 @{
 	ViewData["Title"] = "Index";
 }
 
-<h1>You Have Parked This Car</h1>
+<h2><strong>@Garage2Helpers.MessageToUser</strong></h2>
 
 <table class="table">
 	<thead>

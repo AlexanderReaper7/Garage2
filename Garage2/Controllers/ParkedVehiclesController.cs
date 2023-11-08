@@ -11,6 +11,7 @@ using Garage2.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Garage2.Models;
 
+
 namespace Garage2.Controllers;
 
 public class ParkedVehiclesController : Controller
@@ -107,13 +108,21 @@ public class ParkedVehiclesController : Controller
             context.Add(parkedVehicle);
             //await context.SaveChangesAsync();
 
-            var parkingSlot = parkingLotManager.AddVehicleToSlot(parkedVehicle.Id, parkedVehicle.VehicleType.GetVehicleSize());
-            parkedVehicle.ParkingSpace = parkingSlot.Item1;
-            parkedVehicle.ParkingSubSpace = parkingSlot.Item2;
+            GetParkingLotNr(parkedVehicle);
+
             await context.SaveChangesAsync();
+
+            Garage2Helpers.Garage2Helpers.MessageToUser = "Parked Info";
             return View("ShowParkedInfo", parkedVehicle);
         }
         return View(parkedVehicle);
+    }
+
+    private void GetParkingLotNr(ParkedVehicle parkedVehicle)
+    {
+        var parkingLot = parkingLotManager.AddVehicleToSlot(parkedVehicle.Id, parkedVehicle.VehicleType.GetVehicleSize());
+        parkedVehicle.ParkingSpace = parkingLot.Item1;
+        parkedVehicle.ParkingSubSpace = parkingLot.Item2;
     }
 
     // GET: ParkedVehicles/Edit/5
@@ -171,7 +180,11 @@ public class ParkedVehiclesController : Controller
                     throw;
                 }
             }
-            return RedirectToAction(nameof(Index));
+
+            GetParkingLotNr(parkedVehicle);
+
+            Garage2Helpers.Garage2Helpers.MessageToUser = "Edit Info";
+            return View("ShowParkedInfo",parkedVehicle);
         }
         return View(parkedVehicle);
     }
