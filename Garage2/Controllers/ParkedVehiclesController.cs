@@ -147,7 +147,7 @@ public class ParkedVehiclesController : Controller
     // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit(int id, [Bind("Id,RegistrationNumber,VehicleType,Color,Brand,Model,NumberOfWheels,ArrivalTime")] ParkedVehicle parkedVehicle)
+    public async Task<IActionResult> Edit(int id, [Bind("Id,RegistrationNumber,VehicleType,Color,Brand,Model,NumberOfWheels,ArrivalTime,ParkingSpace,ParkingSubSpace")] ParkedVehicle parkedVehicle)
     {
         if (id != parkedVehicle.Id)
         {
@@ -158,12 +158,15 @@ public class ParkedVehiclesController : Controller
         {
             try
             {
+
                 // Retrieve existing vehicle in database
-                var existingParkedVehicle = await context.ParkedVehicle.FindAsync(id);
+                var  existingParkedVehicle = await context.ParkedVehicle.FindAsync(id);
                 if (existingParkedVehicle == null)
                 {
                     return NotFound();
                 }
+                parkedVehicle.ParkingSpace = existingParkedVehicle.ParkingSpace;
+                parkedVehicle.ParkingSubSpace = existingParkedVehicle.ParkingSubSpace;
                 // Only edit the properties we want the user to be able to edit
                 EditableProperties(parkedVehicle, existingParkedVehicle);
 
@@ -181,7 +184,6 @@ public class ParkedVehiclesController : Controller
                 }
             }
 
-            GetParkingLotNr(parkedVehicle);
 
             Garage2Helpers.Garage2Helpers.MessageToUser = "Edit Info";
             return View("ShowParkedInfo",parkedVehicle);

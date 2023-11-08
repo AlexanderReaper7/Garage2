@@ -7,7 +7,7 @@ public class VehicleStatistics
     [Display(Name = "Total Vehicle Types")]
     public VehicleType VehicleType { get; set; }
     [Display(Name = "Total Number Of Wheels")]
-    [Range(0, 99)]
+    [Range(0, 30)]
     public int NumberOfWheels { get; set; }
     [Display(Name ="Total Earnings")]
     [DisplayFormat(DataFormatString = "{0:N2}")]

@@ -71,7 +71,7 @@ namespace Garage2.Models
                         if (CanParkAt(i, j, subSlotSize))
                         {
                             Park((i, j), subSlotSize, id);
-                            return (i, j);
+                            return (i + 1, j);
                         }
                     }
                 }

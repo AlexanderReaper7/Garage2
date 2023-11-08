@@ -73,7 +73,7 @@ public class ParkedVehicle
     [StringLength(50)]
     public string Model { get; set; }
     [Display(Name = "Number Of Wheels")]
-    [Range(0, 99)]
+    [Range(0, 30)]
     public int NumberOfWheels { get; set; }
     [Display(Name = "Arrival Time")]
     public DateTime ArrivalTime { get; set; }
