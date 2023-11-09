@@ -81,17 +81,24 @@ namespace Garage2.Models
         }
         private bool CanParkAt(int row, int col, int subSlotSize)
         {
-            for (int i = row; i < row + subSlotSize && i < parkingLot.GetLength(0); i++) //parkingLot.GetLength(0) ensures that it stays within the bounds of the parking lot's columns.
+            var count = 0;
+            for (int i = row; i < parkingLot.GetLength(0); i++) 
             {
-                for (int j = col; j < col + subSlotSize && j < parkingLot.GetLength(1); j++)
+                for (int j = col; j < parkingLot.GetLength(1); j++)
                 {
+                    count++;
+                    if (count == subSlotSize)
+                    {
+                        // If the count is equal to the size of the vehicle, return true
+                        return true;
+                    }
                     if (parkingLot[i, j] != 0)
                     {
                         return false; // Vehicle can't be parked here as some slots are already occupied
                     }
                 }
             }
-            return true;
+            return false; // Vehicle can't be parked here as there are not enough slots left
         }
         /// <summary>
         /// fills the following parking slots with the database id
