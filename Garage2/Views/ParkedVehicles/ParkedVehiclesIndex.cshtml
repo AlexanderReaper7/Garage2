@@ -8,14 +8,14 @@
 <h5>Check In Your Vehicle By Clicking "Park Vehicle" Down Below</h5>
 
 <p>
-	<a asp-action="Create" class="btn btn-primary">Park Vehicle</a>
+    <a asp-action="Create" class="btn btn-primary text-black shadow-sm">Park Vehicle</a>
 </p>
 
 @* Search bar *@
 <form asp-action="Search" method="get">
     <div class="form-group d-flex flex-row">
         <input type="text" class="form-control" id="searchString" name="searchString" placeholder="Registration Number">
-        <button type="submit" class="btn btn-primary ">Search</button>
+        <button type="submit" class="btn btn-primary text-black shadow-sm">Search</button>
     </div>
 </form>
 
@@ -55,14 +55,16 @@
 	            </td>
 	            <td>
 		            @Html.DisplayFor(modelItem => item.ParkingSpace)
-	            </td>
-	            <td>
-		            @Html.DisplayFor(modelItem => item.ParkingSubSpace)
+
+                    @if (item.ParkingSubSpace != 0)
+                    {
+                        <text>: </text>@Html.DisplayFor(modelItem => item.ParkingSubSpace)
+                    }
 	            </td>
                 <td>
                     <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
                     <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.Id">Check Out Vehicle</a>
+                    <a asp-action="Delete" asp-route-id="@item.Id">Check Out</a>
                 </td>
             </tr>
         }
