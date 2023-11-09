@@ -323,12 +323,14 @@ public class ParkedVehiclesController : Controller
             Id = v.Id,
             RegistrationNumber = v.RegistrationNumber,
             VehicleType = v.VehicleType,
-            ArrivalTime = v.ArrivalTime
+            ArrivalTime = v.ArrivalTime,
+            ParkingSpace = v.ParkingSpace,
+            ParkingSubSpace = v.ParkingSubSpace
         });
 
         if (!string.IsNullOrEmpty(searchString))
         {
-            model = model.Where(v => v.RegistrationNumber.Contains(searchString));
+            model = model.Where(v => v.RegistrationNumber.Replace(" ", "").Contains(searchString.Replace(" ", "")));
         }
 
         return View("ParkedVehiclesIndex", await model.ToListAsync());
