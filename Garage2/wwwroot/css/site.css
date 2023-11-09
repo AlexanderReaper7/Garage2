@@ -43,6 +43,40 @@ body {
 a {
     color: #F9B572;
 }
+
 a:hover {
     color: #748E63;
 }
+
+.navbar-nav {
+    display: flex;
+    flex-direction: column;
+    padding-left: 0;
+    margin-bottom: 0;
+    list-style: none;
+    justify-content: center; 
+    align-items: center; 
+}
+.footer {
+    text-align: center;
+}
+
+.my-button {
+    background-color: #F9B572;
+    color: white;
+    border: 1px solid rgba(0, 0, 0, 0.5);
+    padding: 5px 10px;
+    border-radius: 50px;
+    cursor: pointer;
+}
+
+.my-button:hover {
+    background-color: rgba(116, 142, 99, 0.5);
+
+}
+
+a.nav-link.text-dark:hover {
+    background-color: rgba(116, 142, 99, 0.5);
+    
+}
+

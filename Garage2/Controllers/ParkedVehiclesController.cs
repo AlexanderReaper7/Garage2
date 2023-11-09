@@ -106,9 +106,10 @@ public class ParkedVehiclesController : Controller
 
             
             context.Add(parkedVehicle);
-            //await context.SaveChangesAsync();
 
-            GetParkingLotNr(parkedVehicle);
+            await context.SaveChangesAsync();
+
+            Park(parkedVehicle);
 
             await context.SaveChangesAsync();
 
@@ -118,7 +119,11 @@ public class ParkedVehiclesController : Controller
         return View(parkedVehicle);
     }
 
-    private void GetParkingLotNr(ParkedVehicle parkedVehicle)
+    /// <summary>
+    /// adds the vehicle to the parking lot and updates the parked vehicle with the parking space and sub-space numbers
+    /// </summary>
+    /// <param name="parkedVehicle"></param>
+    private void Park(ParkedVehicle parkedVehicle)
     {
         var parkingLot = parkingLotManager.AddVehicleToSlot(parkedVehicle.Id, parkedVehicle.VehicleType.GetVehicleSize());
         parkedVehicle.ParkingSpace = parkingLot.Item1;
