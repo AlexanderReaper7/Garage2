@@ -14,6 +14,7 @@ using Garage2.Models;
 
 namespace Garage2.Controllers;
 
+
 public class ParkedVehiclesController : Controller
 {
     private readonly IParkingLotManager parkingLotManager;
@@ -31,9 +32,29 @@ public class ParkedVehiclesController : Controller
     }
 
     // GET: ParkedVehicles
-    public async Task<IActionResult> Index()
+    public async Task<IActionResult> Index(string sortOrder)
     {
-        var model = context.ParkedVehicle.Select(v => new ParkedVehiclesViewModel
+        var model = from v in context.ParkedVehicle
+                    select v;
+        if (string.IsNullOrEmpty(sortOrder))
+        {
+            sortOrder = "RegistrationNumber_asc";
+        }
+        ViewBag.CurrentSort = sortOrder;
+        model = sortOrder switch
+        {
+            "RegistrationNumber_asc" => model.OrderBy(v => v.RegistrationNumber),
+            "RegistrationNumber_desc" => model.OrderByDescending(v => v.RegistrationNumber),
+            "VehicleType_asc" => model.OrderBy(v => v.VehicleType),
+            "VehicleType_desc" => model.OrderByDescending(v => v.VehicleType),
+            "ArrivalTime_asc" => model.OrderBy(v => v.ArrivalTime),
+            "ArrivalTime_desc" => model.OrderByDescending(v => v.ArrivalTime),
+            "ParkingSpace_asc" => model.OrderBy(v => v.ParkingSpace),
+            "ParkingSpace_desc" => model.OrderByDescending(v => v.ParkingSpace),
+            _ => model.OrderBy(v => v.RegistrationNumber)
+        };
+
+        var viewModel = model.Select(v => new ParkedVehiclesViewModel
         {
             Id = v.Id,
             RegistrationNumber = v.RegistrationNumber,
@@ -43,9 +64,7 @@ public class ParkedVehiclesController : Controller
             ParkingSubSpace = v.ParkingSubSpace
         });
 
-
-
-        return View("ParkedVehiclesIndex", await model.ToListAsync());
+        return View("ParkedVehiclesIndex", await viewModel.ToListAsync());
     }
 
     // GET: ParkedVehicles/Details/5
@@ -72,7 +91,6 @@ public class ParkedVehiclesController : Controller
         var model = new ParkedVehicle
         {
             ArrivalTime = DateTime.Now,
-
         };
 
         return View(model);
@@ -104,7 +122,7 @@ public class ParkedVehiclesController : Controller
                 return View(parkedVehicle);
             }
 
-            
+
             context.Add(parkedVehicle);
 
             await context.SaveChangesAsync();
@@ -165,7 +183,7 @@ public class ParkedVehiclesController : Controller
             {
 
                 // Retrieve existing vehicle in database
-                var  existingParkedVehicle = await context.ParkedVehicle.FindAsync(id);
+                var existingParkedVehicle = await context.ParkedVehicle.FindAsync(id);
                 if (existingParkedVehicle == null)
                 {
                     return NotFound();
@@ -191,7 +209,7 @@ public class ParkedVehiclesController : Controller
 
 
             Garage2Helpers.Garage2Helpers.MessageToUser = "Edit Info";
-            return View("ShowParkedInfo",parkedVehicle);
+            return View("ShowParkedInfo", parkedVehicle);
         }
         return View(parkedVehicle);
     }
@@ -202,7 +220,6 @@ public class ParkedVehiclesController : Controller
         existingParkedVehicle.Color = parkedVehicle.Color;
         existingParkedVehicle.Model = parkedVehicle.Model;
         existingParkedVehicle.NumberOfWheels = parkedVehicle.NumberOfWheels;
-        existingParkedVehicle.VehicleType = parkedVehicle.VehicleType;
     }
 
     // GET: ParkedVehicles/Delete/5
