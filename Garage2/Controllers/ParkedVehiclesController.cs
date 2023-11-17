@@ -10,6 +10,7 @@ using Garage2.Data;
 using Garage2.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Garage2.Models;
+using Garage2.Models.Entities;
 
 
 namespace Garage2.Controllers;
@@ -143,7 +144,7 @@ public class ParkedVehiclesController : Controller
     /// <param name="parkedVehicle"></param>
     private void Park(ParkedVehicle parkedVehicle)
     {
-        var parkingLot = parkingLotManager.AddVehicleToSlot(parkedVehicle.Id, parkedVehicle.VehicleType.GetVehicleSize());
+        var parkingLot = parkingLotManager.AddVehicleToSlot(parkedVehicle.Id, (int)parkedVehicle.VehicleType.Size);
         parkedVehicle.ParkingSpace = parkingLot.Item1;
         parkedVehicle.ParkingSubSpace = parkingLot.Item2;
     }
@@ -292,9 +293,9 @@ public class ParkedVehiclesController : Controller
         CheckOutDetails(parkedVehicle);
 
         await context.SaveChangesAsync();
-
+        /* TODO: ADD THIS BACK WHEN CONTROLLER IS ADDED
         parkingLotManager.RemoveVehicleFromLot(parkedVehicle.Id, (parkedVehicle.ParkingSpace, parkedVehicle.ParkingSubSpace), parkedVehicle.VehicleType.GetVehicleSize());
-
+        */
         return View("Receipt", checkOutModel);
     }
 

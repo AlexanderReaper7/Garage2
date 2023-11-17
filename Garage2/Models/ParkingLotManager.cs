@@ -1,5 +1,5 @@
 ﻿using Garage2.Data;
-
+using Garage2.Models.Entities;
 namespace Garage2.Models
 {
     public class ParkingLotManager : IParkingLotManager
@@ -7,18 +7,18 @@ namespace Garage2.Models
         /// <summary>
         /// stores the id of ParkedVehicle´s with up to 3 Id´s per slot 
         /// </summary>
-        private int[,] parkingLot = new int[25, 3];
+        private int[,] parkingLot = new int[25, 3]; // TODO: Into array with list of parked vehicle
 
         public ParkingLotManager(Garage2Context context)
         {
 
-            foreach (var vehicle in context.ParkedVehicle)
-            {
-                var i = vehicle.ParkingSpace;
-                i -= 1;
-                var j = vehicle.ParkingSubSpace;
-                Park((i, j), vehicle.VehicleType.GetVehicleSize(), vehicle.Id);
-            }
+            //foreach (var vehicle in context.ParkedVehicle)
+            //{
+            //    var i = vehicle.ParkingSpace;
+            //    i -= 1;
+            //    var j = vehicle.ParkingSubSpace;
+            //    Park((i, j), (int)vehicle.VehicleType.Size, vehicle.Id);
+            //}
         }
 
         public int LargestParkingSpaceAvailable
@@ -79,6 +79,13 @@ namespace Garage2.Models
 
             throw new Exception("Couldn't find anywhere to park.");
         }
+        /// <summary>
+        /// Checks if the vehicle can be parked at the given position
+        /// </summary>
+        /// <param name="row"></param>
+        /// <param name="col"></param>
+        /// <param name="subSlotSize"></param>
+        /// <returns></returns>
         private bool CanParkAt(int row, int col, int subSlotSize)
         {
             var count = 0;
