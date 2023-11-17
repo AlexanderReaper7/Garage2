@@ -21,7 +21,10 @@ public class Member
     public string LastName { get; set; }
 
     public Membership Membership { get; set; }
+    // Foreign Key
+    public int ParkedVehicleId { get; set; }
+
     //Navigation Property
-    public ICollection<ParkedVehicle> Vehicles { get; set; }
+    public ICollection<ParkedVehicle> ParkedVehicle { get; set; }
 
 }

@@ -16,7 +16,7 @@ public class VehicleType
     /// </summary>
     public double Size { get; set; }
     //Foreign Key
-    public int VehicleId { get; set; }
+    public int ParkedVehicleId { get; set; }
 	//Navigation Property
-	public ICollection<ParkedVehicle> Vehicle { get; set; }
+	public ICollection<ParkedVehicle> ParkedVehicle { get; set; }
 }
