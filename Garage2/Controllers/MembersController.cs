@@ -159,5 +159,10 @@ namespace Garage2.Controllers
         {
           return (_context.Member?.Any(e => e.PersonNumber == id)).GetValueOrDefault();
         }
+        public IActionResult Park()
+        {
+            return View();
+        }
+    }
     }
 }
