@@ -4,6 +4,7 @@ using Microsoft.CodeAnalysis.Elfie.Diagnostics;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using Garage2.Migrations;
+using Garage2.Models.Entities;
 
 
 namespace Garage2.Models;
@@ -12,12 +13,12 @@ public static class DbInitializer
 {
     public static void Seed(WebApplication applicationBuilder, IServiceProvider serviceProvider)
     {
+        /*
         using (var scope = applicationBuilder.Services.CreateScope())
         {
            // var parkingLotManager = serviceProvider.GetRequiredService<ParkingLotManager>();
 
             var context = scope.ServiceProvider.GetRequiredService<Garage2Context>();
-
             if (!context.ParkedVehicle.Any())
             {
                 context.AddRange(
@@ -144,8 +145,8 @@ public static class DbInitializer
                     }
                 );
             }
-           
             context.SaveChanges();
         }
+        */
     }
 }

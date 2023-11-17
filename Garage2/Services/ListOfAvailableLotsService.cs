@@ -18,7 +18,9 @@ public class ListOfAvailableLotsService : IListOfAvailableLotsService
         get
         {
             var largest = parkingLotManager.LargestParkingSpaceAvailable;
-            return VehicleTypeExtensions.GetAvailableTypesForParkingSpace(largest);
+            //var availableTypes = context.VehicleType.Select(v => v.Size <= largest);
+            //return VehicleTypeExtensions.GetAvailableTypesForParkingSpace(largest);
+            throw new NotImplementedException();
         }
     }
 
