@@ -12,5 +12,5 @@ public class VehicleStatistics
     [Display(Name ="Total Earnings")]
     [DisplayFormat(DataFormatString = "{0:N2}")]
     public decimal Price { get; set; }
-    public Dictionary<VehicleType, int> VehicleCounts { get; set; } = new Dictionary<VehicleType, int>();
+    public Dictionary<string, int> VehicleCounts { get; set; } = new Dictionary<string, int>();
 }

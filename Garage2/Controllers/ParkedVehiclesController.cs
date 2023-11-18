@@ -21,7 +21,7 @@ public class ParkedVehiclesController : Controller
 {
     private readonly IParkingLotManager parkingLotManager;
     private readonly Garage2Context context;
-    private readonly CheckOutVehicleViewModel checkOutModel;
+    //private readonly CheckOutVehicleViewModel checkOutModel;
     private readonly VehicleStatistics vehicleStatistics;
     private readonly IMapper mapper;
 
@@ -29,7 +29,7 @@ public class ParkedVehiclesController : Controller
     {
         this.parkingLotManager = parkingLotManager;
         this.context = context;
-        checkOutModel = new CheckOutVehicleViewModel();
+        //checkOutModel = new CheckOutVehicleViewModel();
         vehicleStatistics = new VehicleStatistics();
         this.mapper = mapper;
     }
@@ -57,16 +57,6 @@ public class ParkedVehiclesController : Controller
             _ => model.OrderBy(v => v.RegistrationNumber)
         };
 
-        //var viewModel = model.Select(v => new ParkedVehiclesViewModel
-        //{
-        //    Id = v.Id,
-        //    RegistrationNumber = v.RegistrationNumber,
-        //    VehicleType = v.VehicleType,
-        //    ArrivalTime = v.ArrivalTime,
-        //    ParkingSpace = v.ParkingSpace,
-        //    ParkingSubSpace = v.ParkingSubSpace
-        //});
-
         var viewModel = mapper.ProjectTo<ParkedVehiclesViewModel>(context.ParkedVehicle);
 
         return View("ParkedVehiclesIndex", await viewModel.ToListAsync());
@@ -80,7 +70,7 @@ public class ParkedVehiclesController : Controller
             return NotFound();
         }
 
-        var parkedVehicle = await context.ParkedVehicle
+        var parkedVehicle = await context.ParkedVehicle.Include(v => v.VehicleType)
             .FirstOrDefaultAsync(m => m.Id == id);
 
         if (parkedVehicle == null)
@@ -244,24 +234,24 @@ public class ParkedVehiclesController : Controller
             return NotFound();
         }
 
-        CheckOutDetails(parkedVehicle);
+        var viewModel = CheckOutDetails(parkedVehicle);
 
-        return View(checkOutModel);
+        return View(viewModel);
     }
 
-    private void CheckOutDetails(ParkedVehicle parkedVehicle)
+    private CheckOutVehicleViewModel CheckOutDetails(ParkedVehicle parkedVehicle)
     {
-        checkOutModel.ArrivalTime = parkedVehicle.ArrivalTime;
-        checkOutModel.Id = parkedVehicle.Id;
-        checkOutModel.RegistrationNumber = parkedVehicle.RegistrationNumber;
+        var checkOutModel = mapper.Map<CheckOutVehicleViewModel>(parkedVehicle);
+
         checkOutModel.CheckOutTime = DateTime.Now;
         checkOutModel.TotalTime = checkOutModel.CheckOutTime - checkOutModel.ArrivalTime;
-        checkOutModel.ParkingSpace = parkedVehicle.ParkingSpace;
 
-        int totalHours = (int)checkOutModel.TotalTime.TotalHours;
+		int totalHours = (int)checkOutModel.TotalTime.TotalHours;
         int totalMin = checkOutModel.TotalTime.Minutes;
 
         checkOutModel.Price = (10 * totalHours) + (10 * (decimal)totalMin / 60.0m);
+
+        return checkOutModel;
     }
 
     private decimal CalculateCurrentEarnings(List<ParkedVehicle> parkedVehicle)
@@ -295,7 +285,7 @@ public class ParkedVehiclesController : Controller
         }
 
         context.ParkedVehicle.Remove(parkedVehicle);
-        CheckOutDetails(parkedVehicle);
+        var checkOutModel = CheckOutDetails(parkedVehicle); //ToDo: Is there a way to not call this method again since we already have stored the data in Delete method
 
         await context.SaveChangesAsync();
         /* TODO: ADD THIS BACK WHEN CONTROLLER IS ADDED
@@ -321,10 +311,10 @@ public class ParkedVehiclesController : Controller
         return View("ShowStatistics", vehicleStatistics);
     }
 
-    public Dictionary<VehicleType, int> VehicleCount()
+    public Dictionary<string, int> VehicleCount()
     {
         var vehicleCount = context.ParkedVehicle
-            .GroupBy(p => p.VehicleType)
+            .GroupBy(p => p.VehicleType.Name)
             .ToDictionary(
                 group => group.Key,
                 group => group.Count()
@@ -341,15 +331,8 @@ public class ParkedVehiclesController : Controller
     /// <returns></returns>
     public async Task<IActionResult> Search(string searchString)
     {
-        var model = context.ParkedVehicle.Select(v => new ParkedVehiclesViewModel
-        {
-            Id = v.Id,
-            RegistrationNumber = v.RegistrationNumber,
-            VehicleType = v.VehicleType,
-            ArrivalTime = v.ArrivalTime,
-            ParkingSpace = v.ParkingSpace,
-            ParkingSubSpace = v.ParkingSubSpace
-        });
+
+        var model = mapper.ProjectTo<ParkedVehiclesViewModel>(context.ParkedVehicle);
 
         if (!string.IsNullOrEmpty(searchString))
         {
