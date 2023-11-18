@@ -67,9 +67,6 @@ namespace Garage2.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<int>("MemberId")
-                        .HasColumnType("int");
-
                     b.Property<string>("MemberPersonNumber")
                         .HasColumnType("nvarchar(450)");
 

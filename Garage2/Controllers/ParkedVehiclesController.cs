@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -22,14 +23,15 @@ public class ParkedVehiclesController : Controller
     private readonly Garage2Context context;
     private readonly CheckOutVehicleViewModel checkOutModel;
     private readonly VehicleStatistics vehicleStatistics;
+    private readonly IMapper mapper;
 
-    public ParkedVehiclesController(Garage2Context context, IParkingLotManager parkingLotManager)
+    public ParkedVehiclesController(Garage2Context context, IParkingLotManager parkingLotManager, IMapper mapper)
     {
         this.parkingLotManager = parkingLotManager;
         this.context = context;
         checkOutModel = new CheckOutVehicleViewModel();
         vehicleStatistics = new VehicleStatistics();
-
+        this.mapper = mapper;
     }
 
     // GET: ParkedVehicles
@@ -55,15 +57,17 @@ public class ParkedVehiclesController : Controller
             _ => model.OrderBy(v => v.RegistrationNumber)
         };
 
-        var viewModel = model.Select(v => new ParkedVehiclesViewModel
-        {
-            Id = v.Id,
-            RegistrationNumber = v.RegistrationNumber,
-            VehicleType = v.VehicleType,
-            ArrivalTime = v.ArrivalTime,
-            ParkingSpace = v.ParkingSpace,
-            ParkingSubSpace = v.ParkingSubSpace
-        });
+        //var viewModel = model.Select(v => new ParkedVehiclesViewModel
+        //{
+        //    Id = v.Id,
+        //    RegistrationNumber = v.RegistrationNumber,
+        //    VehicleType = v.VehicleType,
+        //    ArrivalTime = v.ArrivalTime,
+        //    ParkingSpace = v.ParkingSpace,
+        //    ParkingSubSpace = v.ParkingSubSpace
+        //});
+
+        var viewModel = mapper.ProjectTo<ParkedVehiclesViewModel>(context.ParkedVehicle);
 
         return View("ParkedVehiclesIndex", await viewModel.ToListAsync());
     }
@@ -78,6 +82,7 @@ public class ParkedVehiclesController : Controller
 
         var parkedVehicle = await context.ParkedVehicle
             .FirstOrDefaultAsync(m => m.Id == id);
+
         if (parkedVehicle == null)
         {
             return NotFound();

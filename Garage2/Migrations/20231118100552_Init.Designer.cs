@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Garage2.Migrations
 {
     [DbContext(typeof(Garage2Context))]
-    [Migration("20231117130646_AddMemberVehicleType")]
-    partial class AddMemberVehicleType
+    [Migration("20231118100552_Init")]
+    partial class Init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -69,9 +69,6 @@ namespace Garage2.Migrations
                     b.Property<string>("Color")
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
-
-                    b.Property<int>("MemberId")
-                        .HasColumnType("int");
 
                     b.Property<string>("MemberPersonNumber")
                         .HasColumnType("nvarchar(450)");

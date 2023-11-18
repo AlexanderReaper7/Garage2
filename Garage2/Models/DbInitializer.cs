@@ -3,150 +3,122 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.CodeAnalysis.Elfie.Diagnostics;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
+using Bogus;
+using Bogus.DataSets;
+using Bogus.Extensions.UnitedKingdom;
 using Garage2.Migrations;
 using Garage2.Models.Entities;
-
-
 namespace Garage2.Models;
 
-public static class DbInitializer
+public class DbInitializer
 {
-    public static void Seed(WebApplication applicationBuilder, IServiceProvider serviceProvider)
-    {
-        /*
-        using (var scope = applicationBuilder.Services.CreateScope())
-        {
-           // var parkingLotManager = serviceProvider.GetRequiredService<ParkingLotManager>();
+	private static Faker faker = null!;
+	private static Random rnd = new Random();
+	public static async Task InitAsync(Garage2Context db)
+	{
+		//If there are members in database return
+		if (await db.Member.AnyAsync()) return;
 
-            var context = scope.ServiceProvider.GetRequiredService<Garage2Context>();
-            if (!context.ParkedVehicle.Any())
-            {
-                context.AddRange(
-                    new ParkedVehicle
-                    {
-                        ParkingSpace = 1,
-                        ParkingSubSpace = 0,
-                        RegistrationNumber = "SE XTV213",
-                        VehicleType = VehicleType.Car,
-                        Color = "Silver",
-                        Brand = "Volkswagen",
-                        Model = "Golf",
-                        NumberOfWheels = 4,
-                        ArrivalTime = new DateTime(2023, 11, 01, 15, 46, 25),
+		faker = new Faker("sv");
 
-                    },
-                    new ParkedVehicle
-                    {
-                        ParkingSpace = 2,
-                        ParkingSubSpace = 0,
-                        RegistrationNumber = "SE ABC123",
-                        VehicleType = VehicleType.Car,
-                        Color = "Blue",
-                        Brand = "Ford",
-                        Model = "Mustang",
-                        NumberOfWheels = 4,
-                        ArrivalTime = new DateTime(2023, 11, 02, 01, 56, 07)
-                    },
-                    new ParkedVehicle
-                    {
-                        ParkingSpace = 3,
-                        ParkingSubSpace = 0,
-                        RegistrationNumber = "SE XYZ789",
-                        VehicleType = VehicleType.Car,
-                        Color = "Red",
-                        Brand = "Toyota",
-                        Model = "Camry",
-                        NumberOfWheels = 4,
-                        ArrivalTime = new DateTime(2023, 11, 03, 10, 55, 19)
-                    },
-                    new ParkedVehicle
-                    {
-                        ParkingSpace = 4,
-                        ParkingSubSpace = 0,
-                        RegistrationNumber = "SE MOT456",
-                        VehicleType = VehicleType.Motorcycle,
-                        Color = "Black",
-                        Brand = "Honda",
-                        Model = "CBR600RR",
-                        NumberOfWheels = 2,
-                        ArrivalTime = new DateTime(2023, 11, 04, 12, 40, 13)
-                    },
-                    new ParkedVehicle
-                    {
-                        ParkingSpace = 4,
-                        ParkingSubSpace = 1,
-                        RegistrationNumber = "SE MOV468",
-                        VehicleType = VehicleType.Motorcycle,
-                        Color = "Purple",
-                        Brand = "Yamaha",
-                        Model = "CBR600RR",
-                        NumberOfWheels = 2,
-                        ArrivalTime = new DateTime(2023, 11, 05, 23, 12, 25)
-                    },
-                    new ParkedVehicle
-                    {
-                        ParkingSpace = 5,
-                        ParkingSubSpace = 0,
-                        RegistrationNumber = "SE TRK001",
-                        VehicleType = VehicleType.Truck,
-                        Color = "White",
-                        Brand = "Ford",
-                        Model = "F-150",
-                        NumberOfWheels = 6, // Trucks often have multiple wheels
-                        ArrivalTime = new DateTime(2023, 11, 05, 13, 10, 45)
-                    },
-                    new ParkedVehicle
-                    {
-                        ParkingSpace = 7,
-                        ParkingSubSpace = 0,
-                        RegistrationNumber = "SE TRK002",
-                        VehicleType = VehicleType.Bus,
-                        Color = "Blue",
-                        Brand = "Chevrolet",
-                        Model = "Silverado",
-                        NumberOfWheels = 8, // Larger trucks might have more wheels
-                        ArrivalTime = new DateTime(2023, 11, 06, 22, 12, 17)
-                    },
-                    new ParkedVehicle
-                    {
-                        ParkingSpace = 9,
-                        ParkingSubSpace = 0,
-                        RegistrationNumber = "SE BUS001",
-                        VehicleType = VehicleType.Truck,
-                        Color = "Red",
-                        Brand = "Volvo",
-                        Model = "XC90",
-                        NumberOfWheels = 6, // Adjust this based on the specific bus type
-                        ArrivalTime = new DateTime(2023, 11, 07, 18, 10, 13)
-                    },
-                    new ParkedVehicle
-                    {
-                        ParkingSpace = 11,
-                        ParkingSubSpace = 0,
-                        RegistrationNumber = "SE AIR001",
-                        VehicleType = VehicleType.Airplane,
-                        Color = "Red",
-                        Brand = "Airbus",
-                        Model = "787",
-                        NumberOfWheels = 24,
-                        ArrivalTime = new DateTime(2023, 11, 07, 02, 11, 16)
-                    },
-                    new ParkedVehicle
-                    {
-                        ParkingSpace = 14,
-                        ParkingSubSpace = 0,
-                        RegistrationNumber = "SE WAT001",
-                        VehicleType = VehicleType.Boat,
-                        Color = "Blue",
-                        Brand = "Maxi",
-                        Model = "77",
-                        NumberOfWheels = 0,
-                        ArrivalTime = new DateTime(2023, 11, 07, 17, 01, 03)
-                    }
-                );
-            }
-            context.SaveChanges();
-        }
-        */
-    }
+		var members = GenerateMembers(10);
+		await db.AddRangeAsync(members);
+		await db.SaveChangesAsync(); // Save changes to make sure members are tracked
+
+		var vehicleTypes = GenerateVehicleTypes(10);
+		await db.AddRangeAsync(vehicleTypes);
+
+		var vehicles = GenerateVehicles(vehicleTypes);
+		await db.AddRangeAsync(vehicles);
+
+		await db.SaveChangesAsync();
+	}
+	private static IEnumerable<Member> GenerateMembers(int numberOfMembers)
+	{
+		var members = new List<Member>();
+
+		for (int i = 0; i < numberOfMembers; i++)
+		{
+			var fName = faker.Name.FirstName();
+			var lName = faker.Name.LastName();
+			var membership = Membership.Standard;
+			var personNumber = faker.Date.Between(new DateTime(1965,1,2), new DateTime(2002,1,2));
+
+
+			var member = new Member()
+			{
+				FirstName = fName,
+				LastName = lName,
+				PersonNumber = personNumber.ToLongDateString(),
+				Membership = membership
+			};
+
+			members.Add(member);
+		}
+		return members;
+	}
+	private static IEnumerable<VehicleType> GenerateVehicleTypes(int generateVehicleTypes)
+	{
+		var vehicleTypes = new List<VehicleType>();
+
+		for (int i = 0; i < generateVehicleTypes; i++)
+		{
+			var vehicleType = new VehicleType()
+			{
+				Name = GenerateRandomVehicleType()
+			};
+			vehicleTypes.Add(vehicleType);
+		}
+
+		return vehicleTypes;
+	}
+
+	private static string GenerateRandomVehicleType()
+	{
+		string[] vehicleTypeNames = new[] { "Car", "Bus", "Truck" };
+
+		var typeName = vehicleTypeNames[rnd.Next(vehicleTypeNames.Length)];
+
+		return typeName;
+	}
+
+	private static IEnumerable<ParkedVehicle> GenerateVehicles(IEnumerable<VehicleType> vehicleTypes)
+	{
+		var vehicles = new List<ParkedVehicle>();
+		var startDate = new DateTime(2022, 1, 1);
+		var endDate = new DateTime(2022, 12, 31);
+
+			foreach (var vehicleType in vehicleTypes)
+			{
+				var model = faker.Vehicle.Model();
+				var regNr = faker.Vehicle.GbRegistrationPlate(new DateTime(2001, 09, 2), new DateTime(2023, 1, 2));
+				var color = faker.Commerce.Color();
+				var arrivalTime = faker.Date.Between(startDate, endDate);
+				var brand = faker.Vehicle.Manufacturer();
+				//var parkingSpace = GenerateParkingSpace(vehicleTypes);
+
+				var vehicle = new ParkedVehicle()
+				{
+					
+					Brand = brand,
+					Model = model,
+					RegistrationNumber = regNr,
+					Color = color,
+					ArrivalTime = arrivalTime,
+					VehicleType = new VehicleType()
+					{
+						Name = vehicleType.Name
+					},
+					NumberOfWheels = 4
+				};
+				//if (vehicle.VehicleType.Name == "Car")
+				//{
+				//	vehicle.NumberOfWheels = 4;
+				//}
+				vehicles.Add(vehicle);
+			}
+		
+		return vehicles;
+	}
 }
+
