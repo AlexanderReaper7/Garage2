@@ -18,7 +18,13 @@ public class Garage2Context : DbContext
 	public DbSet<ParkedVehicle> ParkedVehicle { get; set; } = default!;
 	public DbSet<Member> Member { get; set; } = default!;
 	public DbSet<VehicleType> VehicleType { get; set; } = default!;
-
+	//protected override void OnModelCreating(ModelBuilder modelBuilder)
+	//{
+	//	modelBuilder.Entity<ParkedVehicle>()
+	//		.HasOne(p => p.Member)
+	//		.WithMany(m => m.ParkedVehicles)
+	//		.HasForeignKey(p => p.MemberPersonNumber);
+	//}
 	//protected override void OnModelCreating(ModelBuilder modelBuilder)
 	//{
 	//	modelBuilder.Entity<Member>()

@@ -23,7 +23,7 @@ public class DbInitializer
 
 		var members = GenerateMembers(10);
 		await db.AddRangeAsync(members);
-		await db.SaveChangesAsync(); // Save changes to make sure members are tracked
+	//	await db.SaveChangesAsync(); // Save changes to make sure members are tracked
 
 		var vehicleTypes = GenerateVehicleTypes(10);
 		await db.AddRangeAsync(vehicleTypes);
@@ -31,8 +31,10 @@ public class DbInitializer
 		var vehicles = GenerateVehicles(vehicleTypes, members);
 		await db.AddRangeAsync(vehicles);
 
+
 		await db.SaveChangesAsync();
 	}
+
 	//Generate Random Members
 	private static IEnumerable<Member> GenerateMembers(int numberOfMembers)
 	{
@@ -51,7 +53,7 @@ public class DbInitializer
 				FirstName = fName,
 				LastName = lName,
 				PersonNumber = personNumber.ToLongDateString(),
-				Membership = Membership.Pro
+				Membership = Membership.Pro,
 			};
 
 			members.Add(member);
@@ -66,7 +68,7 @@ public class DbInitializer
 		{
 			var vehicleType = new VehicleType()
 			{
-				Name = GenerateRandomVehicleType()
+				Name = GenerateRandomVehicleType(),
 			};
 			vehicleTypes.Add(vehicleType);
 		}
@@ -89,39 +91,43 @@ public class DbInitializer
 		var startDate = new DateTime(2022, 1, 1);
 		var endDate = new DateTime(2022, 12, 31);
 
-		foreach (var vehicleType in vehicleTypes)
+		var random = new Random();
+
+		foreach (var member in members)
 		{
-			foreach (var member in members)
+
+			var model = faker.Vehicle.Model();
+			var regNr = faker.Vehicle.GbRegistrationPlate(new DateTime(2001, 09, 2), new DateTime(2023, 1, 2));
+			var color = faker.Commerce.Color();
+			var arrivalTime = faker.Date.Between(startDate, endDate);
+			var brand = faker.Vehicle.Manufacturer();
+
+			// Randomly select a vehicle type for each member
+			var randomVehicleType = vehicleTypes.ElementAt(random.Next(vehicleTypes.Count()));
+
+			var vehicle = new ParkedVehicle()
 			{
-				var model = faker.Vehicle.Model();
-				var regNr = faker.Vehicle.GbRegistrationPlate(new DateTime(2001, 09, 2), new DateTime(2023, 1, 2));
-				var color = faker.Commerce.Color();
-				var arrivalTime = faker.Date.Between(startDate, endDate);
-				var brand = faker.Vehicle.Manufacturer();
+				ParkingSpace = 2,
+				Brand = brand,
+				Model = model,
+				RegistrationNumber = regNr,
+				Color = color,
+				ArrivalTime = arrivalTime,
+				VehicleType = randomVehicleType,
+				NumberOfWheels = 4,
+				Member = member,
+			
+			};
 
-				var vehicle = new ParkedVehicle()
-				{
+			
+			FetchNrWheelsAndParkingSpace(vehicle);
 
-					ParkingSpace = 2,
-					Brand = brand,
-					Model = model,
-					RegistrationNumber = regNr,
-					Color = color,
-					ArrivalTime = arrivalTime,
-					VehicleType = new VehicleType()
-					{
-						Name = vehicleType.Name
-					},
-					//MemberPersonNumber = member.ParkedVehicleId,
-					NumberOfWheels = 4
+			member.ParkedVehicles.Add(vehicle);
 
-				};
-				FetchNrWheelsAndParkingSpace(vehicle);
-
-				vehicles.Add(vehicle);
-			}
+			vehicles.Add(vehicle);
 		}
 
+	
 		return vehicles;
 	}
 	//Fetch Number Of WHeels And Parking Space Depending On Type

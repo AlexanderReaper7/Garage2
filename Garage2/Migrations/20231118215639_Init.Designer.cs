@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Garage2.Migrations
 {
     [DbContext(typeof(Garage2Context))]
-    [Migration("20231118161913_ChangedPropertyTypeInVehicleStatistics")]
-    partial class ChangedPropertyTypeInVehicleStatistics
+    [Migration("20231118215639_Init")]
+    partial class Init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -127,7 +127,7 @@ namespace Garage2.Migrations
             modelBuilder.Entity("Garage2.Models.Entities.ParkedVehicle", b =>
                 {
                     b.HasOne("Garage2.Models.Entities.Member", "Member")
-                        .WithMany("ParkedVehicle")
+                        .WithMany("ParkedVehicles")
                         .HasForeignKey("MemberPersonNumber");
 
                     b.HasOne("Garage2.Models.VehicleType", "VehicleType")
@@ -143,7 +143,7 @@ namespace Garage2.Migrations
 
             modelBuilder.Entity("Garage2.Models.Entities.Member", b =>
                 {
-                    b.Navigation("ParkedVehicle");
+                    b.Navigation("ParkedVehicles");
                 });
 
             modelBuilder.Entity("Garage2.Models.VehicleType", b =>

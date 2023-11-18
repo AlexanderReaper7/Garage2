@@ -124,7 +124,7 @@ namespace Garage2.Migrations
             modelBuilder.Entity("Garage2.Models.Entities.ParkedVehicle", b =>
                 {
                     b.HasOne("Garage2.Models.Entities.Member", "Member")
-                        .WithMany("ParkedVehicle")
+                        .WithMany("ParkedVehicles")
                         .HasForeignKey("MemberPersonNumber");
 
                     b.HasOne("Garage2.Models.VehicleType", "VehicleType")
@@ -140,7 +140,7 @@ namespace Garage2.Migrations
 
             modelBuilder.Entity("Garage2.Models.Entities.Member", b =>
                 {
-                    b.Navigation("ParkedVehicle");
+                    b.Navigation("ParkedVehicles");
                 });
 
             modelBuilder.Entity("Garage2.Models.VehicleType", b =>
