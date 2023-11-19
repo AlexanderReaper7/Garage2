@@ -9,9 +9,6 @@ public class GarageMapping : Profile
 	public GarageMapping()
 	{
 		CreateMap<ParkedVehicle, ParkedVehiclesViewModel>();
-		//CreateMap<ParkedVehicle, VehicleStatistics>();
-	
 		CreateMap<ParkedVehicle, CheckOutVehicleViewModel>();
 	}
-    
 }

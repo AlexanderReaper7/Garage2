@@ -1,21 +1,16 @@
 ﻿using Garage2.Data;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.CodeAnalysis.Elfie.Diagnostics;
 using Microsoft.EntityFrameworkCore;
-using System.Linq;
 using Bogus;
-using Bogus.DataSets;
 using Bogus.Extensions.UnitedKingdom;
-using Garage2.Migrations;
 using Garage2.Models.Entities;
-using NuGet.Packaging;
 
 namespace Garage2.Models;
 
 public class DbInitializer
 {
 	private static Faker faker = null!;
-	private static Random rnd = new Random();
+	private static readonly Random rnd = new Random();
+	private static readonly int dbInitializerAmount = 10;
 	public static async Task InitAsync(Garage2Context db)
 	{
 		//If there are members in database return
@@ -23,44 +18,26 @@ public class DbInitializer
 
 		faker = new Faker("sv");
 
-		var members = GenerateMembers(10);
+		var members = GenerateMembers(dbInitializerAmount);
 		await db.AddRangeAsync(members);
-		//	await db.SaveChangesAsync(); // Save changes to make sure members are tracked
 
-		var vehicleTypes = GenerateVehicleTypes(10);
+		var vehicleTypes = GenerateVehicleTypes(dbInitializerAmount);
 		await db.AddRangeAsync(vehicleTypes);
 
 		var vehicles = GenerateVehicles(vehicleTypes, members);
 		await db.AddRangeAsync(vehicles);
 		await db.SaveChangesAsync();
 
-		// Add the generated vehicles to the corresponding members
-		foreach (var member in members)
-		{
-			var correspondingVehicle = vehicles.FirstOrDefault(v => v.Member == member);
-
-			if (correspondingVehicle != null)
-			{
-				member.ParkedVehicleId = correspondingVehicle.Id;
-			}
-		}
+		// Add the generated vehicles to the corresponding members ForeignKey
+		SetMembersForeignKey(members, vehicles);
 
 		await db.SaveChangesAsync();
 
-		// Add the generated vehicleType to the corresponding vehicle
-		foreach (var type in vehicleTypes)
-		{
-			var correspondingVehicle = vehicles.FirstOrDefault(v => v.VehicleTypeId == type.Id);
-
-			if (correspondingVehicle != null)
-			{
-				type.ParkedVehicleId = correspondingVehicle.Id;
-			}
-		}
+		// Add the generated vehicleType to the corresponding vehicles ForeignKey
+		SetVehicleTypesForeignKey(vehicleTypes, vehicles);
 
 		await db.SaveChangesAsync();
 	}
-
 	//Generate Random Members
 	private static IEnumerable<Member> GenerateMembers(int numberOfMembers)
 	{
@@ -70,11 +47,9 @@ public class DbInitializer
 		{
 			var fName = faker.Name.FirstName();
 			var lName = faker.Name.LastName();
-			//var membership = Membership.Standard;
 			var personNumber = faker.Date.Between(new DateTime(1965, 1, 2), new DateTime(2002, 1, 2));
-			Array membershipValues = Enum.GetValues(typeof(Membership));
+			var membershipValues = Enum.GetValues(typeof(Membership));
 
-			var Random = new Random();
 			var member = new Member()
 			{
 				FirstName = fName,
@@ -86,7 +61,8 @@ public class DbInitializer
 			members.Add(member);
 		}
 		return members;
-	}//Generate Random vehicles
+	}
+	//Generate Random vehicles
 	private static IEnumerable<VehicleType> GenerateVehicleTypes(int generateVehicleTypes)
 	{
 		var vehicleTypes = new List<VehicleType>();
@@ -106,7 +82,7 @@ public class DbInitializer
 
 		return vehicleTypes;
 	}
-
+	//Generate VehicleSize
 	private static double GenerateSizeDependingOnName(string name)
 	{
 		switch (name)
@@ -134,9 +110,8 @@ public class DbInitializer
 	{
 		var parkedVehicle = new List<ParkedVehicle>();
 		var startDate = new DateTime(2023, 1, 1);
-		var endDate = new DateTime(2023, 12, 31);
+		var endDate = new DateTime(2023, 11, 19);
 
-		var random = new Random();
 		var index = 0;
 		foreach (var member in members)
 		{
@@ -146,8 +121,8 @@ public class DbInitializer
 			var color = faker.Commerce.Color();
 			var arrivalTime = faker.Date.Between(startDate, endDate);
 			var brand = faker.Vehicle.Manufacturer();
-			
-			// Get The list from start to end
+
+			// Get The list One By One
 			var currentVehicleType = vehicleTypes.ElementAt(index);
 
 			var vehicle = new ParkedVehicle()
@@ -182,6 +157,32 @@ public class DbInitializer
 				vehicle.NumberOfWheels = 8;
 				vehicle.ParkingSpace = 2;
 				break;
+		}
+	}
+	// Add the generated vehicles to the corresponding members ForeignKey
+	private static void SetVehicleTypesForeignKey(IEnumerable<VehicleType> vehicleTypes, IEnumerable<ParkedVehicle> vehicles)
+	{
+		foreach (var type in vehicleTypes)
+		{
+			var correspondingVehicle = vehicles.FirstOrDefault(v => v.VehicleTypeId == type.Id);
+
+			if (correspondingVehicle != null)
+			{
+				type.ParkedVehicleId = correspondingVehicle.Id;
+			}
+		}
+	}
+	// Add the generated vehicleType to the corresponding vehicles ForeignKey
+	private static void SetMembersForeignKey(IEnumerable<Member> members, IEnumerable<ParkedVehicle> vehicles)
+	{
+		foreach (var member in members)
+		{
+			var correspondingVehicle = vehicles.FirstOrDefault(v => v.Member == member);
+
+			if (correspondingVehicle != null)
+			{
+				member.ParkedVehicleId = correspondingVehicle.Id;
+			}
 		}
 	}
 }

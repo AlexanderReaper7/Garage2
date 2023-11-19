@@ -21,7 +21,6 @@ public class ParkedVehiclesController : Controller
 {
 	private readonly IParkingLotManager parkingLotManager;
 	private readonly Garage2Context context;
-	//private readonly CheckOutVehicleViewModel checkOutModel;
 	private readonly VehicleStatistics vehicleStatistics;
 	private readonly IMapper mapper;
 
@@ -29,7 +28,6 @@ public class ParkedVehiclesController : Controller
 	{
 		this.parkingLotManager = parkingLotManager;
 		this.context = context;
-		//checkOutModel = new CheckOutVehicleViewModel();
 		vehicleStatistics = new VehicleStatistics();
 		this.mapper = mapper;
 	}
@@ -286,7 +284,7 @@ public class ParkedVehiclesController : Controller
 
 		context.ParkedVehicle.Remove(parkedVehicle);
 		var checkOutModel = CheckOutDetails(parkedVehicle); //ToDo: Is there a way to not call this method again since we already have stored the data in Delete method
-		
+
 		await context.SaveChangesAsync();
 		/* TODO: ADD THIS BACK WHEN CONTROLLER IS ADDED
         parkingLotManager.RemoveVehicleFromLot(parkedVehicle.Id, (parkedVehicle.ParkingSpace, parkedVehicle.ParkingSubSpace), parkedVehicle.VehicleType.GetVehicleSize());

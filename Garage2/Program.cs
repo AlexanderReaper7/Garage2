@@ -5,6 +5,7 @@ using Garage2.Models;
 using Garage2.Services;
 using Microsoft.Extensions.DependencyInjection;
 using AutoMapper;
+using Garage2.Extensions;
 
 namespace Garage2;
 using Garage2.Models;
@@ -25,31 +26,6 @@ public class Program
 
         var app = builder.Build();
 
-        using (var scope = app.Services.CreateScope())
-        {
-	        var serviceProvider = scope.ServiceProvider;
-	        var db = serviceProvider.GetRequiredService<Garage2Context>();
-
-	        //If there isn't any parkedVehicles in the database erase it and instantiate defaults
-	        //if (!db.ParkedVehicle.Any())
-	        //{
-		        await db.Database.EnsureDeletedAsync();
-			//}
-	        //run all the migrations, if the database doesnt exist create it, if it exist, just update the database
-	        await db.Database.MigrateAsync();
-
-	        try
-	        {
-		        await DbInitializer.InitAsync(db);
-	        }
-	        catch (Exception e)
-	        {
-		        Console.WriteLine(e.Message);
-		        throw;
-	        }
-        }
-		//DbInitializer.Seed(app, serviceProvider);
-
 		// Configure the HTTP request pipeline.
 		if (!app.Environment.IsDevelopment())
         {
@@ -57,7 +33,10 @@ public class Program
             // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
             app.UseHsts();
         }
-       
+		else
+		{
+			await app.SeedDataAsync();
+		}
 
 		app.UseHttpsRedirection();
         app.UseStaticFiles();
