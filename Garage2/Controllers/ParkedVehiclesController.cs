@@ -227,7 +227,7 @@ public class ParkedVehiclesController : Controller
 		}
 
 		var parkedVehicle = await context.ParkedVehicle
-			.FirstOrDefaultAsync(m => m.Id == id);
+			.Include(m => m.Member).FirstOrDefaultAsync(m => m.Id == id);
 
 		if (parkedVehicle == null)
 		{
@@ -301,14 +301,28 @@ public class ParkedVehiclesController : Controller
 
 	public async Task<IActionResult> Statistics()
 	{
-		var parkedVehicle = await context.ParkedVehicle.ToListAsync();
+		var parkedVehicle = await context.ParkedVehicle.Include(m => m.Member).ToListAsync();
 
 		vehicleStatistics.NumberOfWheels = context.ParkedVehicle.Select(v => v.NumberOfWheels).Sum();
 		vehicleStatistics.Price = CalculateCurrentEarnings(parkedVehicle);
 
 		vehicleStatistics.VehicleCounts = VehicleCount();
+		vehicleStatistics.NrOfMembers = parkedVehicle.Select(p => p.Member).Distinct().Count();
+		vehicleStatistics.Memberships = GetTotalMemberships();
+
 
 		return View("ShowStatistics", vehicleStatistics);
+	}
+
+	private Dictionary<Membership, int> GetTotalMemberships()
+	{
+		var membershipCounts = context.ParkedVehicle.Include(t => t.Member)
+			.GroupBy(p => p.Member.Membership)
+			.ToDictionary(
+				group => group.Key,
+				group => group.Count()
+			);
+		return membershipCounts;
 	}
 
 	public Dictionary<string, int> VehicleCount()

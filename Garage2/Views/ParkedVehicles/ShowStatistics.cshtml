@@ -5,6 +5,51 @@
 }
 
 <h2><strong>Statistics</strong></h2>
+<div>
+	<a asp-action="Index">Back to List</a>
+</div>
+<table class="table">
+	<thead>
+		<tr>
+			<th>
+				@Html.DisplayNameFor(model => model.NrOfMembers)
+			</th>
+		</tr>
+	</thead>
+
+	<tbody>
+
+		<tr>
+			<td>
+				@Html.DisplayFor(model => model.NrOfMembers)
+			</td>
+
+		</tr>
+
+	</tbody>
+</table>
+
+<table class="table">
+	<thead>
+		<tr>
+			<th>
+				@Html.DisplayNameFor(model => model.Memberships)
+			</th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (var kvp in Model.Memberships)
+		{
+			<tr>
+				<td>
+					@Html.DisplayFor(model => kvp.Key)
+					@Html.DisplayFor(model => kvp.Value)
+				</td>
+			</tr>
+		}
+	</tbody>
+
+</table>
 
 <table class="table">
 	<thead>
@@ -25,9 +70,7 @@
 			</tr>
 		}
 	</tbody>
-	<div>
-		<a asp-action="Index">Back to List</a>
-	</div>
+
 </table>
 
 <table class="table">

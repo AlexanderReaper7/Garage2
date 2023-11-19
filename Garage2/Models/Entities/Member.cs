@@ -8,6 +8,7 @@ public class Member
 {
     [Key]
     [PersonNumberValidator]
+    [Display(Name = "Birth Number")]
     public string PersonNumber { get; set; }
 
     [Required]

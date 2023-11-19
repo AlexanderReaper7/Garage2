@@ -79,7 +79,7 @@ public class DbInitializer
 			{
 				FirstName = fName,
 				LastName = lName,
-				PersonNumber = personNumber.ToLongDateString(),
+				PersonNumber = personNumber.ToString("d"),
 				Membership = (Membership)membershipValues.GetValue(rnd.Next(membershipValues.Length))!,
 			};
 
