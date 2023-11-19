@@ -30,83 +30,83 @@
 
 <table class="table">
     <thead>
-        <tr>
-            <th onclick="location.href='?sortOrder=@registrationNumberSortParam'">
-                @Html.DisplayNameFor(model => model.RegistrationNumber)
-                @if (ViewBag.CurrentSort == "RegistrationNumber_asc")
-                {
-                    <text> ↑</text>
-                }
-                else if (ViewBag.CurrentSort == "RegistrationNumber_desc")
-                {
-                    <text> ↓</text>
-                }
-            </th>
-            <th onclick="location.href='?sortOrder=@vehicleTypeSortParam'">
-                @Html.DisplayNameFor(model => model.VehicleType)
-                @if (ViewBag.CurrentSort == "VehicleType_asc")
-                {
-                    <text> ↑</text>
-                }
-                else if (ViewBag.CurrentSort == "VehicleType_desc")
-                {
-                    <text> ↓</text>
-                }
-            </th>
-            <th onclick="location.href='?sortOrder=@arrivalTimeSortParam'">
-                @Html.DisplayNameFor(model => model.ArrivalTime)
-                @if (ViewBag.CurrentSort == "ArrivalTime_asc")
-                {
-                    <text> ↑</text>
-                }
-                else if (ViewBag.CurrentSort == "ArrivalTime_desc")
-                {
-                    <text> ↓</text>
-                }
-            </th>
-            <th onclick="location.href='?sortOrder=@parkingSpaceSortParam'">
-                @Html.DisplayNameFor(model => model.ParkingSpace)
-                @if (ViewBag.CurrentSort == "ParkingSpace_asc")
-                {
-                    <text> ↑</text>
-                }
-                else if (ViewBag.CurrentSort == "ParkingSpace_desc")
-                {
-                    <text> ↓</text>
-                }
-            </th>
-            <th></th>
-        </tr>
+    <tr>
+	    <th onclick="location.href='?sortOrder=@registrationNumberSortParam'">
+		    @Html.DisplayNameFor(model => model.RegistrationNumber)
+		    @if (ViewBag.CurrentSort == "RegistrationNumber_asc")
+		    {
+			    <text> ↑</text>
+		    }
+		    else if (ViewBag.CurrentSort == "RegistrationNumber_desc")
+		    {
+			    <text> ↓</text>
+		    }
+	    </th>
+	    <th onclick="location.href='?sortOrder=@vehicleTypeSortParam'">
+		    @Html.DisplayNameFor(model => model.VehicleType)
+		    @if (ViewBag.CurrentSort == "VehicleType_asc")
+		    {
+			    <text> ↑</text>
+		    }
+		    else if (ViewBag.CurrentSort == "VehicleType_desc")
+		    {
+			    <text> ↓</text>
+		    }
+	    </th>
+	    <th onclick="location.href='?sortOrder=@arrivalTimeSortParam'">
+		    @Html.DisplayNameFor(model => model.ArrivalTime)
+		    @if (ViewBag.CurrentSort == "ArrivalTime_asc")
+		    {
+			    <text> ↑</text>
+		    }
+		    else if (ViewBag.CurrentSort == "ArrivalTime_desc")
+		    {
+			    <text> ↓</text>
+		    }
+	    </th>
+	    <th onclick="location.href='?sortOrder=@parkingSpaceSortParam'">
+		    @Html.DisplayNameFor(model => model.ParkingSpace)
+		    @if (ViewBag.CurrentSort == "ParkingSpace_asc")
+		    {
+			    <text> ↑</text>
+		    }
+		    else if (ViewBag.CurrentSort == "ParkingSpace_desc")
+		    {
+			    <text> ↓</text>
+		    }
+	    </th>
+	    <th></th>
+    </tr>
     </thead>
     <tbody>
         @foreach (var item in Model)
         {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.RegistrationNumber)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.VehicleType.Name)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ArrivalTime)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ParkingSpace)
+	        <tr>
+		        <td>
+			        @Html.DisplayFor(modelItem => item.RegistrationNumber)
+		        </td>
+		        <td>
+			        @Html.DisplayFor(modelItem => item.VehicleType.Name)
+		        </td>
+		        <td>
+			        @Html.DisplayFor(modelItem => item.ArrivalTime)
+		        </td>
+		        <td>
+			        @Html.DisplayFor(modelItem => item.ParkingSpace)
 
-                    @if (item.ParkingSubSpace != 0)
-                    {
-                        <text>: </text>
+			        @if (item.ParkingSubSpace != 0)
+			        {
+				        <text>: </text>
 
-                        @Html.DisplayFor(modelItem => item.ParkingSubSpace)
-                    }
-                </td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.Id">Check Out</a>
-                </td>
-            </tr>
+				        @Html.DisplayFor(modelItem => item.ParkingSubSpace)
+			        }
+		        </td>
+		        <td>
+			        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+			        <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+			        <a asp-action="Delete" asp-route-id="@item.Id">Check Out</a>
+		        </td>
+	        </tr>
         }
     </tbody>
 </table>

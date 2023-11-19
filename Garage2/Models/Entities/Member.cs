@@ -19,7 +19,8 @@ public class Member
     [MaxLength(50)]
     [MinLength(1)]
     public string LastName { get; set; }
-
+    [Display(Name = "Owner")]
+    public string FullName => $"{FirstName} {LastName}";
     public Membership Membership { get; set; }
     //Foreign Key
     public int ParkedVehicleId { get; set; }

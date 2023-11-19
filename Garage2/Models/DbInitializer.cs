@@ -72,14 +72,15 @@ public class DbInitializer
 			var lName = faker.Name.LastName();
 			//var membership = Membership.Standard;
 			var personNumber = faker.Date.Between(new DateTime(1965, 1, 2), new DateTime(2002, 1, 2));
+			Array membershipValues = Enum.GetValues(typeof(Membership));
 
-
+			var Random = new Random();
 			var member = new Member()
 			{
 				FirstName = fName,
 				LastName = lName,
 				PersonNumber = personNumber.ToLongDateString(),
-				Membership = Membership.Pro,
+				Membership = (Membership)membershipValues.GetValue(rnd.Next(membershipValues.Length))!,
 			};
 
 			members.Add(member);
@@ -132,8 +133,8 @@ public class DbInitializer
 	private static IEnumerable<ParkedVehicle> GenerateVehicles(IEnumerable<VehicleType> vehicleTypes, IEnumerable<Member> members)
 	{
 		var parkedVehicle = new List<ParkedVehicle>();
-		var startDate = new DateTime(2022, 1, 1);
-		var endDate = new DateTime(2022, 12, 31);
+		var startDate = new DateTime(2023, 1, 1);
+		var endDate = new DateTime(2023, 12, 31);
 
 		var random = new Random();
 		var index = 0;

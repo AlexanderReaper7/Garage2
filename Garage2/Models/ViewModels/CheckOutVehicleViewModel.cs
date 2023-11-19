@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Garage2.Models.Entities;
 
 namespace Garage2.Models.ViewModels;
 
@@ -21,4 +22,5 @@ public class CheckOutVehicleViewModel
     [Display(Name = "Parking Lot Nr")]
     public int ParkingSpace { get; set; }
     public int ParkingSubSpace { get; set; }
+    public Member Member { get; set; }
 }
