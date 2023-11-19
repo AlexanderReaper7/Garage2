@@ -25,6 +25,6 @@ public class Member
     public int ParkedVehicleId { get; set; }
 
     //Navigation Property
-    public ICollection<ParkedVehicle> ParkedVehicles { get; set; } = new List<ParkedVehicle>();
+    public ICollection<ParkedVehicle> ParkedVehicle { get; set; } 
 
 }

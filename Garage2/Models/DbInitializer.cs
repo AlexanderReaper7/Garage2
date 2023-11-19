@@ -8,6 +8,8 @@ using Bogus.DataSets;
 using Bogus.Extensions.UnitedKingdom;
 using Garage2.Migrations;
 using Garage2.Models.Entities;
+using NuGet.Packaging;
+
 namespace Garage2.Models;
 
 public class DbInitializer
@@ -23,14 +25,38 @@ public class DbInitializer
 
 		var members = GenerateMembers(10);
 		await db.AddRangeAsync(members);
-	//	await db.SaveChangesAsync(); // Save changes to make sure members are tracked
+		//	await db.SaveChangesAsync(); // Save changes to make sure members are tracked
 
 		var vehicleTypes = GenerateVehicleTypes(10);
 		await db.AddRangeAsync(vehicleTypes);
 
 		var vehicles = GenerateVehicles(vehicleTypes, members);
 		await db.AddRangeAsync(vehicles);
+		await db.SaveChangesAsync();
 
+		// Add the generated vehicles to the corresponding members
+		foreach (var member in members)
+		{
+			var correspondingVehicle = vehicles.FirstOrDefault(v => v.Member == member);
+
+			if (correspondingVehicle != null)
+			{
+				member.ParkedVehicleId = correspondingVehicle.Id;
+			}
+		}
+
+		await db.SaveChangesAsync();
+
+		// Add the generated vehicleType to the corresponding vehicle
+		foreach (var type in vehicleTypes)
+		{
+			var correspondingVehicle = vehicles.FirstOrDefault(v => v.VehicleTypeId == type.Id);
+
+			if (correspondingVehicle != null)
+			{
+				type.ParkedVehicleId = correspondingVehicle.Id;
+			}
+		}
 
 		await db.SaveChangesAsync();
 	}
@@ -66,15 +92,33 @@ public class DbInitializer
 
 		for (int i = 0; i < generateVehicleTypes; i++)
 		{
+			var name = GenerateRandomVehicleType();
+			var size = GenerateSizeDependingOnName(name);
+
 			var vehicleType = new VehicleType()
 			{
-				Name = GenerateRandomVehicleType(),
+				Name = name,
+				Size = size
 			};
 			vehicleTypes.Add(vehicleType);
 		}
 
 		return vehicleTypes;
 	}
+
+	private static double GenerateSizeDependingOnName(string name)
+	{
+		switch (name)
+		{
+			case "Car":
+				return 1;
+			case "Truck":
+			case "Bus":
+				return 2;
+		}
+		return 0;
+	}
+
 	//Generate Random Vehicle Types
 	private static string GenerateRandomVehicleType()
 	{
@@ -87,12 +131,12 @@ public class DbInitializer
 	//Generate Random Vehicle
 	private static IEnumerable<ParkedVehicle> GenerateVehicles(IEnumerable<VehicleType> vehicleTypes, IEnumerable<Member> members)
 	{
-		var vehicles = new List<ParkedVehicle>();
+		var parkedVehicle = new List<ParkedVehicle>();
 		var startDate = new DateTime(2022, 1, 1);
 		var endDate = new DateTime(2022, 12, 31);
 
 		var random = new Random();
-
+		var index = 0;
 		foreach (var member in members)
 		{
 
@@ -101,34 +145,27 @@ public class DbInitializer
 			var color = faker.Commerce.Color();
 			var arrivalTime = faker.Date.Between(startDate, endDate);
 			var brand = faker.Vehicle.Manufacturer();
-
-			// Randomly select a vehicle type for each member
-			var randomVehicleType = vehicleTypes.ElementAt(random.Next(vehicleTypes.Count()));
+			
+			// Get The list from start to end
+			var currentVehicleType = vehicleTypes.ElementAt(index);
 
 			var vehicle = new ParkedVehicle()
 			{
-				ParkingSpace = 2,
 				Brand = brand,
 				Model = model,
 				RegistrationNumber = regNr,
 				Color = color,
 				ArrivalTime = arrivalTime,
-				VehicleType = randomVehicleType,
-				NumberOfWheels = 4,
+				VehicleType = currentVehicleType,
 				Member = member,
-			
 			};
 
-			
 			FetchNrWheelsAndParkingSpace(vehicle);
-
-			member.ParkedVehicles.Add(vehicle);
-
-			vehicles.Add(vehicle);
+			parkedVehicle.Add(vehicle);
+			index++;
 		}
 
-	
-		return vehicles;
+		return parkedVehicle;
 	}
 	//Fetch Number Of WHeels And Parking Space Depending On Type
 	private static void FetchNrWheelsAndParkingSpace(ParkedVehicle vehicle)
