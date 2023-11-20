@@ -1,14 +1,17 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Garage2.AutoMapperConfig;
+using Microsoft.EntityFrameworkCore;
 using Garage2.Data;
 using Garage2.Models;
 using Garage2.Services;
+using Microsoft.Extensions.DependencyInjection;
+using AutoMapper;
+using Garage2.Extensions;
 
 namespace Garage2;
 using Garage2.Models;
 public class Program
 {
-    public static void Main(string[] args)
+    public static async Task Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
         builder.Services.AddDbContext<Garage2Context>(options =>
@@ -16,24 +19,28 @@ public class Program
 
         // Add services to the container.
         builder.Services.AddControllersWithViews();
-       
-        builder.Services.AddScoped<IListOfAvailableLotsService, ListOfAvailableLotsService>();
+		builder.Services.AddAutoMapper(typeof(GarageMapping));
+
+		builder.Services.AddScoped<IListOfAvailableLotsService, ListOfAvailableLotsService>();
         builder.Services.AddScoped<IParkingLotManager, ParkingLotManager>();
 
         var app = builder.Build();
 
-		var serviceProvider = app.Services;
-		DbInitializer.Seed(app, serviceProvider);
-
-        // Configure the HTTP request pipeline.
-        if (!app.Environment.IsDevelopment())
+		// Configure the HTTP request pipeline.
+		if (!app.Environment.IsDevelopment())
         {
             app.UseExceptionHandler("/Home/Error");
             // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
             app.UseHsts();
-        }
 
-        app.UseHttpsRedirection();
+            
+		}
+		else
+		{
+			await app.SeedDataAsync();
+		}
+
+		app.UseHttpsRedirection();
         app.UseStaticFiles();
 
         app.UseRouting();

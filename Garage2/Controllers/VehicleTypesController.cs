@@ -22,13 +22,13 @@ namespace Garage2.Controllers
         // GET: VehicleTypes
         public async Task<IActionResult> Index()
         {
-              return _context.VehicleType != null ? 
-                          View(await _context.VehicleType.ToListAsync()) :
-                          Problem("Entity set 'Garage2Context.VehicleType'  is null.");
+            return _context.VehicleType != null ?
+                        View(await _context.VehicleType.ToListAsync()) :
+                        Problem("Entity set 'Garage2Context.VehicleType'  is null.");
         }
 
         // GET: VehicleTypes/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(string? id)
         {
             if (id == null || _context.VehicleType == null)
             {
@@ -36,7 +36,7 @@ namespace Garage2.Controllers
             }
 
             var vehicleType = await _context.VehicleType
-                .FirstOrDefaultAsync(m => m.Id == id);
+                .FirstOrDefaultAsync(m => m.Name == id);
             if (vehicleType == null)
             {
                 return NotFound();
@@ -56,7 +56,7 @@ namespace Garage2.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Size,ParkedVehicleId")] VehicleType vehicleType)
+        public async Task<IActionResult> Create([Bind("Name,Size,ParkedVehicleId")] VehicleType vehicleType)
         {
             if (ModelState.IsValid)
             {
@@ -68,7 +68,7 @@ namespace Garage2.Controllers
         }
 
         // GET: VehicleTypes/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Edit(string? id)
         {
             if (id == null || _context.VehicleType == null)
             {
@@ -88,9 +88,9 @@ namespace Garage2.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Size,ParkedVehicleId")] VehicleType vehicleType)
+        public async Task<IActionResult> Edit(string id, [Bind("Name,Size,ParkedVehicleId")] VehicleType vehicleType)
         {
-            if (id != vehicleType.Id)
+            if (id != vehicleType.Name)
             {
                 return NotFound();
             }
@@ -104,7 +104,7 @@ namespace Garage2.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!VehicleTypeExists(vehicleType.Id))
+                    if (!VehicleTypeExists(vehicleType.Name))
                     {
                         return NotFound();
                     }
@@ -119,7 +119,7 @@ namespace Garage2.Controllers
         }
 
         // GET: VehicleTypes/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public async Task<IActionResult> Delete(string? id)
         {
             if (id == null || _context.VehicleType == null)
             {
@@ -127,7 +127,7 @@ namespace Garage2.Controllers
             }
 
             var vehicleType = await _context.VehicleType
-                .FirstOrDefaultAsync(m => m.Id == id);
+                .FirstOrDefaultAsync(m => m.Name == id);
             if (vehicleType == null)
             {
                 return NotFound();
@@ -139,7 +139,7 @@ namespace Garage2.Controllers
         // POST: VehicleTypes/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(string id)
         {
             if (_context.VehicleType == null)
             {
@@ -150,14 +150,14 @@ namespace Garage2.Controllers
             {
                 _context.VehicleType.Remove(vehicleType);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool VehicleTypeExists(int id)
+        private bool VehicleTypeExists(string id)
         {
-          return (_context.VehicleType?.Any(e => e.Id == id)).GetValueOrDefault();
+            return (_context.VehicleType?.Any(e => e.Name == id)).GetValueOrDefault();
         }
     }
 }
