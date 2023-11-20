@@ -55,7 +55,7 @@ public class ParkedVehiclesController : Controller
             _ => model.OrderBy(v => v.RegistrationNumber)
         };
 
-        var viewModel = mapper.ProjectTo<ParkedVehiclesViewModel>(context.ParkedVehicle);
+        var viewModel = mapper.ProjectTo<ParkedVehiclesViewModel>(model);
 
         return View("ParkedVehiclesIndex", await viewModel.ToListAsync());
     }
@@ -137,7 +137,7 @@ public class ParkedVehiclesController : Controller
     /// <param name="parkedVehicle"></param>
     private void Park(ParkedVehicle parkedVehicle)
     {
-        var parkingLot = parkingLotManager.AddVehicleToSlot(parkedVehicle.Id, (int)parkedVehicle.VehicleType.Size);
+        var parkingLot = parkingLotManager.Park(parkedVehicle.Id, parkedVehicle.VehicleType.Size);
         parkedVehicle.ParkingSpace = parkingLot.Item1;
         parkedVehicle.ParkingSubSpace = parkingLot.Item2;
     }
@@ -276,7 +276,8 @@ public class ParkedVehiclesController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> DeleteConfirmed(int id)
     {
-        var parkedVehicle = await context.ParkedVehicle.Include(m => m.Member).FirstOrDefaultAsync(m => m.Id == id);
+        var parkedVehicle = await context.ParkedVehicle.Include(m => m.Member)
+            .Include(parkedVehicle => parkedVehicle.VehicleType).FirstOrDefaultAsync(m => m.Id == id);
         if (parkedVehicle == null)
         {
             return NotFound();
@@ -286,9 +287,7 @@ public class ParkedVehiclesController : Controller
         var checkOutModel = CheckOutDetails(parkedVehicle); //ToDo: Is there a way to not call this method again since we already have stored the data in Delete method
 
         await context.SaveChangesAsync();
-        /* TODO: ADD THIS BACK WHEN CONTROLLER IS ADDED
-        parkingLotManager.RemoveVehicleFromLot(parkedVehicle.Id, (parkedVehicle.ParkingSpace, parkedVehicle.ParkingSubSpace), parkedVehicle.VehicleType.GetVehicleSize());
-        */
+        parkingLotManager.UnPark(parkedVehicle.Id, (parkedVehicle.ParkingSpace, parkedVehicle.ParkingSubSpace), parkedVehicle.VehicleType.Size);
         return View("Receipt", checkOutModel);
     }
 
@@ -344,13 +343,13 @@ public class ParkedVehiclesController : Controller
     public async Task<IActionResult> Search(string searchString)
     {
 
-        var model = mapper.ProjectTo<ParkedVehiclesViewModel>(context.ParkedVehicle);
-
+        var results = new List<ParkedVehiclesViewModel>();
         if (!string.IsNullOrEmpty(searchString))
         {
-            model = model.Where(v => v.RegistrationNumber.Replace(" ", "").Contains(searchString.Replace(" ", "")));
+            var model = context.ParkedVehicle.Where(v => v.RegistrationNumber.Replace(" ", "").Contains(searchString.Replace(" ", "")));
+            results = await mapper.ProjectTo<ParkedVehiclesViewModel>(model).ToListAsync();
         }
 
-        return View("ParkedVehiclesIndex", await model.ToListAsync());
+        return View("ParkedVehiclesIndex", results);
     }
 }
