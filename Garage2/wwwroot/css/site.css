@@ -80,3 +80,6 @@ a.nav-link.text-dark:hover {
     
 }
 
+#vehicleTypeDropdown {
+    width: fit-content;
+}

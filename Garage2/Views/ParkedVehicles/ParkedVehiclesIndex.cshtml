@@ -1,5 +1,6 @@
-﻿@model IEnumerable<Garage2.Models.ViewModels.ParkedVehiclesViewModel>
-
+﻿@using Garage2.Services
+@model IEnumerable<Garage2.Models.ViewModels.ParkedVehiclesViewModel>
+@inject ISelectListSearchService service
 @{
     ViewData["Title"] = "Index";
 }
@@ -22,10 +23,14 @@
 
 @* Search bar *@
 <form asp-action="Search" method="get">
-    <div class="form-group d-flex flex-row">
-        <input type="text" class="form-control" id="searchString" name="searchString" placeholder="Registration Number">
-        <button type="submit" class="btn btn-primary text-black shadow-sm">Search</button>
-    </div>
+	<div class="form-group d-flex flex-row">
+		<select id="selectTypeDropdown" class="form-control" asp-items="@service.GetSelectList()">
+			<option value="">Select Type</option>
+		</select>
+		<input type="hidden" id="selectedType" name="selectedType" /> <!-- This is to tie the chosen type to the search thorugh javascript -->
+		<input type="text" class="form-control" id="searchString" name="searchString" placeholder="Registration Number">
+		<button type="submit" class="btn btn-primary text-black shadow-sm">Search</button>
+	</div>
 </form>
 
 <table class="table">

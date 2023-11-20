@@ -35,7 +35,7 @@ public class ParkedVehiclesController : Controller
     // GET: ParkedVehicles
     public async Task<IActionResult> Index(string sortOrder)
     {
-        var model = from v in context.ParkedVehicle
+        var model = from v in context.ParkedVehicle.Include(p => p.VehicleType)
                     select v;
         if (string.IsNullOrEmpty(sortOrder))
         {
@@ -55,7 +55,7 @@ public class ParkedVehiclesController : Controller
             _ => model.OrderBy(v => v.RegistrationNumber)
         };
 
-        var viewModel = mapper.ProjectTo<ParkedVehiclesViewModel>(context.ParkedVehicle);
+        var viewModel = mapper.ProjectTo<ParkedVehiclesViewModel>(context.ParkedVehicle.Include(p => p.VehicleType));
 
         return View("ParkedVehiclesIndex", await viewModel.ToListAsync());
     }

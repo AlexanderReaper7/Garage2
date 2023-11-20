@@ -22,6 +22,7 @@ public class Program
 		builder.Services.AddAutoMapper(typeof(GarageMapping));
 
 		builder.Services.AddScoped<IListOfAvailableLotsService, ListOfAvailableLotsService>();
+		builder.Services.AddScoped<ISelectListSearchService, SelectListSearchService>();
         builder.Services.AddScoped<IParkingLotManager, ParkingLotManager>();
 
         var app = builder.Build();
