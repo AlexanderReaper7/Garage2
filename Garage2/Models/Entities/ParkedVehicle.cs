@@ -36,8 +36,8 @@ public class ParkedVehicle
     [Display(Name = "Parking Sub Space")]
     public int ParkingSubSpace { get; set; }
     // Foreign Key
-    public int MemberId { get; set; }
-    public int VehicleTypeId { get; set; }
+    public string MemberPersonNumber { get; set; }
+    public string VehicleTypeName { get; set; }
 
     // Navigation Property
     [Display(Name = "Owner")]

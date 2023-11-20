@@ -8,6 +8,7 @@ public class Member
 {
     [Key]
     [PersonNumberValidator]
+    [Display(Name = "Birth Number")]
     public string PersonNumber { get; set; }
 
     [Required]
@@ -19,10 +20,9 @@ public class Member
     [MaxLength(50)]
     [MinLength(1)]
     public string LastName { get; set; }
-
+    [Display(Name = "Owner")]
+    public string FullName => $"{FirstName} {LastName}";
     public Membership Membership { get; set; }
-    // Foreign Key
-    public int ParkedVehicleId { get; set; }
 
     //Navigation Property
     public ICollection<ParkedVehicle> ParkedVehicle { get; set; }
