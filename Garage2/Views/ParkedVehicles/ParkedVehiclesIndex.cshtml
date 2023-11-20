@@ -24,10 +24,11 @@
 @* Search bar *@
 <form asp-action="Search" method="get">
 	<div class="form-group d-flex flex-row">
-		<select id="selectTypeDropdown" class="form-control" asp-items="@service.GetSelectList()">
+		<select id="selectTypeDropDown" class="form-control" asp-items="@service.GetSelectList()">
 			<option value="">Select Type</option>
 		</select>
-		<input type="hidden" id="selectedType" name="selectedType" /> <!-- This is to tie the chosen type to the search thorugh javascript -->
+		<!-- This is to tie the chosen type to the search bar and then used in javascript to get the chosen value -->
+		<input type="hidden" id="selectedType" name="selectedType" /> 
 		<input type="text" class="form-control" id="searchString" name="searchString" placeholder="Registration Number">
 		<button type="submit" class="btn btn-primary text-black shadow-sm">Search</button>
 	</div>
@@ -84,34 +85,34 @@
     </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model)
-        {
-	        <tr>
-		        <td>
-			        @Html.DisplayFor(modelItem => item.RegistrationNumber)
-		        </td>
-		        <td>
-			        @Html.DisplayFor(modelItem => item.VehicleType.Name)
-		        </td>
-		        <td>
-			        @Html.DisplayFor(modelItem => item.ArrivalTime)
-		        </td>
-		        <td>
-			        @Html.DisplayFor(modelItem => item.ParkingSpace)
+    @foreach (var item in Model)
+    {
+	    <tr>
+		    <td>
+			    @Html.DisplayFor(modelItem => item.RegistrationNumber)
+		    </td>
+		    <td>
+			    @Html.DisplayFor(modelItem => item.VehicleType.Name)
+		    </td>
+		    <td>
+			    @Html.DisplayFor(modelItem => item.ArrivalTime)
+		    </td>
+		    <td>
+			    @Html.DisplayFor(modelItem => item.ParkingSpace)
 
-			        @if (item.ParkingSubSpace != 0)
-			        {
-				        <text>: </text>
+			    @if (item.ParkingSubSpace != 0)
+			    {
+				    <text>: </text>
 
-				        @Html.DisplayFor(modelItem => item.ParkingSubSpace)
-			        }
-		        </td>
-		        <td>
-			        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-			        <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-			        <a asp-action="Delete" asp-route-id="@item.Id">Check Out</a>
-		        </td>
-	        </tr>
-        }
+				    @Html.DisplayFor(modelItem => item.ParkingSubSpace)
+			    }
+		    </td>
+		    <td>
+			    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+			    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+			    <a asp-action="Delete" asp-route-id="@item.Id">Check Out</a>
+		    </td>
+	    </tr>
+    }
     </tbody>
 </table>

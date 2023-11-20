@@ -335,22 +335,30 @@ public class ParkedVehiclesController : Controller
         return vehicleCount;
     }
 
-    /// <summary>
-    /// GET: ParkedVehicles/Search/"searchString"
-    /// Search for parked vehicles by registration number
-    /// </summary>
-    /// <param name="searchString"></param>
-    /// <returns></returns>
-    public async Task<IActionResult> Search(string searchString)
-    {
+	/// <summary>
+	/// GET: ParkedVehicles/Search/"searchString"
+	/// Search for parked vehicles by registration number
+	/// </summary>
+	/// <param name="searchString"></param>
+	/// <returns></returns>
+	public async Task<IActionResult> Search(string searchString, string selectedType)
+	{
+		var model = context.ParkedVehicle.Include(p => p.VehicleType).AsQueryable();
 
-        var model = mapper.ProjectTo<ParkedVehiclesViewModel>(context.ParkedVehicle);
+		if (!string.IsNullOrEmpty(searchString))
+		{
+			model = model.Where(v => v.RegistrationNumber.Replace(" ", "").Contains(searchString.Replace(" ", "")));
+		}
 
-        if (!string.IsNullOrEmpty(searchString))
-        {
-            model = model.Where(v => v.RegistrationNumber.Replace(" ", "").Contains(searchString.Replace(" ", "")));
-        }
+		if (!string.IsNullOrEmpty(selectedType))
+		{
+			model = model
+				.Where(n => n.VehicleType.Name == selectedType);
+		}
 
-        return View("ParkedVehiclesIndex", await model.ToListAsync());
-    }
+		// Project to view model after including and filtering
+		var viewModel = mapper.ProjectTo<ParkedVehiclesViewModel>(model);
+
+		return View("ParkedVehiclesIndex", viewModel);
+	}
 }
