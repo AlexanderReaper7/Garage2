@@ -23,10 +23,8 @@ public class Member
     [Display(Name = "Owner")]
     public string FullName => $"{FirstName} {LastName}";
     public Membership Membership { get; set; }
-    //Foreign Key
-    public int ParkedVehicleId { get; set; }
 
     //Navigation Property
-    public ICollection<ParkedVehicle> ParkedVehicle { get; set; } 
+    public ICollection<ParkedVehicle> ParkedVehicle { get; set; }
 
 }
