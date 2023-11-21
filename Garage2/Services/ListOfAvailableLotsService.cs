@@ -51,9 +51,6 @@ public class ListOfAvailableLotsService : IListOfAvailableLotsService
                               .ToList()
         };
         var Relevantdropdown = selectList.Memberships;
-		//var finallist = new MembershipModelist();
-		//finallist.Memberships = Relevantdropdown;
-        //var selectList = AvailableTypes.Select(v => new SelectListItem { Value = v.ToString(), Text = v.ToString() });
         return Relevantdropdown;
     }
 }

@@ -15,11 +15,11 @@ namespace Garage2.Controllers
     public class MembersController : Controller
     {
         private readonly Garage2Context _context;
-        private readonly IListOfAvailableLotsService listOfAvailableLotsService;
+    
 
-        public MembersController(Garage2Context context, IListOfAvailableLotsService listOfAvailableLotsService)
+        public MembersController(Garage2Context context)
         {
-            this.listOfAvailableLotsService = listOfAvailableLotsService;
+           
             _context = context;
         }
 
