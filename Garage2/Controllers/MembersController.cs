@@ -7,15 +7,19 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Garage2.Data;
 using Garage2.Models.Entities;
+using Garage2.Models;
+using Garage2.Services;
 
 namespace Garage2.Controllers
 {
     public class MembersController : Controller
     {
         private readonly Garage2Context _context;
+        private readonly IListOfAvailableLotsService listOfAvailableLotsService;
 
-        public MembersController(Garage2Context context)
+        public MembersController(Garage2Context context, IListOfAvailableLotsService listOfAvailableLotsService)
         {
+            this.listOfAvailableLotsService = listOfAvailableLotsService;
             _context = context;
         }
 
@@ -49,6 +53,7 @@ namespace Garage2.Controllers
         public IActionResult Create()
         {
             return View();
+            
         }
 
         // POST: Members/Create
@@ -164,5 +169,5 @@ namespace Garage2.Controllers
             return View();
         }
     }
-    }
+    
 }

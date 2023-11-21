@@ -8,12 +8,14 @@
 
   <ItemGroup>
     <Compile Remove="Models\ParkingSlotManager.cs" />
+    <Compile Remove="Validators\NotLikeAttribute.cs" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="12.0.1" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
     <PackageReference Include="Bogus" Version="34.0.2" />
+    <PackageReference Include="Foolproof" Version="0.9.4518" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.12" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="7.0.12">
       <PrivateAssets>all</PrivateAssets>
