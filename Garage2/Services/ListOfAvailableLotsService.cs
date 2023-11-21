@@ -11,8 +11,6 @@ public class ListOfAvailableLotsService : IListOfAvailableLotsService
 {
 
 	readonly IParkingLotManager parkingLotManager;
-	readonly Garage2Context context;
-
 	/// <summary>
 	/// 
 	/// </summary>
@@ -27,10 +25,9 @@ public class ListOfAvailableLotsService : IListOfAvailableLotsService
 		}
 	}
 
-	public ListOfAvailableLotsService(IParkingLotManager parkingLotManager, Garage2Context context)
+	public ListOfAvailableLotsService(IParkingLotManager parkingLotManager)
 	{
 		this.parkingLotManager = parkingLotManager;
-		this.context = context;
 	}
 
 	public IEnumerable<SelectListItem> GetVehicleTypesForList()
