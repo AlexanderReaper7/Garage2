@@ -12,6 +12,7 @@ using Garage2.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Garage2.Models;
 using Garage2.Models.Entities;
+using Garage2.Services;
 
 
 namespace Garage2.Controllers;
@@ -23,13 +24,15 @@ public class ParkedVehiclesController : Controller
     private readonly Garage2Context context;
     private readonly VehicleStatistics vehicleStatistics;
     private readonly IMapper mapper;
+    private readonly ISelectListSearchService selectListService;
 
-    public ParkedVehiclesController(Garage2Context context, IParkingLotManager parkingLotManager, IMapper mapper)
+    public ParkedVehiclesController(Garage2Context context, IParkingLotManager parkingLotManager, IMapper mapper, ISelectListSearchService selectListService)
     {
         this.parkingLotManager = parkingLotManager;
         this.context = context;
         vehicleStatistics = new VehicleStatistics();
         this.mapper = mapper;
+        this.selectListService = selectListService;
     }
 
     // GET: ParkedVehicles
@@ -95,7 +98,7 @@ public class ParkedVehiclesController : Controller
     // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create([Bind("Id,RegistrationNumber,VehicleType,Color,Brand,Model,NumberOfWheels,ArrivalTime,ParkingSpace,ParkingSubSpace")] ParkedVehicle parkedVehicle)
+    public async Task<IActionResult> Create([Bind("Id,RegistrationNumber,VehicleTypeName,Color,Brand,Model,NumberOfWheels,ArrivalTime,ParkingSpace,ParkingSubSpace")] ParkedVehicle parkedVehicle)
     {
         // normalize the registration number
         string[] parts = parkedVehicle.RegistrationNumber.ToUpperInvariant().Split(' ');
@@ -116,12 +119,11 @@ public class ParkedVehiclesController : Controller
                 return View(parkedVehicle);
             }
 
-
             context.Add(parkedVehicle);
 
-            await context.SaveChangesAsync();
+            //await context.SaveChangesAsync();
 
-            Park(parkedVehicle);
+            //Park(parkedVehicle);
 
             await context.SaveChangesAsync();
 
@@ -361,4 +363,41 @@ public class ParkedVehiclesController : Controller
 
 		return View("ParkedVehiclesIndex", viewModel);
 	}
+
+	public async Task<IActionResult> AddNewVehicleType()
+	{
+
+        return View("AddNewVehicleType");
+	}
+    //Save the new added type to database
+    public async Task<IActionResult> AddNewType(string addNewType)
+    {
+      
+        if (!string.IsNullOrEmpty(addNewType))
+        {
+            var additionalItem = new SelectListItem
+            {
+                Value = addNewType,
+                Text = addNewType
+            };
+
+            selectListService.AddNewType(addNewType);
+
+            var existInDatabase = context.ParkedVehicle.Include(t => t.VehicleType)
+                .Any(n => n.VehicleTypeName == addNewType);
+
+            if (!existInDatabase)
+            {
+                var newType = new VehicleType
+                {
+                    Name = addNewType
+                };
+
+                context.VehicleType.Add(newType);
+                await context.SaveChangesAsync();
+            }
+        }
+
+        return View("Create");
+    }
 }

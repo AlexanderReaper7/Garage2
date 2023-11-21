@@ -4,5 +4,7 @@ namespace Garage2.Services;
 
 public interface ISelectListSearchService
 {
-	IEnumerable<SelectListItem> GetSelectList();
+    IEnumerable<SelectListItem> GetSelectList();
+    void AddNewType(string newType);
+
 }

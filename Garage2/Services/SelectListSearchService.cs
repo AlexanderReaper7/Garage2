@@ -1,28 +1,52 @@
 ﻿using Garage2.Data;
+using Garage2.Models;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 
 namespace Garage2.Services
 {
 	public class SelectListSearchService : ISelectListSearchService
 	{
 		private readonly Garage2Context context;
-
-		public SelectListSearchService(Garage2Context context)
+        private List<SelectListItem> selectList;
+        public SelectListSearchService(Garage2Context context)
 		{
 			this.context = context;
-		}
-		public IEnumerable<SelectListItem> GetSelectList()
+            // Initialize selectList once at the beginning
+            InitializeSelectList();
+        }
+        private void InitializeSelectList()
+        {
+            selectList = context.ParkedVehicle
+                .Include(p => p.VehicleType)
+                .Select(n => new SelectListItem
+                {
+                    Value = n.VehicleTypeName,
+                    Text = n.VehicleTypeName
+                }).ToList();
+        }
+        public IEnumerable<SelectListItem> GetSelectList()
 		{
-			var selectList = context.ParkedVehicle
-				.Select(t => t.VehicleType)
-				.Distinct()
-				.Select(n => new SelectListItem
-				{
-					Value = n.Name,
-					Text = n.Name
-				});
-			
-			return selectList;
+			selectList = context.VehicleType
+                .Select(n => new SelectListItem
+                {
+                    Value = n.Name,
+                    Text = n.Name
+                }).Distinct().ToList();
+
+
+            return selectList;
 		}
-	}
+
+        public void AddNewType(string newType)
+        {
+            var additionalType = new SelectListItem
+            {
+                Value = newType,
+                Text = newType
+            };
+
+			selectList = selectList.Concat(new[]{additionalType}).ToList();
+        }
+    }
 }

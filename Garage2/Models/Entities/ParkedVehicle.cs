@@ -37,6 +37,7 @@ public class ParkedVehicle
     public int ParkingSubSpace { get; set; }
     // Foreign Key
     public string MemberPersonNumber { get; set; }
+    [Display(Name = "Type")]
     public string VehicleTypeName { get; set; }
 
     // Navigation Property
