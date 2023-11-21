@@ -1,7 +1,7 @@
 ﻿@using Garage2.Services
 @model Garage2.Models.Entities.ParkedVehicle
 
-@inject IAddNewVehicleTypes service
+@inject IAddNewVehicleTypesService service
 
 @{
     ViewData["Title"] = "AddNewVehicleType";
@@ -17,10 +17,11 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="VehicleType" class="control-label"></label>
-                <select id="selectedType" asp-for="VehicleType" class="form-control" asp-items="@service.GetSelectListOfNewTypes()">
+                <select id="selectedNewTypeDropdown" asp-for="VehicleType" class="form-control" asp-items="@service.GetSelectListOfNewTypes()">
                     <option selected="selected" value="">Select Type</option>
 	            </select>
 	            <span asp-validation-for="VehicleType" class="text-danger"></span>
+
                 <input type="hidden" id="addNewType" name="addNewType"/>
             </div>
             <div class="form-group">
@@ -31,21 +32,23 @@
 </div>
 
 <div>
-    <a asp-action="Create">Back to List</a>
+    <a asp-action="Index">Back to List</a>
 </div>
 
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/js/site.js"></script>
 @section Scripts {
 	@{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 	<script>
         // Update the hidden input with the selected value just before submitting the form
         $(document).ready(function () {
-            $('#selectedType').change(function () {
+            $('#selectedNewTypeDropdown').change(function () {
                 $('#addNewType').val($(this).val());
             });
 
             $('form').submit(function () {
                 // Ensure the hidden input is updated with the latest selected value before submitting the form
-                $('#addNewType').val($('#selectedType').val());
+                $('#addNewType').val($('#selectedNewTypeDropdown').val());
             });
         });
     </script>

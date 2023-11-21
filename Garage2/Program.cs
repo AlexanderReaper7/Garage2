@@ -23,10 +23,9 @@ public class Program
 
 		builder.Services.AddScoped<IListOfAvailableLotsService, ListOfAvailableLotsService>();
 		builder.Services.AddScoped<ISelectListSearchService, SelectListSearchService>();
-		builder.Services.AddScoped<IAddNewVehicleTypes, AddNewVehicleTypes>();
+		builder.Services.AddScoped<IAddNewVehicleTypesService, AddNewVehicleTypesService>();
 		builder.Services.AddScoped<IParkingLotManager, ParkingLotManager>();
 		builder.Services.AddScoped<IMessageToView, MessageToView>();
-        //builder.Services.AddScoped<IParkingLotManager, ParkingLotManager>();
 
 		var app = builder.Build();
 

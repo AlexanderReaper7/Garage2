@@ -1,0 +1,32 @@
+﻿@using Garage2.Services
+@model Garage2.Models.Entities.ParkedVehicle
+@inject IMessageToView messageToView;
+
+
+@{
+	ViewData["Title"] = "ShowAddedType";
+}
+
+<h2><strong>You have added this new type to the database</strong></h2>
+
+<table class="table">
+	<thead>
+		<tr>
+			
+			<th>
+				@Html.DisplayNameFor(model => model.VehicleTypeName)
+			</th>
+			<th></th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td>
+				@Html.DisplayFor(model => model.VehicleTypeName)
+			</td>
+		</tr>
+	</tbody>
+</table>
+<div>
+	<a asp-action="Index">Back to List</a>
+</div>

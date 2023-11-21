@@ -3,8 +3,9 @@
 
 // Write your JavaScript code.
 
-//sets the value of the choosen type in the dropdown searchlist in parkedVehiclesIndex.cshtml
+//sets the value of the choosen type in the dropdown searchlist in ParkedVehiclesIndex.cshtml
 document.getElementById('selectTypeDropDown').addEventListener('change', function () {
     var selectedValue = this.value;
     document.getElementById('selectedType').value = selectedValue;
 });
+

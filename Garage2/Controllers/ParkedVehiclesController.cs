@@ -102,6 +102,10 @@ public class ParkedVehiclesController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create([Bind("Id,RegistrationNumber,VehicleTypeName,Color,Brand,Model,NumberOfWheels,ArrivalTime,ParkingSpace,ParkingSubSpace")] ParkedVehicle parkedVehicle)
     {
+        var model = new ParkedVehicle
+        {
+            ArrivalTime = DateTime.Now,
+        };
         // normalize the registration number
         string[] parts = parkedVehicle.RegistrationNumber.ToUpperInvariant().Split(' ');
         if (parts.Length == 1)
@@ -366,11 +370,13 @@ public class ParkedVehiclesController : Controller
 		 return View("ParkedVehiclesIndex", await viewModel.ToListAsync());
 	}
 
-	public async Task<IActionResult> AddNewVehicleType()
-	{
+    public IActionResult AddNewVehicleType()
+    {
 
         return View("AddNewVehicleType");
-	}
+    }
+    //[HttpPost]
+    [ValidateAntiForgeryToken]
     //Save the new added type to database
     public async Task<IActionResult> AddNewType(string addNewType)
     {
@@ -384,6 +390,7 @@ public class ParkedVehiclesController : Controller
             };
 
             selectListService.AddNewType(addNewType);
+            var getSizeOfNewType = GetSizeOfNewType(addNewType);
 
             var existInDatabase = context.ParkedVehicle.Include(t => t.VehicleType)
                 .Any(n => n.VehicleTypeName == addNewType);
@@ -392,14 +399,40 @@ public class ParkedVehiclesController : Controller
             {
                 var newType = new VehicleType
                 {
-                    Name = addNewType
+                    Name = addNewType,
+                    Size = getSizeOfNewType
                 };
 
                 context.VehicleType.Add(newType);
                 await context.SaveChangesAsync();
             }
         }
+       
+        var model = new ParkedVehicle
+        {
+            VehicleTypeName = addNewType,
+        };
 
-        return View("Create");
+        return View("ShowAddedType", model);
+    }
+
+    private int GetSizeOfNewType(string typeName)
+    {
+        switch (typeName)
+        {
+            case "Scooter":
+                return 1;
+            case "Ambulance":
+            case "Motorhome":
+                return 3;
+            case "Tractor":
+            case "Yacht":
+                return 6;
+            case "Helicopter":
+            case "Bulldozer":
+                return 9;
+            default:
+                return 0; // Handle the case where the typeName is not recognized
+        }
     }
 }

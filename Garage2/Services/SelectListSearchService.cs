@@ -5,38 +5,27 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Garage2.Services
 {
-	public class SelectListSearchService : ISelectListSearchService
-	{
-		private readonly Garage2Context context;
+    public class SelectListSearchService : ISelectListSearchService
+    {
+        private readonly Garage2Context context;
         private List<SelectListItem> selectList;
         public SelectListSearchService(Garage2Context context)
-		{
-			this.context = context;
-            // Initialize selectList once at the beginning
-            InitializeSelectList();
-        }
-        private void InitializeSelectList()
         {
-            selectList = context.ParkedVehicle
-                .Include(p => p.VehicleType)
-                .Select(n => new SelectListItem
-                {
-                    Value = n.VehicleTypeName,
-                    Text = n.VehicleTypeName
-                }).ToList();
+            this.context = context;
+            selectList = new List<SelectListItem>();
         }
+        //Temporary solution?, depending if we want to show vehicle types without the need of it being connected to a vehicle.
         public IEnumerable<SelectListItem> GetSelectList()
-		{
-			selectList = context.VehicleType
+        {
+            selectList = context.VehicleType
                 .Select(n => new SelectListItem
                 {
                     Value = n.Name,
                     Text = n.Name
                 }).Distinct().ToList();
 
-
             return selectList;
-		}
+        }
 
         public void AddNewType(string newType)
         {
@@ -45,8 +34,8 @@ namespace Garage2.Services
                 Value = newType,
                 Text = newType
             };
-
-			selectList = selectList.Concat(new[]{additionalType}).ToList();
+            //Adds the new created Type to the existing seleclist
+            selectList = selectList.Concat(new[] { additionalType }).ToList();
         }
     }
 }

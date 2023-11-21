@@ -2,7 +2,7 @@
 
 namespace Garage2.Services;
 
-public interface IAddNewVehicleTypes
+public interface IAddNewVehicleTypesService
 {
     IEnumerable<SelectListItem> GetSelectListOfNewTypes();
 }

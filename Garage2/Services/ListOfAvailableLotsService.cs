@@ -40,6 +40,8 @@ public class ListOfAvailableLotsService : IListOfAvailableLotsService
 	{
 		// Assuming you want to convert AvailableLotsList to a list of SelectListItem
 		//var selectList = AvailableTypes.Select(v => new SelectListItem { Value = v.ToString(), Text = v.ToString() });
+		
+        //Needed to add this so I was able to get the add vehicle button to work so i could fix the add new type feature. Depending on how we refactor the parkinglotmanager this need to be changed
 		var selectList = context.ParkedVehicle.Select(v => new SelectListItem { Value = v.VehicleType.Name, Text = v.VehicleType.Name }).Distinct();
 
 		return selectList;

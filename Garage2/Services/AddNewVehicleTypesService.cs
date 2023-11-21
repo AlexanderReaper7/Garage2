@@ -4,15 +4,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Garage2.Services
 {
-    public class AddNewVehicleTypes : IAddNewVehicleTypes
+    public class AddNewVehicleTypesService : IAddNewVehicleTypesService
     {
-        private readonly Garage2Context context;
-
-        public AddNewVehicleTypes(Garage2Context context)
-        {
-            this.context = context;
-        }
-
         public IEnumerable<SelectListItem> GetSelectListOfNewTypes()
         {
             var addNewTypes = Enum.GetValues(typeof(VehicleTypesEnum));
