@@ -26,7 +26,7 @@ public class Program
 		builder.Services.AddScoped<IAddNewVehicleTypes, AddNewVehicleTypes>();
 		builder.Services.AddScoped<IParkingLotManager, ParkingLotManager>();
 		builder.Services.AddScoped<IMessageToView, MessageToView>();
-        builder.Services.AddScoped<IParkingLotManager, ParkingLotManager>();
+        //builder.Services.AddScoped<IParkingLotManager, ParkingLotManager>();
 
 		var app = builder.Build();
 

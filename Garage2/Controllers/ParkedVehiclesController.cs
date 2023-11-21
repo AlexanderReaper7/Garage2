@@ -26,9 +26,8 @@ public class ParkedVehiclesController : Controller
     private readonly IMapper mapper;
 	private readonly ISelectListSearchService selectListService;
 
-	public ParkedVehiclesController(Garage2Context context, IParkingLotManager parkingLotManager, IMapper mapper, ISelectListSearchService selectListService)
     private readonly IMessageToView messageToView;
-    public ParkedVehiclesController(Garage2Context context, IParkingLotManager parkingLotManager, IMapper mapper, IMessageToView messageToView)
+    public ParkedVehiclesController(Garage2Context context, IParkingLotManager parkingLotManager, IMapper mapper, ISelectListSearchService selectListService, IMessageToView messageToView)
     {
         this.parkingLotManager = parkingLotManager;
         this.context = context;
@@ -364,7 +363,7 @@ public class ParkedVehiclesController : Controller
 		// Project to view model after including and filtering
 		var viewModel = mapper.ProjectTo<ParkedVehiclesViewModel>(model);
 
-		return View("ParkedVehiclesIndex", viewModel);
+		 return View("ParkedVehiclesIndex", await viewModel.ToListAsync());
 	}
 
 	public async Task<IActionResult> AddNewVehicleType()
