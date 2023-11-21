@@ -24,15 +24,18 @@ public class ParkedVehiclesController : Controller
     private readonly Garage2Context context;
     private readonly VehicleStatistics vehicleStatistics;
     private readonly IMapper mapper;
-    private readonly ISelectListSearchService selectListService;
+	private readonly ISelectListSearchService selectListService;
 
-    public ParkedVehiclesController(Garage2Context context, IParkingLotManager parkingLotManager, IMapper mapper, ISelectListSearchService selectListService)
+	public ParkedVehiclesController(Garage2Context context, IParkingLotManager parkingLotManager, IMapper mapper, ISelectListSearchService selectListService)
+    private readonly IMessageToView messageToView;
+    public ParkedVehiclesController(Garage2Context context, IParkingLotManager parkingLotManager, IMapper mapper, IMessageToView messageToView)
     {
         this.parkingLotManager = parkingLotManager;
         this.context = context;
         vehicleStatistics = new VehicleStatistics();
         this.mapper = mapper;
-        this.selectListService = selectListService;
+        this.messageToView = messageToView;
+		this.selectListService = selectListService;
     }
 
     // GET: ParkedVehicles
@@ -127,7 +130,7 @@ public class ParkedVehiclesController : Controller
 
             await context.SaveChangesAsync();
 
-            Garage2Helpers.Garage2Helpers.MessageToUser = "Parked Info";
+            messageToView.ShowMessageInView("Parked Info:");
             return View("ShowParkedInfo", parkedVehicle);
         }
         return View(parkedVehicle);
@@ -204,7 +207,7 @@ public class ParkedVehiclesController : Controller
             }
 
 
-            Garage2Helpers.Garage2Helpers.MessageToUser = "Edit Info";
+            messageToView.ShowMessageInView("New edited info:");
             return View("ShowParkedInfo", parkedVehicle);
         }
         return View(parkedVehicle);
