@@ -372,31 +372,31 @@ public class ParkedVehiclesController : Controller
 
     public IActionResult AddNewVehicleType()
     {
-
         return View("AddNewVehicleType");
     }
-    //[HttpPost]
     [ValidateAntiForgeryToken]
     //Save the new added type to database
     public async Task<IActionResult> AddNewType(string addNewType)
     {
-      
+
+        ParkedVehicle model = new ParkedVehicle();
+
         if (!string.IsNullOrEmpty(addNewType))
         {
-            var additionalItem = new SelectListItem
+            var existingType = context.VehicleType.FirstOrDefault(t => t.Name == addNewType);
+
+            if (existingType == null)
             {
-                Value = addNewType,
-                Text = addNewType
-            };
+                
+                var additionalItem = new SelectListItem
+                {
+                    Value = addNewType,
+                    Text = addNewType
+                };
 
-            selectListService.AddNewType(addNewType);
-            var getSizeOfNewType = GetSizeOfNewType(addNewType);
+                selectListService.AddNewType(addNewType);
+                var getSizeOfNewType = GetSizeOfNewType(addNewType);
 
-            var existInDatabase = context.ParkedVehicle.Include(t => t.VehicleType)
-                .Any(n => n.VehicleTypeName == addNewType);
-
-            if (!existInDatabase)
-            {
                 var newType = new VehicleType
                 {
                     Name = addNewType,
@@ -405,13 +405,22 @@ public class ParkedVehiclesController : Controller
 
                 context.VehicleType.Add(newType);
                 await context.SaveChangesAsync();
+
+                model = new ParkedVehicle
+                {
+                    VehicleTypeName = addNewType,
+                };
+
+            }
+            else
+            {
+                //Temporary solution before we have fixed the adding of member to tie it to a vehicle
+                model = new ParkedVehicle
+                {
+                    VehicleTypeName = "The type you added already exists in the database. Please add another one.",
+                };
             }
         }
-       
-        var model = new ParkedVehicle
-        {
-            VehicleTypeName = addNewType,
-        };
 
         return View("ShowAddedType", model);
     }

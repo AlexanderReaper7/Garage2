@@ -3,9 +3,19 @@
 
 // Write your JavaScript code.
 
-//sets the value of the choosen type in the dropdown searchlist in ParkedVehiclesIndex.cshtml
-document.getElementById('selectTypeDropDown').addEventListener('change', function () {
-    var selectedValue = this.value;
-    document.getElementById('selectedType').value = selectedValue;
+//sets the value of the chosen newType to add in the dropdownlist of AddNewVhehicleType.cshtml
+document.addEventListener('DOMContentLoaded', function () {
+    document.getElementById('selectedNewTypeDropdown').addEventListener('change', function () {
+        var selectedTypeValue = this.value;
+        document.getElementById('addNewType').value = selectedTypeValue;
+    });
+});
+
+//sets the value of the chosen type in the dropdown searchlist in ParkedVehiclesIndex.cshtml
+document.addEventListener('DOMContentLoaded', function () {
+    document.getElementById('selectTypeDropDown').addEventListener('change', function () {
+        var selectedValue = this.value;
+        document.getElementById('selectedType').value = selectedValue;
+    });
 });
 

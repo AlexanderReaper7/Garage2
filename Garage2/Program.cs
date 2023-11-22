@@ -40,8 +40,8 @@ public class Program
 		}
 		else
 		{
-			await app.SeedDataAsync();
-		}
+            await app.SeedDataAsync();
+        }
 
 		app.UseHttpsRedirection();
 		app.UseStaticFiles();
