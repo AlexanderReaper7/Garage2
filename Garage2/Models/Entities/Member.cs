@@ -7,6 +7,7 @@ namespace Garage2.Models.Entities;
 public class Member
 {
     [Key]
+    [Required]
     [PersonNumberValidator]
     [Display(Name = "Person Number")]
     public string PersonNumber { get; set; }
@@ -14,16 +15,20 @@ public class Member
     [Required]
     [MaxLength(50)]
     [MinLength(1)]
+    [FirstNameIsNotLastName(ErrorMessage = "Cannot be the same as Last Name.")]
     [Display(Name = "First name")]
     public string FirstName { get; set; }
 
     [Required]
     [MaxLength(50)]
     [MinLength(1)]
+    [FirstNameIsNotLastName(ErrorMessage = "Cannot be the same as First Name.")]
     [Display(Name = "Last name")]
     public string LastName { get; set; }
+
     [Display(Name = "Owner")]
     public string FullName => $"{FirstName} {LastName}";
+    [Required]
     public Membership Membership { get; set; }
 
     //Navigation Property
