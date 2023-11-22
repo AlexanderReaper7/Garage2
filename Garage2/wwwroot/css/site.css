@@ -79,4 +79,38 @@ a.nav-link.text-dark:hover {
     round-clip: 1rem
 }
 
+/*#member {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 
+#vehicle {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}*/
+
+.centerContent {
+    display: flex;
+    justify-content: center;
+    align-items: start;
+ 
+}
+dl.row dt,
+dl.row dd {
+    display: inline-block;
+   
+
+}
+.customWidth {
+    width: 300px;
+}
+
+.form-control {
+    text-align: center;
+    margin: 0 auto;
+}
+#marginbutton {
+    margin-bottom: 15px;
+}

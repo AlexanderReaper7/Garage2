@@ -1,31 +1,36 @@
 ﻿@model Garage2.Models.VehicleType
 
 @{
-    ViewData["Title"] = "Details";
+	ViewData["Title"] = "Details";
 }
 
 <h1>Details</h1>
 
 <div>
-    <h4>VehicleType</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Size)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Size)
-        </dd>
-      
-    </dl>
+	<h4>VehicleType</h4>
+	<hr />
+	<dl class="row centerContent">
+		<div class="col-sm-12">
+			<dt>
+				@Html.DisplayNameFor(model => model.Name)
+			</dt>
+			<dd>
+				@Html.DisplayFor(model => model.Name)
+			</dd>
+		</div>
+
+		<div class="col-sm-12">
+			<dt>
+				@Html.DisplayNameFor(model => model.Size)
+			</dt>
+			<dd>
+				@Html.DisplayFor(model => model.Size)
+			</dd>
+		</div>
+	</dl>
+
 </div>
 <div>
-    <a class="btn btn-primary" asp-action="Edit" asp-route-id="@Model?.Name">Edit</a>
-    <a class="btn btn-primary" asp-action="Index">Back to List</a>
+	<a class="btn btn-primary" asp-action="Edit" asp-route-id="@Model?.Name">Edit</a>
+	<a class="btn btn-primary" asp-action="Index">Back to List</a>
 </div>
