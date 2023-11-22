@@ -14,6 +14,9 @@
     --bs-primary-border-subtle: #ba600b;
     --bs-primary-text-emphasis: #ed7b0f;
 }*/
+h1, h2{
+    padding-bottom: 10px;
+}
 :root {
     --primary: #ff9410;
     --primary-bright: #ff9410;
@@ -98,4 +101,12 @@ dl.row dd {
 }
 #marginbutton {
     margin-bottom: 15px;
+}
+.even-row {
+    background-color: white; 
+    /*background-color: rgba(241, 235, 144, 0.1); */
+}
+
+.odd-row {
+    background-color: rgba(128, 128, 128, 0.1); /* Adjust the alpha value as needed */
 }

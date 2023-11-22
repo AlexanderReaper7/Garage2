@@ -10,37 +10,38 @@
     <a asp-action="Create" class="btn btn-primary">Create New</a>
 </p>
 <table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.PersonNumber)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.FirstName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.LastName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Membership)
-            </th>
-            <th>Links</th>
-        </tr>
-    </thead>
+	<thead>
+	<tr>
+		<th>
+			@Html.DisplayNameFor(model => model.PersonNumber)
+		</th>
+		<th>
+			@Html.DisplayNameFor(model => model.FirstName)
+		</th>
+		<th>
+			@Html.DisplayNameFor(model => model.LastName)
+		</th>
+		<th>
+			@Html.DisplayNameFor(model => model.Membership)
+		</th>
+		<th>Links</th>
+	</tr>
+	</thead>
+
     <tbody>
         @foreach (var item in Model)
         {
             <tr>
-                <td>
+                <td class="align-middle">
                     @Html.DisplayFor(modelItem => item.PersonNumber)
                 </td>
-                <td>
+                <td class="align-middle">
                     @Html.DisplayFor(modelItem => item.FirstName)
                 </td>
-                <td>
+                <td class="align-middle">
                     @Html.DisplayFor(modelItem => item.LastName)
                 </td>
-                <td>
+                <td class="align-middle">
                     @Html.DisplayFor(modelItem => item.Membership)
                 </td>
                 <td>
