@@ -1,12 +1,12 @@
 ﻿@using Garage2.Models.Entities
 @model Garage2.Models.Entities.Member
-
+@inject Garage2.Services.IMessageToView MessageToView
 @{
     ViewData["Title"] = "Details";
 }
 
 <h1>Details</h1>
-<h2><strong>@Garage2Helpers.MessageToUser</strong></h2>
+<h2><strong>@MessageToView.MessageToUser</strong></h2>
 <div>
     <h4>Member</h4>
     <div>

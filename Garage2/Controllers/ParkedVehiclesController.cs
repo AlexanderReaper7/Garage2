@@ -162,7 +162,6 @@ public class ParkedVehiclesController : Controller
             await context.SaveChangesAsync();
 
 			messageToView.ShowMessageInView("Parked Info:");
-			Garage2Helpers.Garage2Helpers.MessageToUser = "Parked Info";
             return View("Details", parkedVehicle);
         }
         return View(parkedVehicle);
