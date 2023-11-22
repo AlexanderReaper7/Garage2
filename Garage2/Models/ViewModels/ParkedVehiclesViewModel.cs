@@ -12,10 +12,9 @@ public class ParkedVehiclesViewModel
     public VehicleType VehicleType { get; set; }
     [Display(Name ="Arrival Time")]
     public DateTime ArrivalTime { get; set; }
-    [Display(Name = "Parking Lot Nr")]
-    public int ParkingSpace { get; set; }
-    [Display(Name = "Parking Sub Space")]
-    public int ParkingSubSpace { get; set; }
+    [Display(Name = "Parked at")]
+    public string ParkingSpaceString { get; set; }
+    [Display(Name = "Owner")]
     public Member Member { get; set; }
 
 }

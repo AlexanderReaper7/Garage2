@@ -1,71 +1,244 @@
-﻿@model IEnumerable<Garage2.Models.Entities.ParkedVehicle>
-
+﻿@using Garage2.Services
+@model IEnumerable<Garage2.Models.Entities.ParkedVehicle>
+@inject IVehicleTypesService VehicleTypesService
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Vehicle Index";
 }
 
-<h1>Welcome To Garage 2.0</h1>
+@{
+    var sortOrder = ViewBag.CurrentSort ?? "RegistrationNumber_asc";
+    var registrationNumberSortParam = sortOrder == "RegistrationNumber_asc" ? "RegistrationNumber_desc" : "RegistrationNumber_asc";
+    var ownerSortParam = sortOrder == "Owner_asc" ? "Owner_desc" : "Owner_asc";
+    var vehicleTypeSortParam = sortOrder == "VehicleType_asc" ? "VehicleType_desc" : "VehicleType_asc";
+    var brandSortParam = sortOrder == "Brand_asc" ? "Brand_desc" : "Brand_asc";
+    var modelSortParam = sortOrder == "Model_asc" ? "Model_desc" : "Model_asc";
+    var colorSortParam = sortOrder == "Color_asc" ? "Color_desc" : "Color_asc";
+    var arrivalTimeSortParam = sortOrder == "ArrivalTime_asc" ? "ArrivalTime_desc" : "ArrivalTime_asc";
+    var parkingSpaceSortParam = sortOrder == "ParkingSpace_asc" ? "ParkingSpace_desc" : "ParkingSpace_asc";
+    ViewBag.CurrentSort = sortOrder;
+}
+
+<h2><strong>Vehicle Index</strong></h2>
 
 <p>
-    <a asp-action="Create">Park Vehicle</a>
+    <a asp-action="Create" class="btn btn-primary  shadow-sm">Register Vehicle</a>
+    <a asp-controller="Members" asp-action="Create" class="btn btn-primary  shadow-sm">Register Member</a>
 </p>
-<table class="table">
+
+@* Search/Filter *@
+<form asp-action="Index" method="get">
+    <input type="hidden" name="sortOrder" value="@ViewBag.CurrentSort" />
+    <div class="d-flex flex-wrap justify-content-evenly">
+        <div class="row g-2 m-1 align-items-center">
+            <div class="col-auto">
+                <label for="regNum" class="col-form-label">Registration Number:</label>
+            </div>
+            <div class="col-auto">
+                <input type="text" name="regNum" id="regNum" placeholder="Registration Number" />
+            </div>
+        </div>
+        <div class="row g-2 m-1 align-items-center">
+            <div class="col-auto">
+                <label for="owner" class="col-form-label">Owner:</label>
+            </div>
+            <div class="col-auto">
+                <input type="text" name="owner" id="owner" placeholder="Owner" />
+            </div>
+        </div>
+        <div class="row g-2 m-1 align-items-center">
+            <div class="col-auto">
+                <label for="isParked" class="col-form-label">Parked:</label>
+            </div>
+            <div class="col-auto">
+                <select class="form-select btn btn-primary rounded" name="isParked" id="isParked">
+                    <option value="null">Any</option>
+                    <option value="false">No</option>
+                    <option value="true">Yes</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="row g-2 m-1 align-items-center dropdown">
+            <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" data-bs-auto-close="outside">
+                Vehicle Types
+            </button>
+            <div class="dropdown-menu p-2">
+                <select class="form-select" name="vehicleTypes" id="vehicleTypes" multiple>
+                    @foreach (var vehicleType in VehicleTypesService.AllTypes)
+                    {
+                        <option value="@vehicleType.Name">@vehicleType.Name</option>
+                    }
+                </select>
+            </div>
+        </div>
+        <div class="row g-2 m-1 align-items-center">
+            <div class="col-auto">
+                <label for="color" class="col-form-label">Color:</label>
+            </div>
+            <div class="col-auto">
+                <input type="text" name="color" id="color" placeholder="Color" />
+            </div>
+        </div>
+        <div class="row g-2 m-1 align-items-center">
+            <div class="col-auto">
+                <label for="brand" class="col-form-label">Brand:</label>
+            </div>
+            <div class="col-auto">
+                <input type="text" name="brand" id="brand" placeholder="Brand" />
+            </div>
+        </div>
+        <div class="row g-2 m-1 align-items-center">
+            <div class="col-auto">
+                <label for="model" class="col-form-label">Model:</label>
+            </div>
+            <div class="col-auto">
+                <input type="text" name="model" id="model" placeholder="Model" />
+            </div>
+        </div>
+    </div>
+    <button type="submit" class="btn btn-primary shadow-sm col-12 align-content-center">Search</button>
+</form>
+
+<table class="table-responsive text-center mt-3">
     <thead>
         <tr>
-            <th>
+            <th onclick="location.href='?sortOrder=@registrationNumberSortParam'">
                 @Html.DisplayNameFor(model => model.RegistrationNumber)
+                @if (ViewBag.CurrentSort == "RegistrationNumber_asc")
+                {
+                    <text> ↑</text>
+                }
+                else if (ViewBag.CurrentSort == "RegistrationNumber_desc")
+                {
+                    <text> ↓</text>
+                }
             </th>
-            <th>
+            <th onclick="location.href='?sortOrder=@ownerSortParam'">
+                @Html.DisplayNameFor(model => model.Member.FullName)
+                @if (ViewBag.CurrentSort == "Owner_asc")
+                {
+                    <text> ↑</text>
+                }
+                else if (ViewBag.CurrentSort == "Owner_desc")
+                {
+                    <text> ↓</text>
+                }
+            </th>
+
+            <th onclick="location.href='?sortOrder=@vehicleTypeSortParam'">
                 @Html.DisplayNameFor(model => model.VehicleType)
+                @if (ViewBag.CurrentSort == "VehicleType_asc")
+                {
+                    <text> ↑</text>
+                }
+                else if (ViewBag.CurrentSort == "VehicleType_desc")
+                {
+                    <text> ↓</text>
+                }
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Color)
-            </th>
-            <th>
+
+            <th onclick="location.href='?sortOrder=@brandSortParam'">
                 @Html.DisplayNameFor(model => model.Brand)
+                @if (ViewBag.CurrentSort == "Brand_asc")
+                {
+                    <text> ↑</text>
+                }
+                else if (ViewBag.CurrentSort == "Brand_desc")
+                {
+                    <text> ↓</text>
+                }
             </th>
-            <th>
+            <th onclick="location.href='?sortOrder=@modelSortParam'">
                 @Html.DisplayNameFor(model => model.Model)
+                @if (ViewBag.CurrentSort == "Model_asc")
+                {
+                    <text> ↑</text>
+                }
+                else if (ViewBag.CurrentSort == "Model_desc")
+                {
+                    <text> ↓</text>
+                }
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.NumberOfWheels)
+            <th onclick="location.href='?sortOrder=@colorSortParam'">
+                @Html.DisplayNameFor(model => model.Color)
+                @if (ViewBag.CurrentSort == "Color_asc")
+                {
+                    <text> ↑</text>
+                }
+                else if (ViewBag.CurrentSort == "Color_desc")
+                {
+                    <text> ↓</text>
+                }
             </th>
-            <th>
+            <th onclick="location.href='?sortOrder=@arrivalTimeSortParam'">
                 @Html.DisplayNameFor(model => model.ArrivalTime)
+                @if (ViewBag.CurrentSort == "ArrivalTime_asc")
+                {
+                    <text> ↑</text>
+                }
+                else if (ViewBag.CurrentSort == "ArrivalTime_desc")
+                {
+                    <text> ↓</text>
+                }
             </th>
-            <th></th>
+            <th onclick="location.href='?sortOrder=@parkingSpaceSortParam'">
+                @Html.DisplayNameFor(model => model.ParkingSpaceString)
+                @if (ViewBag.CurrentSort == "ParkingSpace_asc")
+                {
+                    <text> ↑</text>
+                }
+                else if (ViewBag.CurrentSort == "ParkingSpace_desc")
+                {
+                    <text> ↓</text>
+                }
+            </th>
+            <th>Links</th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.RegistrationNumber)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.VehicleType)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Color)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Brand)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Model)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.NumberOfWheels)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ArrivalTime)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Check Out Vehicle</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RegistrationNumber)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Member.FullName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.VehicleType.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Brand)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Model)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Color)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ArrivalTime)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ParkingSpaceString)
+                </td>
+                <td>
+                    <div class="btn-group">
+                        @{
+                            var parkParam = item.ParkingSpace == 0 ? "Park" : "UnPark";
+                        }
+                        <form asp-action="@parkParam">
+                            <input type="hidden" name="id" id="id" value="@item.Id" />
+                            <input type="submit" value="@parkParam" class="btn btn-danger" />
+                        </form>
+
+                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-primary">Edit</a>
+                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-primary">Details</a>
+                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-primary">Delete</a>
+                    </div>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
