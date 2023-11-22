@@ -4,5 +4,5 @@ namespace Garage2.Services;
 
 public interface IListOfAvailableLotsService
 {
-    IEnumerable<SelectListItem> GetVehicleTypesForList();
+    IEnumerable<SelectListItem> AvailableTypesAsSelectList();
 }

@@ -8,17 +8,19 @@ public class Member
 {
     [Key]
     [PersonNumberValidator]
-    [Display(Name = "Birth Number")]
+    [Display(Name = "Person Number")]
     public string PersonNumber { get; set; }
 
     [Required]
     [MaxLength(50)]
     [MinLength(1)]
+    [Display(Name = "First name")]
     public string FirstName { get; set; }
 
     [Required]
     [MaxLength(50)]
     [MinLength(1)]
+    [Display(Name = "Last name")]
     public string LastName { get; set; }
     [Display(Name = "Owner")]
     public string FullName => $"{FirstName} {LastName}";

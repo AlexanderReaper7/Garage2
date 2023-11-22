@@ -23,6 +23,7 @@ public class Program
 
 		builder.Services.AddScoped<IListOfAvailableLotsService, ListOfAvailableLotsService>();
         builder.Services.AddScoped<IParkingLotManager, ParkingLotManager>();
+        builder.Services.AddScoped<IVehicleTypesService, VehicleTypesService>();
 
         var app = builder.Build();
 
@@ -49,7 +50,7 @@ public class Program
 
         app.MapControllerRoute(
             name: "default",
-            pattern: "{controller=ParkedVehicles}/{action=Index}/{id?}");
+            pattern: "{controller=Home}/{action=Index}/{id?}");
 
         app.Run();
     }

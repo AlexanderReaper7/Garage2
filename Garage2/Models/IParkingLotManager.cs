@@ -2,6 +2,8 @@
 
 public interface IParkingLotManager
 {
+    public const int ParkingLotSize = 25;
+    public const int ParkingSubLotSize = 3;
     int LargestParkingSpaceAvailable { get; }
 
     /// <summary>
@@ -18,5 +20,6 @@ public interface IParkingLotManager
     /// </summary>
     /// <param name="id">the database id of the vehicle</param>
     /// <param name="parkingSpace">starting location of the space in ParkingLot</param>
+    /// <param name="size">the number of partial spaces the vehicle occupies</param>
     void UnPark(int id, (int, int) parkingSpace, int size);
 }

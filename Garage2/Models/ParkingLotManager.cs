@@ -9,7 +9,7 @@ namespace Garage2.Models
 		/// <summary>
 		/// stores the id of ParkedVehicle´s with up to 3 Id´s per slot 
 		/// </summary>
-		private int[,] parkingLot = new int[25, 3]; // TODO: Into array with list of parked vehicle
+		private int[,] parkingLot = new int[IParkingLotManager.ParkingLotSize, IParkingLotManager.ParkingSubLotSize];
 
 		public ParkingLotManager(Garage2Context context)
 		{

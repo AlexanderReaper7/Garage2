@@ -1,32 +1,43 @@
-html {
-  font-size: 14px;
+/*
+@import url("https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@200;300;400;500;600;700&display=swap");
+:root,
+[data-bs-theme=light] {
+    --bs-primary: #ed7b0f;
+    --bs-primary-bg-subtle: #a0530a;
+    --bs-primary-border-subtle: #ba600b;
+    --bs-primary-text-emphasis: #ed7b0f;
 }
-
-@media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
+:root,
+[data-bs-theme=dark] {
+    --bs-primary: #ed7b0f;
+    --bs-primary-bg-subtle: #a0530a;
+    --bs-primary-border-subtle: #ba600b;
+    --bs-primary-text-emphasis: #ed7b0f;
+}*/
+:root {
+    --primary: #ff9410;
+    --primary-bright: #ff9410;
 }
-
 .btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
   box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
 }
-.btn {
-    background: #F9B572;
-    border: 1px solid black;
-}
 
-.btn:hover {
-    background: rgb(116, 142, 99, 0.5);
+.btn-primary:hover {
+    background: var(--primary);
+    transition: ease-in-out 0.3s;
 }
 
 .nav-link:hover {
-    background: rgb(116, 142, 99, 0.2);  
+    background: var(--primary);
 }
 
 html {
   position: relative;
   min-height: 100%;
+}
+
+table {
+    width: 100%;
 }
 
 body {
@@ -41,11 +52,12 @@ body {
     width: 550px;
 }
 a {
-    color: #F9B572;
+    color: var(--primary);
 }
 
 a:hover {
-    color: #748E63;
+    color: var(--primary);
+    animation: ease-in-out 0.5s;
 }
 
 .navbar-nav {
@@ -54,29 +66,17 @@ a:hover {
     padding-left: 0;
     margin-bottom: 0;
     list-style: none;
-    justify-content: center; 
-    align-items: center; 
+    justify-content: center;
+    align-items: center;
 }
 .footer {
     text-align: center;
-}
-
-.my-button {
-    background-color: #F9B572;
-    color: white;
-    border: 1px solid rgba(0, 0, 0, 0.5);
-    padding: 5px 10px;
-    border-radius: 50px;
-    cursor: pointer;
-}
-
-.my-button:hover {
-    background-color: rgba(116, 142, 99, 0.5);
-
+    text-transform: uppercase;
 }
 
 a.nav-link.text-dark:hover {
-    background-color: rgba(116, 142, 99, 0.5);
-    
+    background-color: var(--primary);
+    round-clip: 1rem
 }
+
 

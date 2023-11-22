@@ -12,6 +12,7 @@ using Garage2.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Garage2.Models;
 using Garage2.Models.Entities;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 
 namespace Garage2.Controllers;
@@ -33,31 +34,73 @@ public class ParkedVehiclesController : Controller
     }
 
     // GET: ParkedVehicles
-    public async Task<IActionResult> Index(string sortOrder)
+    public async Task<IActionResult> Index(string? sortOrder = null, string? owner = null, bool? isParked = null, string[]? vehicleTypes = null,
+        string? color = null, string? brand = null, string? model = null, string? regNum = null)
     {
-        var model = from v in context.ParkedVehicle
-                    select v;
+        // Get all parked vehicles
+        var vehicles = context.ParkedVehicle.Include(v => v.VehicleType).Include(m => m.Member).AsQueryable();
+        // Apply filters
+        vehicles = ApplyFilters(vehicles, regNum, owner, isParked, vehicleTypes, color, brand, model);
+
+        // Sort
         if (string.IsNullOrEmpty(sortOrder))
         {
             sortOrder = "RegistrationNumber_asc";
         }
         ViewBag.CurrentSort = sortOrder;
-        model = sortOrder switch
+        vehicles = sortOrder switch
         {
-            "RegistrationNumber_asc" => model.OrderBy(v => v.RegistrationNumber),
-            "RegistrationNumber_desc" => model.OrderByDescending(v => v.RegistrationNumber),
-            "VehicleType_asc" => model.OrderBy(v => v.VehicleType),
-            "VehicleType_desc" => model.OrderByDescending(v => v.VehicleType),
-            "ArrivalTime_asc" => model.OrderBy(v => v.ArrivalTime),
-            "ArrivalTime_desc" => model.OrderByDescending(v => v.ArrivalTime),
-            "ParkingSpace_asc" => model.OrderBy(v => v.ParkingSpace),
-            "ParkingSpace_desc" => model.OrderByDescending(v => v.ParkingSpace),
-            _ => model.OrderBy(v => v.RegistrationNumber)
+            "RegistrationNumber_asc" => vehicles.OrderBy(v => v.RegistrationNumber),
+            "RegistrationNumber_desc" => vehicles.OrderByDescending(v => v.RegistrationNumber),
+            "Owner_asc" => vehicles.OrderBy(v => v.Member.FirstName + v.Member.LastName),
+            "Owner_desc" => vehicles.OrderByDescending(v => v.Member.FirstName + v.Member.LastName),
+            "VehicleType_asc" => vehicles.OrderBy(v => v.VehicleType),
+            "VehicleType_desc" => vehicles.OrderByDescending(v => v.VehicleType),
+            "Brand_asc" => vehicles.OrderBy(v => v.Brand),
+            "Brand_desc" => vehicles.OrderByDescending(v => v.Brand),
+            "Model_asc" => vehicles.OrderBy(v => v.Model),
+            "Model_desc" => vehicles.OrderByDescending(v => v.Model),
+            "Color_asc" => vehicles.OrderBy(v => v.Color),
+            "Color_desc" => vehicles.OrderByDescending(v => v.Color),
+            "ArrivalTime_asc" => vehicles.OrderBy(v => v.ArrivalTime),
+            "ArrivalTime_desc" => vehicles.OrderByDescending(v => v.ArrivalTime),
+            "ParkingSpace_asc" => vehicles.OrderBy(v => v.ParkingSpace),
+            "ParkingSpace_desc" => vehicles.OrderByDescending(v => v.ParkingSpace),
+            _ => vehicles.OrderBy(v => v.RegistrationNumber)
         };
 
-        var viewModel = mapper.ProjectTo<ParkedVehiclesViewModel>(model);
+        return View("Index", await vehicles.ToListAsync());
+    }
 
-        return View("ParkedVehiclesIndex", await viewModel.ToListAsync());
+    private static IQueryable<ParkedVehicle> ApplyFilters(IQueryable<ParkedVehicle> vehicles, string? regNum = null,
+        string? owner = null, bool? isParked = null, string[]? vehicleTypes = null,
+        string? color = null, string? brand = null, string? model = null)
+    {
+        if (!string.IsNullOrEmpty(regNum))
+            vehicles = vehicles.Where(v =>
+                v.RegistrationNumber.Contains(regNum));
+        if (!string.IsNullOrEmpty(owner))
+            vehicles = vehicles.Where(v =>
+                v.Member.FirstName.Contains(owner) ||
+                v.Member.LastName.Contains(owner));
+        if (isParked is { } b)
+        {
+            vehicles = b ? vehicles.Where(v => v.ParkingSpace != 0) : vehicles.Where(v => v.ParkingSpace == 0);
+        }
+
+        if (vehicleTypes is { Length: > 0 }){
+            foreach (var vehicleType in vehicleTypes)
+            {
+                vehicles = vehicles.Where(v => v.VehicleType.Name == vehicleType);
+            }
+        }
+        if (!string.IsNullOrEmpty(color))
+            vehicles = vehicles.Where(v => v.Color.Contains(color));
+        if (!string.IsNullOrEmpty(brand))
+            vehicles = vehicles.Where(v => v.Brand.Contains(brand));
+        if (!string.IsNullOrEmpty(model))
+            vehicles = vehicles.Where(v => v.Model.Contains(model));
+        return vehicles;
     }
 
     // GET: ParkedVehicles/Details/5
@@ -82,12 +125,7 @@ public class ParkedVehiclesController : Controller
     // GET: ParkedVehicles/Create
     public IActionResult Create()
     {
-        var model = new ParkedVehicle
-        {
-            ArrivalTime = DateTime.Now,
-        };
-
-        return View(model);
+        return View();
     }
 
     // POST: ParkedVehicles/Create
@@ -115,18 +153,15 @@ public class ParkedVehiclesController : Controller
                 ModelState.AddModelError("RegistrationNumber", "Registration number already exists");
                 return View(parkedVehicle);
             }
-
+            // Registering a vehicle doesn't park it so set arrival time to min value
+            parkedVehicle.ArrivalTime = DateTime.MinValue;
 
             context.Add(parkedVehicle);
 
             await context.SaveChangesAsync();
 
-            Park(parkedVehicle);
-
-            await context.SaveChangesAsync();
-
             Garage2Helpers.Garage2Helpers.MessageToUser = "Parked Info";
-            return View("ShowParkedInfo", parkedVehicle);
+            return View("Details", parkedVehicle);
         }
         return View(parkedVehicle);
     }
@@ -134,17 +169,57 @@ public class ParkedVehiclesController : Controller
     /// <summary>
     /// adds the vehicle to the parking lot and updates the parked vehicle with the parking space and sub-space numbers
     /// </summary>
-    /// <param name="parkedVehicle"></param>
-    private void Park(ParkedVehicle parkedVehicle)
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Park(int id)
     {
+        ParkedVehicle parkedVehicle;
+        try
+        {
+            parkedVehicle = context.ParkedVehicle.Include(p => p.Member).Include(p => p.VehicleType).First(p => p.Id == id);
+        }
+        catch (Exception)
+        {
+            return NotFound();
+        }
+        if (parkedVehicle.ParkingSpace != 0) return NotFound(); // vehicle is already parked
         var parkingLot = parkingLotManager.Park(parkedVehicle.Id, parkedVehicle.VehicleType.Size);
         parkedVehicle.ParkingSpace = parkingLot.Item1;
         parkedVehicle.ParkingSubSpace = parkingLot.Item2;
+        parkedVehicle.ArrivalTime = DateTime.Now;
+        await context.SaveChangesAsync();
+        return View("Details", parkedVehicle);
+    }
+    /// <summary>
+    /// UnParks the vehicle and returns a receipt
+    /// </summary>
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> UnPark(int id)
+    {
+        ParkedVehicle parkedVehicle;
+        try
+        {
+            parkedVehicle = context.ParkedVehicle.Include(p => p.Member).Include(p => p.VehicleType).First(p => p.Id == id);
+        }
+        catch (Exception)
+        {
+            return NotFound();
+        }
+        if (parkedVehicle.ParkingSpace == 0) return NotFound(); // vehicle is not parked
+        var checkoutModel = CheckOutDetails(parkedVehicle);
+        var space = parkedVehicle.ParkingSpace;
+        var subspace = parkedVehicle.ParkingSubSpace;
+        parkingLotManager.UnPark(parkedVehicle.Id, (space, subspace), parkedVehicle.VehicleType.Size);
+        parkedVehicle.ParkingSpace = 0;
+        parkedVehicle.ParkingSubSpace = 0;
+        parkedVehicle.ArrivalTime = DateTime.MinValue;
+        await context.SaveChangesAsync();
+        return View("Receipt", checkoutModel);
     }
 
     // GET: ParkedVehicles/Edit/5
     public async Task<IActionResult> Edit(int? id)
-
     {
         if (id == null)
         {
@@ -195,15 +270,13 @@ public class ParkedVehiclesController : Controller
                 {
                     return NotFound();
                 }
-                else
-                {
-                    throw;
-                }
+
+                throw;
             }
 
 
-            Garage2Helpers.Garage2Helpers.MessageToUser = "Edit Info";
-            return View("ShowParkedInfo", parkedVehicle);
+            Garage2Helpers.Garage2Helpers.MessageToUser = "Successfully Edited Info";
+            return View("Details", parkedVehicle);
         }
         return View(parkedVehicle);
     }
@@ -277,17 +350,17 @@ public class ParkedVehiclesController : Controller
     public async Task<IActionResult> DeleteConfirmed(int id)
     {
         var parkedVehicle = await context.ParkedVehicle.Include(m => m.Member)
-            .Include(parkedVehicle => parkedVehicle.VehicleType).FirstOrDefaultAsync(m => m.Id == id);
+            .Include(parkedVehicle => parkedVehicle.VehicleType).FirstAsync(m => m.Id == id);
         if (parkedVehicle == null)
         {
             return NotFound();
         }
 
-        context.ParkedVehicle.Remove(parkedVehicle);
         var checkOutModel = CheckOutDetails(parkedVehicle); //ToDo: Is there a way to not call this method again since we already have stored the data in Delete method
 
+        context.ParkedVehicle.Remove(parkedVehicle);
         await context.SaveChangesAsync();
-        parkingLotManager.UnPark(parkedVehicle.Id, (parkedVehicle.ParkingSpace, parkedVehicle.ParkingSubSpace), parkedVehicle.VehicleType.Size);
+        if (parkedVehicle.ParkingSpace != 0) parkingLotManager.UnPark(parkedVehicle.Id, (parkedVehicle.ParkingSpace, parkedVehicle.ParkingSubSpace), parkedVehicle.VehicleType.Size);
         return View("Receipt", checkOutModel);
     }
 
@@ -308,7 +381,7 @@ public class ParkedVehiclesController : Controller
         vehicleStatistics.Memberships = GetTotalMemberships();
 
 
-        return View("ShowStatistics", vehicleStatistics);
+        return View(vehicleStatistics);
     }
 
     private Dictionary<Membership, int> GetTotalMemberships()
@@ -332,24 +405,5 @@ public class ParkedVehiclesController : Controller
             );
 
         return vehicleCount;
-    }
-
-    /// <summary>
-    /// GET: ParkedVehicles/Search/"searchString"
-    /// Search for parked vehicles by registration number
-    /// </summary>
-    /// <param name="searchString"></param>
-    /// <returns></returns>
-    public async Task<IActionResult> Search(string searchString)
-    {
-
-        var results = new List<ParkedVehiclesViewModel>();
-        if (!string.IsNullOrEmpty(searchString))
-        {
-            var model = context.ParkedVehicle.Where(v => v.RegistrationNumber.Replace(" ", "").Contains(searchString.Replace(" ", "")));
-            results = await mapper.ProjectTo<ParkedVehiclesViewModel>(model).ToListAsync();
-        }
-
-        return View("ParkedVehiclesIndex", results);
     }
 }

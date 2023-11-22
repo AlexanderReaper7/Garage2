@@ -34,8 +34,8 @@ namespace Garage2.Controllers
             {
                 return NotFound();
             }
-
-            var member = await _context.Member
+            // ERR: needs to include ParkedVehicle.VehicleType
+            var member = await _context.Member.Include(m => m.ParkedVehicle).ThenInclude(pv => pv.VehicleType)
                 .FirstOrDefaultAsync(m => m.PersonNumber == id);
             if (member == null)
             {
@@ -60,6 +60,49 @@ namespace Garage2.Controllers
         {
             if (ModelState.IsValid)
             {
+                // Normalise the person number
+                switch (member.PersonNumber.Length)
+                {
+                    // Determine if the input is in the format YYMMDD-XXXX or YYYYMMDD-XXXX, and if the - is missing or replaced with a +
+                    case 11: // YYMMDD-XXXX or YYMMDD+XXXX
+                        // if the - has been replaced with +, then the person is going to be >= 100 years old this year
+                        if (member.PersonNumber.ElementAt(6) == '+')
+                        {
+                            member.PersonNumber = member.PersonNumber.Replace("+", "");
+                            // get current year - 100
+                            int currentYear = DateTime.Now.Year - 100;
+                            member.PersonNumber = currentYear.ToString().Substring(0, 2) + member.PersonNumber;
+                        }
+                        else if (member.PersonNumber.ElementAt(6) == '-')
+                        {
+                            // strip the '-' from the input
+                            member.PersonNumber = member.PersonNumber.Replace("-", "");
+                        }
+                        else
+                        {
+                            ModelState.AddModelError("PersonNumber", "Invalid format");
+                            return View(member);
+                        }
+                        break;
+                    case 10: // YYMMDDXXXX
+                        // check if the person was born this century or the last
+                        if (int.Parse(member.PersonNumber.Substring(0, 2)) > DateTime.Now.Year - 2000)
+                            // if the person was born this century, add 20 to the year
+                            member.PersonNumber = "20" + member.PersonNumber.Substring(0, 2) + member.PersonNumber.Substring(2, 8);
+                        else
+                            // if the person was born last century, add 19 to the year
+                            member.PersonNumber = "19" + member.PersonNumber.Substring(0, 2) + member.PersonNumber.Substring(2, 8);
+
+                        member.PersonNumber = DateTime.Now.Year.ToString().Substring(0, 2) + member.PersonNumber;
+                        break;
+                    case 13: // YYYYMMDD-XXXX or YYYYMMDD+XXXX
+                        // strip the + or -
+                        member.PersonNumber = member.PersonNumber.Replace("+", "").Replace("-", "");
+                        break;
+                    case 12: // YYYYMMDDXXXX
+                        break;
+                }
+
                 _context.Add(member);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));

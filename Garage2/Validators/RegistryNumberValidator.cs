@@ -22,7 +22,7 @@ public class RegistryNumberValidator : ValidationAttribute
         {
             NationCode _ = Enum.Parse<NationCode>(parts[0]);
         }
-        catch (ArgumentException _)
+        catch (ArgumentException)
         {
             return new ValidationResult($"{parts[0]} is not a valid nation code");
         }

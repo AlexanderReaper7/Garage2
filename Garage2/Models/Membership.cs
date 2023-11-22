@@ -1,9 +1,9 @@
-﻿namespace Garage2.Models.Entities;
+﻿namespace Garage2.Models;
 
 public enum Membership
 {
-    Standard,
-    Pro,
+    STANDARD,
+    PRO,
 }
 
 public static class MembershipExtensions

@@ -4,6 +4,8 @@ using Bogus;
 using Bogus.Extensions.UnitedKingdom;
 using Garage2.Models.Entities;
 using System;
+using System.Text;
+using Bogus.DataSets;
 
 namespace Garage2.Models;
 
@@ -35,24 +37,51 @@ public class DbInitializer
         var members = new List<Member>();
         var membershipValues = Enum.GetValues(typeof(Membership));
 
+        faker = new Faker("sv");
+
         for (int i = 0; i < numberOfMembers; i++)
         {
-            var gender = faker.Person.Gender;
-            var fName = faker.Person.FirstName;
-            var lName = faker.Person.LastName;
+            var genderValues = Enum.GetValues(typeof(Name.Gender));
+            var randomGender = (Name.Gender)genderValues.GetValue(rnd.Next(genderValues.Length));
+            var fName = faker.Name.FirstName();
+            var lName = faker.Name.LastName();
             var dob = faker.Date.Between(new DateTime(1965, 1, 2), new DateTime(2002, 1, 2));
+            
+            var lastFourDigits = FormatPersonNumber(dob, randomGender);
 
             var member = new Member()
             {
                 FirstName = fName,
                 LastName = lName,
-                PersonNumber = dob.ToString("d"),
+                PersonNumber = $"{dob:yyyyMMdd}{lastFourDigits}",
                 Membership = (Membership)rnd.Next(membershipValues.Length),
             };
 
             members.Add(member);
         }
+
         return members;
+    }
+
+    private static string FormatPersonNumber(DateTime dob, Name.Gender gender)
+    {
+        // extract the year and month from birthdate
+        var year = dob.Year % 100; // Take the last 2 digits of the year
+        var month = dob.Month;
+
+        // determine the offset for the last digit based on gender
+        var genderOffset = gender == Name.Gender.Male ? 0 : 500;
+
+        // Generate a random 2 digit number
+        var randomDigits = rnd.Next(0, 100);
+
+        // Combine the year, month, gender offset, and random digits
+        var fullPersonNumber = $"{year:D2}{month:D2}{genderOffset + randomDigits:D2}";
+
+        // Take only the last four digits
+        var lastFourDigits = fullPersonNumber.Substring(fullPersonNumber.Length - 4);
+
+        return lastFourDigits;
     }
     //Generate Random vehicles
     private static IEnumerable<VehicleType> GenerateVehicleTypes(int generateVehicleTypes)
@@ -96,36 +125,41 @@ public class DbInitializer
     //Generate Random Vehicle
     private static IEnumerable<ParkedVehicle> GenerateVehicles(IEnumerable<VehicleType> vehicleTypes, IEnumerable<Member> members)
     {
-        var parkedVehicle = new List<ParkedVehicle>();
+        var parkedVehicles = new List<ParkedVehicle>();
         var startDate = new DateTime(2023, 1, 1);
         var endDate = new DateTime(2023, 11, 19);
 
         foreach (var member in members)
         {
-            var model = faker.Vehicle.Model();
-            var regNr = faker.Vehicle.GbRegistrationPlate(new DateTime(2001, 09, 2), new DateTime(2023, 1, 2));
-            var color = faker.Commerce.Color();
-            var arrivalTime = faker.Date.Between(startDate, endDate);
-            var brand = faker.Vehicle.Manufacturer();
+            var numberOfVehicles = rnd.Next(1, 4); // Randomly choose 1 to 3 vehicles per member
 
-            var currentVehicleType = vehicleTypes.ElementAt(rnd.Next(vehicleTypes.Count()));
-
-            var vehicle = new ParkedVehicle()
+            for (int i = 0; i < numberOfVehicles; i++)
             {
-                Brand = brand,
-                Model = model,
-                RegistrationNumber = regNr,
-                Color = color,
-                ArrivalTime = arrivalTime,
-                VehicleType = currentVehicleType,
-                Member = member,
-            };
+                var model = faker.Vehicle.Model();
+                var regNr = $"SE {faker.Random.String2(3, "ABCDEFGHIJKLMNOPQRSTUVWXYZ")}{faker.Random.Number(100, 999)}";
+                var color = faker.Commerce.Color();
+                var arrivalTime = faker.Date.Between(startDate, endDate);
+                var brand = faker.Vehicle.Manufacturer();
 
-            FetchNrWheelsAndParkingSpace(vehicle);
-            parkedVehicle.Add(vehicle);
+                var currentVehicleType = vehicleTypes.ElementAt(rnd.Next(vehicleTypes.Count()));
+
+                var vehicle = new ParkedVehicle()
+                {
+                    Brand = brand,
+                    Model = model,
+                    RegistrationNumber = regNr,
+                    Color = color,
+                    ArrivalTime = arrivalTime,
+                    VehicleType = currentVehicleType,
+                    Member = member,
+                };
+
+                FetchNrWheelsAndParkingSpace(vehicle);
+                parkedVehicles.Add(vehicle);
+            }
         }
 
-        return parkedVehicle;
+        return parkedVehicles;
     }
     //Fetch Number Of WHeels And Parking Space Depending On Type
     private static void FetchNrWheelsAndParkingSpace(ParkedVehicle vehicle)
@@ -151,6 +185,48 @@ public class DbInitializer
                 vehicle.NumberOfWheels = 8;
                 break;
         }
+    }
+
+    private static string GeneratePersonNumber(DateTime dob)
+    {
+        var strb = new StringBuilder();
+        var year = dob.Year.ToString();
+        strb.Append(year);
+        var month = dob.Month.ToString().PadLeft(2, '0');
+        strb.Append(month);
+        var day = dob.Day.ToString().PadLeft(2, '0');
+        strb.Append(day);
+        var lastThree = rnd.Next(100, 999).ToString();
+        strb.Append(lastThree);
+        var checkNum = CalculateCheckNumber(strb.ToString().Substring(2));
+        return $"{year}{month}{day}{lastThree}{checkNum}";
+    }
+
+    /// <summary>
+    /// mod10 checkNumber
+    /// </summary>
+    /// <param name="nr"></param>
+    /// <returns></returns>
+    private static int CalculateCheckNumber(string nr)
+    {
+        if (nr.Length != 9) throw new ArgumentException("Person number must be 9 digits long");
+        var sum = 0;
+        bool alternate = true;
+        for (int i = 0; i < nr.Length; i++)
+        {
+            int n = int.Parse(nr.Substring(i, 1));
+            if (alternate)
+            {
+                n *= 2;
+                if (n > 9)
+                {
+                    n = (n % 10) + 1;
+                }
+            }
+            sum += n;
+            alternate = !alternate;
+        }
+        return (10 - (sum % 10)) % 10;
     }
 }
 

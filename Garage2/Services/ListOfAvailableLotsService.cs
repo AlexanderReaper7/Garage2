@@ -8,32 +8,32 @@ namespace Garage2.Services;
 
 public class ListOfAvailableLotsService : IListOfAvailableLotsService
 {
-	readonly IParkingLotManager parkingLotManager;
+    private readonly IParkingLotManager _parkingLotManager;
+    private readonly Garage2Context _context;
+    /// <summary>
+    /// The VehicleTypes that are available to park
+    /// </summary>
+    public IQueryable<VehicleType> AvailableTypes
+    {
+        get
+        {
+            var largest = _parkingLotManager.LargestParkingSpaceAvailable;
+            return _context.VehicleType.Where(t => t.Size <= largest);
+        }
+    }
 
-	/// <summary>
-	/// 
-	/// </summary>
-	public List<VehicleType> AvailableTypes
-	{
-		get
-		{
-			var largest = parkingLotManager.LargestParkingSpaceAvailable;
-			//var availableTypes = context.VehicleType.Select(v => v.Size <= largest);
-			//return VehicleTypeExtensions.GetAvailableTypesForParkingSpace(largest);
-			throw new NotImplementedException();
-		}
-	}
+    public ListOfAvailableLotsService(IParkingLotManager parkingLotManager, Garage2Context context)
+    {
+        _parkingLotManager = parkingLotManager;
+        _context = context;
+    }
 
-	public ListOfAvailableLotsService(IParkingLotManager parkingLotManager)
-	{
-		this.parkingLotManager = parkingLotManager;
-	}
-
-	public IEnumerable<SelectListItem> GetVehicleTypesForList()
-	{
-
-		// Assuming you want to convert AvailableLotsList to a list of SelectListItem
-		var selectList = AvailableTypes.Select(v => new SelectListItem { Value = v.ToString(), Text = v.ToString() });
-		return selectList;
-	}
+    /// <summary>
+    /// Returns a list of SelectListItem of the AvailableTypes
+    /// </summary>
+    /// <returns></returns>
+    public IEnumerable<SelectListItem> AvailableTypesAsSelectList()
+    {
+        return AvailableTypes.Select(v => new SelectListItem(v.Name, v.Name));
+    }
 }
