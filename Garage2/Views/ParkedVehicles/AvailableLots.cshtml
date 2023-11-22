@@ -1,0 +1,73 @@
+﻿@model Garage2.Models.ViewModels.AvailableParkingLotsViewModel
+
+@{
+	ViewData["Title"] = "Statistics";
+}
+
+<h2><strong>Empty Parking Lots</strong></h2>
+<div>
+	<a asp-action="Index">Back to List</a>
+</div>
+<table class="table">
+	<thead>
+		<tr>
+			<th>
+				@Html.DisplayNameFor(model => model.AvailableParkingLotsRegularSize)
+			</th>
+		</tr>
+	</thead>
+
+	<tbody>
+
+		<tr>
+			<td>
+				@Html.DisplayFor(model => model.AvailableParkingLotsRegularSize)
+			</td>
+
+		</tr>
+
+	</tbody>
+</table>
+
+
+<table class="table">
+	<thead>
+		<tr>
+			<th>
+				@Html.DisplayNameFor(model => model.AvailableParkingLotsMediumSize)
+			</th>
+		</tr>
+	</thead>
+
+	<tbody>
+
+		<tr>
+			<td>
+				@Html.DisplayFor(model => model.AvailableParkingLotsMediumSize)
+			</td>
+
+		</tr>
+
+	</tbody>
+</table>
+
+<table class="table">
+	<thead>
+		<tr>
+			<th>
+				@Html.DisplayNameFor(model => model.AvailableParkingLotsLargeSize)
+			</th>
+		</tr>
+	</thead>
+
+	<tbody>
+
+		<tr>
+			<td>
+				@Html.DisplayFor(model => model.AvailableParkingLotsLargeSize)
+			</td>
+
+		</tr>
+
+	</tbody>
+</table>

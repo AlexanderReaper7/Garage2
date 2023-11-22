@@ -13,7 +13,7 @@ public class DbInitializer
 {
     private static Faker faker = null!;
     private static readonly Random rnd = new Random();
-    private static readonly int dbInitializerAmount = 10;
+    private const int dbInitializerAmount = 10;
     public static async Task InitAsync(Garage2Context db)
     {
         //If there are members in database return

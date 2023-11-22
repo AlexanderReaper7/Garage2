@@ -51,6 +51,7 @@ namespace Garage2.Models
 						}
 					}
 				}
+
 				return largest; // Return the size of the largest available space
 			}
 		}
@@ -82,6 +83,7 @@ namespace Garage2.Models
 
 			throw new Exception("Couldn't find anywhere to park.");
 		}
+
 		/// <summary>
 		/// Checks if the vehicle can be parked at the given position
 		/// </summary>
@@ -102,23 +104,25 @@ namespace Garage2.Models
 						// If the count is equal to the size of the vehicle, return true
 						return true;
 					}
+
 					if (parkingLot[i, j] != 0)
 					{
 						return false; // Vehicle can't be parked here as some slots are already occupied
 					}
 				}
 			}
+
 			return false; // Vehicle can't be parked here as there are not enough slots left
 		}
 
-        /// <summary>
-        /// fills the following parking slots with the database id
-        /// </summary>
-        /// <param name="startIndex"></param>
-        /// <param name="size"></param>
-        /// <exception cref="Exception"></exception>
-        /// <exception cref="ArgumentOutOfRangeException"></exception>
-        private void Park((int, int) startIndex, int size, int vehicleId)
+		/// <summary>
+		/// fills the following parking slots with the database id
+		/// </summary>
+		/// <param name="startIndex"></param>
+		/// <param name="size"></param>
+		/// <exception cref="Exception"></exception>
+		/// <exception cref="ArgumentOutOfRangeException"></exception>
+		private void Park((int, int) startIndex, int size, int vehicleId)
 		{
 			if (size < 1)
 			{
@@ -127,15 +131,18 @@ namespace Garage2.Models
 
 			if (vehicleId <= 0)
 			{
-				throw new ArgumentOutOfRangeException(nameof(vehicleId),"vehicleId must be greater than 0");
+				throw new ArgumentOutOfRangeException(nameof(vehicleId), "vehicleId must be greater than 0");
 			}
+
 			// deconstruct index into separate vars
 			var (first, second) = startIndex;
 
 			if (first < 0 || second < 0)
 			{
-				throw new ArgumentOutOfRangeException(nameof(startIndex),"the startIndex must be in bounds of the ParkingLot array");
+				throw new ArgumentOutOfRangeException(nameof(startIndex),
+					"the startIndex must be in bounds of the ParkingLot array");
 			}
+
 			var count = 0;
 			for (int i = first; i < parkingLot.GetLength(0) && count < size; i++)
 			{
@@ -153,15 +160,15 @@ namespace Garage2.Models
 		}
 
 
-        /// <summary>
-        /// un-parks a vehicle
-        /// </summary>
-        /// <param name="id">the database id of the vehicle</param>
-        /// <param name="parkingSpace">starting location of the space in ParkingLot</param>
-        /// <param name="size">the number of partial spaces in the parking lot ex. 3 for a car, 1 for a motorcycle and 9 for boats and airplanes</param>
-        /// <exception cref="Exception"></exception>
-        /// ">
-        public void UnPark(int id, (int, int) parkingSpace, int size)
+		/// <summary>
+		/// un-parks a vehicle
+		/// </summary>
+		/// <param name="id">the database id of the vehicle</param>
+		/// <param name="parkingSpace">starting location of the space in ParkingLot</param>
+		/// <param name="size">the number of partial spaces in the parking lot ex. 3 for a car, 1 for a motorcycle and 9 for boats and airplanes</param>
+		/// <exception cref="Exception"></exception>
+		/// ">
+		public void UnPark(int id, (int, int) parkingSpace, int size)
 		{
 			var count = 0;
 			var (index, subIndex) = parkingSpace;
@@ -182,5 +189,28 @@ namespace Garage2.Models
 				}
 			}
 		}
+
+		public int GetAvailableRegularSize(int size)
+		{
+			int count = 0;
+
+			for (int i = 0; i < parkingLot.GetLength(0); i++)
+			{
+				for (int j = 0; j < parkingLot.GetLength(1); j++)
+				{
+					if (parkingLot[i, j] == 0)
+					{
+						
+						count++;
+					}
+					
+				}
+			}
+
+			count /= size;
+
+			return count; 
+		}
+
 	}
 }
