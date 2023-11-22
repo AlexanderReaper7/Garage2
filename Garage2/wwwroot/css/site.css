@@ -79,18 +79,6 @@ a.nav-link.text-dark:hover {
     round-clip: 1rem
 }
 
-/*#member {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-#vehicle {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}*/
-
 .centerContent {
     display: flex;
     justify-content: center;
