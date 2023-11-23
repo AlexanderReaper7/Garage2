@@ -29,7 +29,7 @@ The Details view for the Member shows the member´s regisered vehicles.
 The Details view for the ParkedVehicle shows the member the vehicle is registered to.
 
 <details>
-<summary>Other Group's Repositories</summary>
+<summary><h2>Other Group's Repositories</h2></summary>
 <ul>
   <li><a href="https://github.com/SushmaSrinivasan/Garage-3.0-group-1">Grupp 1</a></li>
   <li><a href="https://github.com/AlexanderReaper7/Garage2">Grupp 2 <- This is us!</a></li>
