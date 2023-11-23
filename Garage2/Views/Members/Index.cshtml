@@ -9,7 +9,7 @@
 <p>
     <a asp-action="Create" class="btn btn-primary">Create New</a>
 </p>
-<table class="table">
+<table class="table table-responsive">
     <thead>
         <tr>
             <th>
@@ -32,7 +32,7 @@
         @foreach (var item in Model)
         {
             <tr>
-                <td>
+                <td class="align-middle">
                     @item.PersonNumber.InsertSeparator()
                 </td>
                 <td class="align-middle">
