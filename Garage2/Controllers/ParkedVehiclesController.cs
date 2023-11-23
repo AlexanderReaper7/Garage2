@@ -178,7 +178,7 @@ public class ParkedVehiclesController : Controller
         ParkedVehicle parkedVehicle;
         try
         {
-            parkedVehicle = context.ParkedVehicle.Include(p => p.VehicleType).First(p => p.Id == id);
+            parkedVehicle = context.ParkedVehicle.Include(p => p.Member).Include(p => p.VehicleType).First(p => p.Id == id);
         }
         catch (Exception)
         {

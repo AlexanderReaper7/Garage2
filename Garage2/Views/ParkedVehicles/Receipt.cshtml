@@ -13,8 +13,8 @@
 		<dt class="col-sm-2">Member</dt>
 		<dd class="col-sm-10">@Model.Member.FullName</dd>
 		
-		<dt class="col-sm-2">Birth Number</dt>
-		<dd class="col-sm-10">@Model.Member.PersonNumber</dd>
+		<dt class="col-sm-2">Person Number</dt>
+		<dd class="col-sm-10">@Model.Member.PersonNumber.InsertSeparator()</dd>
 
 		<dt class="col-sm-2">Registration Number</dt>
 		<dd class="col-sm-10">@Model.RegistrationNumber</dd>
@@ -28,8 +28,6 @@
 		<dt class="col-sm-2">Parking Lot</dt>
 		<dd class="col-sm-10">@Model.ParkingSpaceString</dd>
     </dl>
-
-	<!-- Add any additional content for your receipt -->
 
 	<button class="btn btn-primary" onclick="window.print()">Print Receipt</button>
 	
