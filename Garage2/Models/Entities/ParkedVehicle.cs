@@ -54,7 +54,7 @@ public class ParkedVehicle
             if (ParkingSpace == 0) return "Not Parked";
             var strb = new StringBuilder();
             strb.Append(ParkingSpace);
-            if (ParkingSubSpace != 0)
+            if (ParkingSubSpace != 0 || VehicleType.Size == 1)
             {
                 strb.Append(',');
                 strb.Append(ParkingSubSpace);
@@ -64,7 +64,7 @@ public class ParkedVehicle
             if (VehicleType.Size != 1 && VehicleType.Size != IParkingLotManager.ParkingSubLotSize)
             {
                 strb.Append(" : ");
-                var end = ParkingSubSpace + VehicleType.Size - 1;
+                var end = ParkingSubSpace + VehicleType.Size;
                 var whole = end / IParkingLotManager.ParkingSubLotSize;
                 if (whole > 0) strb.Append(ParkingSpace + whole);
                 var sub = end % IParkingLotManager.ParkingSubLotSize;

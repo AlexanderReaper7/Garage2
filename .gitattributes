@@ -3,6 +3,9 @@
 ###############################################################################
 * text=auto
 
+# Ignore the wwwroot/lib folder for Linguist 
+wwwroot/lib/* linguist-vendored
+
 ###############################################################################
 # Set default behavior for command prompt diff.
 #
