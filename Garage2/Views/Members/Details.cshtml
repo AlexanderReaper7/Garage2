@@ -11,12 +11,6 @@
 <h2><strong>@MessageToView.MessageToUser</strong></h2>
 <div>
     <h4>Member</h4>
-    <div>
-        <button class="btn btn-primary" asp-action="Edit" asp-route-id="@Model?.PersonNumber">Edit</button>
-        <button class="btn btn-primary" asp-action="Delete" asp-route-id="@Model?.PersonNumber">Delete</button>
-        <button class="btn btn-primary" asp-action="Index">Back to List</button>
-    </div>
-
     <hr />
     <dl class="row centerContent">
         <div class="col-sm-12">
@@ -53,8 +47,8 @@
         </div>
     </dl>
     <div id="marginbutton">
-        <a asp-action="Edit" asp-route-id="@Model?.PersonNumber" class="btn btn-primary">Edit</a>
-        <a asp-action="Delete" asp-route-id="@Model?.PersonNumber" class="btn btn-primary">Delete</a>
+        <a asp-action="Edit" asp-route-id="@Model.PersonNumber" class="btn btn-primary">Edit</a>
+        <a asp-action="Delete" asp-route-id="@Model.PersonNumber" class="btn btn-primary">Delete</a>
         <a asp-action="Index" class="btn btn-primary">Back to List</a>
     </div>
     <h4>Registered Vehicles</h4>
