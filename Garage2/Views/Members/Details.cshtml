@@ -10,8 +10,8 @@
 <div>
     <h4>Member</h4>
     <div>
-        <button class="btn btn-primary" asp-action="Edit" asp-route-id="@Model?.PersonNumber">Edit</button>
-        <button class="btn btn-primary" asp-action="Delete" asp-route-id="@Model?.PersonNumber">Delete</button>
+        <button class="btn btn-primary" asp-action="Edit" asp-route-id="@Model.PersonNumber">Edit</button>
+        <button class="btn btn-primary" asp-action="Delete" asp-route-id="@Model.PersonNumber">Delete</button>
         <button class="btn btn-primary" asp-action="Index">Back to List</button>
     </div>
 
@@ -21,7 +21,7 @@
             @Html.DisplayNameFor(model => model.PersonNumber)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.PersonNumber)
+            @Model.PersonNumber.InsertSeparator()
         </dd>
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.FirstName)
