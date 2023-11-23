@@ -11,50 +11,45 @@ namespace Garage2.Models;
 
 public class DbInitializer
 {
-    private static Faker faker = null!;
-    private static readonly Random rnd = new Random();
-    private const int dbInitializerAmount = 10;
+    private static readonly Faker Faker = new("sv");
+    private static readonly Random Rnd = new();
+    private const int MembersCount = 10;
+
     public static async Task InitAsync(Garage2Context db)
     {
-        //If there are members in database return
+        // If there are members in database return
         if (await db.Member.AnyAsync()) return;
 
-        faker = new Faker("sv");
 
-        var members = GenerateMembers(dbInitializerAmount);
+        var members = GenerateMembers(MembersCount);
         await db.AddRangeAsync(members);
 
-        var vehicleTypes = GenerateVehicleTypes(dbInitializerAmount);
+        var vehicleTypes = GenerateVehicleTypes();
         await db.AddRangeAsync(vehicleTypes);
 
         var vehicles = GenerateVehicles(vehicleTypes, members);
         await db.AddRangeAsync(vehicles);
         await db.SaveChangesAsync();
     }
-    //Generate Random Members
-    private static IEnumerable<Member> GenerateMembers(int numberOfMembers)
+    // Generate Random Members
+    private static List<Member> GenerateMembers(int numberOfMembers)
     {
         var members = new List<Member>();
         var membershipValues = Enum.GetValues(typeof(Membership));
 
-        faker = new Faker("sv");
-
-        for (int i = 0; i < numberOfMembers; i++)
+        for (var i = 0; i < numberOfMembers; i++)
         {
-            var genderValues = Enum.GetValues(typeof(Name.Gender));
-            var randomGender = (Name.Gender)genderValues.GetValue(rnd.Next(genderValues.Length));
-            var fName = faker.Name.FirstName();
-            var lName = faker.Name.LastName();
-            var dob = faker.Date.Between(new DateTime(1965, 1, 2), new DateTime(2002, 1, 2));
+            var isFemale = Rnd.Next(2) == 1;
+            var fName = Faker.Name.FirstName(isFemale ? Name.Gender.Female : Name.Gender.Male);
+            var lName = Faker.Name.LastName(isFemale ? Name.Gender.Female : Name.Gender.Male);
+            var dob = Faker.Date.Between(DateTime.Now.AddYears(-100), DateTime.Now.AddYears(-18));
             
-            var lastFourDigits = FormatPersonNumber(dob, randomGender);
-
-            var member = new Member()
+            var member = new Member
             {
                 FirstName = fName,
                 LastName = lName,
-                PersonNumber = $"{dob:yyyyMMdd}{lastFourDigits}",
-                Membership = (Membership)rnd.Next(membershipValues.Length),
+                PersonNumber = PersonNumber.GeneratePersonNumber(dob, isFemale),
+                Membership = (Membership)Rnd.Next(membershipValues.Length),
             };
 
             members.Add(member);
@@ -63,57 +58,37 @@ public class DbInitializer
         return members;
     }
 
-    private static string FormatPersonNumber(DateTime dob, Name.Gender gender)
+    // Generate Random vehicles
+    private static List<VehicleType> GenerateVehicleTypes()
     {
-        // extract the year and month from birthdate
-        var year = dob.Year % 100; // Take the last 2 digits of the year
-        var month = dob.Month;
-
-        // determine the offset for the last digit based on gender
-        var genderOffset = gender == Name.Gender.Male ? 0 : 500;
-
-        // Generate a random 2 digit number
-        var randomDigits = rnd.Next(0, 100);
-
-        // Combine the year, month, gender offset, and random digits
-        var fullPersonNumber = $"{year:D2}{month:D2}{genderOffset + randomDigits:D2}";
-
-        // Take only the last four digits
-        var lastFourDigits = fullPersonNumber.Substring(fullPersonNumber.Length - 4);
-
-        return lastFourDigits;
-    }
-    //Generate Random vehicles
-    private static IEnumerable<VehicleType> GenerateVehicleTypes(int generateVehicleTypes)
-    {
-        var vehicleTypes = new List<VehicleType>()
+        var vehicleTypes = new List<VehicleType>
         {
-            new VehicleType()
+            new()
             {
                 Name = "Car",
                 Size = 3,
             },
-            new VehicleType()
+            new()
             {
                 Name = "Motorcycle",
                 Size = 1,
             },
-            new VehicleType()
+            new()
             {
                 Name = "Truck",
                 Size = 6,
             },
-            new VehicleType()
+            new()
             {
                 Name = "Bus",
                 Size = 6,
             },
-            new VehicleType()
+            new()
             {
                 Name = "Boat",
                 Size = 9,
             },
-            new VehicleType()
+            new()
             {
                 Name = "Airplane",
                 Size = 9,
@@ -122,111 +97,59 @@ public class DbInitializer
         return vehicleTypes;
     }
 
-    //Generate Random Vehicle
-    private static IEnumerable<ParkedVehicle> GenerateVehicles(IEnumerable<VehicleType> vehicleTypes, IEnumerable<Member> members)
+    // Generate Random Vehicle
+    private static List<ParkedVehicle> GenerateVehicles(IEnumerable<VehicleType> vehicleTypes, IEnumerable<Member> members)
     {
         var parkedVehicles = new List<ParkedVehicle>();
-        var startDate = new DateTime(2023, 1, 1);
-        var endDate = new DateTime(2023, 11, 19);
 
         foreach (var member in members)
         {
-            var numberOfVehicles = rnd.Next(1, 4); // Randomly choose 1 to 3 vehicles per member
+            var numberOfVehicles = Rnd.Next(1, 4); // Randomly choose 1 to 3 vehicles per member
 
-            for (int i = 0; i < numberOfVehicles; i++)
+            for (var i = 0; i < numberOfVehicles; i++)
             {
-                var model = faker.Vehicle.Model();
-                var regNr = $"SE {faker.Random.String2(3, "ABCDEFGHIJKLMNOPQRSTUVWXYZ")}{faker.Random.Number(100, 999)}";
-                var color = faker.Commerce.Color();
-                var arrivalTime = faker.Date.Between(startDate, endDate);
-                var brand = faker.Vehicle.Manufacturer();
+                var model = Faker.Vehicle.Model();
+                var regNr = $"SE {Faker.Random.String2(3, "ABCDEFGHIJKLMNOPQRSTUVWXYZ")}{Faker.Random.Number(100, 999)}";
+                var color = Faker.Commerce.Color();
+                var brand = Faker.Vehicle.Manufacturer();
 
-                var currentVehicleType = vehicleTypes.ElementAt(rnd.Next(vehicleTypes.Count()));
+                var currentVehicleType = vehicleTypes.ElementAt(Rnd.Next(vehicleTypes.Count()));
 
-                var vehicle = new ParkedVehicle()
+                var vehicle = new ParkedVehicle
                 {
                     Brand = brand,
                     Model = model,
                     RegistrationNumber = regNr,
                     Color = color,
-                    ArrivalTime = arrivalTime,
+                    ArrivalTime = DateTime.MinValue,
                     VehicleType = currentVehicleType,
                     Member = member,
                 };
 
-                FetchNrWheelsAndParkingSpace(vehicle);
+                SetNumberOfWheels(vehicle);
                 parkedVehicles.Add(vehicle);
             }
         }
 
         return parkedVehicles;
     }
-    //Fetch Number Of WHeels And Parking Space Depending On Type
-    private static void FetchNrWheelsAndParkingSpace(ParkedVehicle vehicle)
-    {
-        switch (vehicle.VehicleType.Name)
-        {
-            case "Car":
-                vehicle.NumberOfWheels = 4;
-                break;
-            case "Bus":
-                vehicle.NumberOfWheels = 6;
-                break;
-            case "Truck":
-                vehicle.NumberOfWheels = 6;
-                break;
-            case "Motorcycle":
-                vehicle.NumberOfWheels = 2;
-                break;
-            case "Boat":
-                vehicle.NumberOfWheels = 0;
-                break;
-            case "Airplane":
-                vehicle.NumberOfWheels = 8;
-                break;
-        }
-    }
-
-    private static string GeneratePersonNumber(DateTime dob)
-    {
-        var strb = new StringBuilder();
-        var year = dob.Year.ToString();
-        strb.Append(year);
-        var month = dob.Month.ToString().PadLeft(2, '0');
-        strb.Append(month);
-        var day = dob.Day.ToString().PadLeft(2, '0');
-        strb.Append(day);
-        var lastThree = rnd.Next(100, 999).ToString();
-        strb.Append(lastThree);
-        var checkNum = CalculateCheckNumber(strb.ToString().Substring(2));
-        return $"{year}{month}{day}{lastThree}{checkNum}";
-    }
 
     /// <summary>
-    /// mod10 checkNumber
+    /// Sets the number of wheels based on the vehicle type
     /// </summary>
-    /// <param name="nr"></param>
-    /// <returns></returns>
-    private static int CalculateCheckNumber(string nr)
+    private static void SetNumberOfWheels(ParkedVehicle vehicle)
     {
-        if (nr.Length != 9) throw new ArgumentException("Person number must be 9 digits long");
-        var sum = 0;
-        bool alternate = true;
-        for (int i = 0; i < nr.Length; i++)
+        vehicle.NumberOfWheels = vehicle.VehicleType.Name switch
         {
-            int n = int.Parse(nr.Substring(i, 1));
-            if (alternate)
-            {
-                n *= 2;
-                if (n > 9)
-                {
-                    n = (n % 10) + 1;
-                }
-            }
-            sum += n;
-            alternate = !alternate;
-        }
-        return (10 - (sum % 10)) % 10;
+            "Car" => 4,
+            "Bus" => 6,
+            "Truck" => 6,
+            "Motorcycle" => 2,
+            "Boat" => 0,
+            "Airplane" => 8,
+            _ => vehicle.NumberOfWheels
+        };
     }
+
 }
 

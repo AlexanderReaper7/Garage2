@@ -32,8 +32,8 @@
         @foreach (var item in Model)
         {
             <tr>
-                <td class="align-middle">
-                    @Html.DisplayFor(modelItem => item.PersonNumber)
+                <td>
+                    @item.PersonNumber.InsertSeparator()
                 </td>
                 <td class="align-middle">
                     @Html.DisplayFor(modelItem => item.FirstName)

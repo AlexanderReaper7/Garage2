@@ -180,13 +180,14 @@ public class ParkedVehiclesController : Controller
         ParkedVehicle parkedVehicle;
         try
         {
-            parkedVehicle = context.ParkedVehicle.Include(p => p.Member).Include(p => p.VehicleType).First(p => p.Id == id);
+            parkedVehicle = context.ParkedVehicle.Include(p => p.VehicleType).First(p => p.Id == id);
         }
         catch (Exception)
         {
             return NotFound();
         }
-        if (parkedVehicle.ParkingSpace != 0) return NotFound(); // vehicle is already parked
+        if (parkedVehicle.ParkingSpace != 0) return BadRequest(); // vehicle is already parked
+        if (parkingLotManager.LargestParkingSpaceAvailable < parkedVehicle.VehicleType.Size) return BadRequest(); // no space available
         var parkingLot = parkingLotManager.Park(parkedVehicle.Id, parkedVehicle.VehicleType.Size);
         parkedVehicle.ParkingSpace = parkingLot.Item1;
         parkedVehicle.ParkingSubSpace = parkingLot.Item2;

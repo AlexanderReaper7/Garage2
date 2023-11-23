@@ -21,7 +21,7 @@ public class Program
         builder.Services.AddControllersWithViews();
         builder.Services.AddAutoMapper(typeof(GarageMapping));
 
-        builder.Services.AddScoped<IListOfAvailableLotsService, ListOfAvailableLotsService>();
+        builder.Services.AddScoped<IAvailableLotsService, AvailableLotsService>();
         builder.Services.AddScoped<IMessageToView, MessageToView>();
         builder.Services.AddScoped<IParkingLotManager, ParkingLotManager>();
         builder.Services.AddScoped<IVehicleTypesService, VehicleTypesService>();
@@ -35,7 +35,7 @@ public class Program
             // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
             app.UseHsts();
 
-
+            
         }
         else
         {
