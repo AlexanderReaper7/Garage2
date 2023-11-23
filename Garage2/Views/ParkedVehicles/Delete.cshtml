@@ -10,48 +10,62 @@
 <div>
     <h4>Parked Vehicle</h4>
     <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.RegistrationNumber)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.RegistrationNumber)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ArrivalTime)
-        </dt>
-	    <dd class = "col-sm-10">
-		    @Html.DisplayFor(model => model.ArrivalTime)
-	    </dd>
-	    <dt class = "col-sm-2">
-		    @Html.DisplayNameFor(model => model.CheckOutTime)
-	    </dt>
-	    <dd class = "col-sm-10">
-		    @Html.DisplayFor(model => model.CheckOutTime)
-	    </dd>
-	    <dt class = "col-sm-2">
-		    @Html.DisplayNameFor(model => model.TotalTime)
-	    </dt>
-	    <dd class = "col-sm-10">
-		    @Html.DisplayFor(model => model.TotalTime)
-	    </dd>
-	    <dt class = "col-sm-2">
-		    @Html.DisplayNameFor(model => model.Price)
-	    </dt>
-	    <dd class = "col-sm-10">
-		    @Html.DisplayFor(model => model.Price)
-	    </dd>
-	    <dt class = "col-sm-2">
-			@Html.DisplayNameFor(model => model.ParkingSpaceString)
-	    </dt>
-	    <dd class = "col-sm-10">
-			@Html.DisplayFor(model => model.ParkingSpaceString)
-	    </dd>
+    <dl class="row centerContent">
+        <div>
+            <dt>
+                @Html.DisplayNameFor(model => model.RegistrationNumber)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.RegistrationNumber)
+            </dd>
+
+        </div>
+        <div>
+            <dt>
+                @Html.DisplayNameFor(model => model.ArrivalTime)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.ArrivalTime)
+            </dd>
+        </div>
+        <div>
+            <dt>
+                @Html.DisplayNameFor(model => model.CheckOutTime)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.CheckOutTime)
+            </dd>
+        </div>
+        <div>
+            <dt>
+                @Html.DisplayNameFor(model => model.TotalTime)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.TotalTime)
+            </dd>
+        </div>
+        <div>
+            <dt>
+                @Html.DisplayNameFor(model => model.Price)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Price)
+            </dd>
+        </div>
+        <div>
+            <dt>
+                @Html.DisplayNameFor(model => model.ParkingSpaceString)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.ParkingSpaceString)
+            </dd>
+        </div>
+
     </dl>
-    
+
     <form asp-action="Delete">
         <input type="hidden" asp-for="Id" />
-        <input type="submit" value="Deregister" class="btn btn-danger" /> |
-        <a asp-action="Index">Back to List</a>
+        <input type="submit" value="Deregister" class="btn btn-danger m-3" />
+        <a class="btn btn-primary m-3" asp-action="Index">Back to List</a>
     </form>
 </div>

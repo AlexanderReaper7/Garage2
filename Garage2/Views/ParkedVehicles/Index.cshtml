@@ -19,7 +19,7 @@
     ViewBag.CurrentSort = sortOrder;
 }
 
-<h2><strong>Vehicle Index</strong></h2>
+<h2><strong>Vehicles Overview</strong></h2>
 
 <p>
     <a asp-action="Create" class="btn btn-primary  shadow-sm">Register Vehicle</a>
@@ -235,7 +235,9 @@
                         {
                             <form asp-action="@parkParam">
                                 <input type="hidden" name="id" id="id" value="@item.Id" />
-                                <input type="submit" value="@parkParam" class="btn btn-danger" />
+                                <input type="submit" value="@parkParam" class="btn @parkParam" id="parkButton"
+                                       onmouseover="this.style.backgroundColor='@(parkParam == "Park" ? "rgba(0, 255, 0, 0.7)" : "rgba(255, 0, 0, 0.5)")'"
+                                       onmouseout="this.style.backgroundColor='@(parkParam == "Park" ? "rgba(0, 128, 0, 1)" : "rgba(255, 0, 0, 1)")'" />
                             </form>
                         }
                         <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-primary">Edit</a>

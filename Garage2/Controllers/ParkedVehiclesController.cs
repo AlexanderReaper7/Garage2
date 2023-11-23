@@ -23,6 +23,7 @@ public class ParkedVehiclesController : Controller
     private readonly IParkingLotManager parkingLotManager;
     private readonly Garage2Context context;
     private readonly VehicleStatistics vehicleStatistics;
+    private readonly AvailableParkingLotsViewModel availableParkingLotsViewModel;
     private readonly IMapper mapper;
     private readonly IMessageToView messageToView;
     public ParkedVehiclesController(Garage2Context context, IParkingLotManager parkingLotManager, IMapper mapper, IMessageToView messageToView)
@@ -30,6 +31,7 @@ public class ParkedVehiclesController : Controller
         this.parkingLotManager = parkingLotManager;
         this.context = context;
         vehicleStatistics = new VehicleStatistics();
+        availableParkingLotsViewModel = new AvailableParkingLotsViewModel();
         this.mapper = mapper;
         this.messageToView = messageToView;
     }
@@ -383,18 +385,28 @@ public class ParkedVehiclesController : Controller
         vehicleStatistics.NrOfMembers = parkedVehicle.Select(p => p.Member).Distinct().Count();
         vehicleStatistics.Memberships = GetTotalMemberships();
 
-
         return View(vehicleStatistics);
+    }
+
+    public IActionResult ShowAvailableLots()
+    {
+
+        availableParkingLotsViewModel.AvailableParkingLotsRegularSize = parkingLotManager.GetAvailableRegularSize(3);
+        availableParkingLotsViewModel.AvailableParkingLotsMediumSize = parkingLotManager.GetAvailableRegularSize(6);
+        availableParkingLotsViewModel.AvailableParkingLotsLargeSize = parkingLotManager.GetAvailableRegularSize(9);
+
+        return View("AvailableLots", availableParkingLotsViewModel);
     }
 
     private Dictionary<Membership, int> GetTotalMemberships()
     {
-        var membershipCounts = context.ParkedVehicle.Include(t => t.Member)
-            .GroupBy(p => p.Member.Membership)
+        var membershipCounts = context.Member
+            .GroupBy(p => p.Membership)
             .ToDictionary(
                 group => group.Key,
                 group => group.Count()
             );
+
         return membershipCounts;
     }
 
