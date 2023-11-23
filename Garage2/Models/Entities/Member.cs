@@ -30,7 +30,7 @@ public class Member
     public string FullName => $"{FirstName} {LastName}";
     [Required]
     public Membership Membership { get; set; }
-
+     
     //Navigation Property
     public ICollection<ParkedVehicle> ParkedVehicle { get; set; }
 

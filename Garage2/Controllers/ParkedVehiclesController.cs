@@ -89,7 +89,8 @@ public class ParkedVehiclesController : Controller
             vehicles = b ? vehicles.Where(v => v.ParkingSpace != 0) : vehicles.Where(v => v.ParkingSpace == 0);
         }
 
-        if (vehicleTypes is { Length: > 0 }){
+        if (vehicleTypes is { Length: > 0 })
+        {
             foreach (var vehicleType in vehicleTypes)
             {
                 vehicles = vehicles.Where(v => v.VehicleType.Name == vehicleType);
@@ -161,7 +162,7 @@ public class ParkedVehiclesController : Controller
 
             await context.SaveChangesAsync();
 
-			messageToView.ShowMessageInView("Parked Info:");
+            messageToView.ShowMessageInView("Parked Info:");
             return View("Details", parkedVehicle);
         }
         return View(parkedVehicle);
@@ -177,13 +178,14 @@ public class ParkedVehiclesController : Controller
         ParkedVehicle parkedVehicle;
         try
         {
-            parkedVehicle = context.ParkedVehicle.Include(p => p.Member).Include(p => p.VehicleType).First(p => p.Id == id);
+            parkedVehicle = context.ParkedVehicle.Include(p => p.VehicleType).First(p => p.Id == id);
         }
         catch (Exception)
         {
             return NotFound();
         }
-        if (parkedVehicle.ParkingSpace != 0) return NotFound(); // vehicle is already parked
+        if (parkedVehicle.ParkingSpace != 0) return BadRequest(); // vehicle is already parked
+        if (parkingLotManager.LargestParkingSpaceAvailable < parkedVehicle.VehicleType.Size) return BadRequest(); // no space available
         var parkingLot = parkingLotManager.Park(parkedVehicle.Id, parkedVehicle.VehicleType.Size);
         parkedVehicle.ParkingSpace = parkingLot.Item1;
         parkedVehicle.ParkingSubSpace = parkingLot.Item2;
@@ -276,8 +278,8 @@ public class ParkedVehiclesController : Controller
             }
 
 
-			messageToView.ShowMessageInView("New edited info:");
-			return View("Details", parkedVehicle);
+            messageToView.ShowMessageInView("New edited info:");
+            return View("Details", parkedVehicle);
         }
         return View(parkedVehicle);
     }
