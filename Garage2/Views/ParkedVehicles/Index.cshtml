@@ -196,36 +196,31 @@
         </tr>
     </thead>
     <tbody>
-    @{
-	    int count = 1; // Initialize count outside the foreach loop
-    }
     @foreach (var item in Model)
     {
-	    count++;
-	    var rowClass = count % 2 == 0 ? "even-row" : "odd-row";
 	    <tr>
-		    <td class="@rowClass">
+		    <td>
 			    @Html.DisplayFor(modelItem => item.RegistrationNumber)
 		    </td>
-		    <td class="@rowClass">
+		    <td>
 			    @Html.DisplayFor(modelItem => item.Member.FullName)
 		    </td>
-		    <td class="@rowClass">
+		    <td>
 			    @Html.DisplayFor(modelItem => item.VehicleType.Name)
 		    </td>
-		    <td class="@rowClass">
+		    <td>
 			    @Html.DisplayFor(modelItem => item.Brand)
 		    </td>
-		    <td class="@rowClass">
+		    <td>
 			    @Html.DisplayFor(modelItem => item.Model)
 		    </td>
-		    <td class="@rowClass">
+		    <td>
 			    @Html.DisplayFor(modelItem => item.Color)
 		    </td>
-		    <td class="@rowClass">
+		    <td>
 			    @Html.DisplayFor(modelItem => item.ArrivalTime)
 		    </td>
-		    <td class="@rowClass">
+		    <td>
 			    @Html.DisplayFor(modelItem => item.ParkingSpaceString)
 		    </td>
 		    <td>
@@ -236,7 +231,7 @@
 				    <form asp-action="@parkParam" onsubmit="toggleButton()">
 					    <input type="hidden" name="id" id="id" value="@item.Id"/>
 					    <input type="submit" value="@parkParam" class="btn @parkParam" id="parkButton"
-					           onmouseover="this.style.backgroundColor='@(parkParam == "Park" ? "rgba(0, 255, 0, 0.7)" : "rgba(255, 0, 0, 0.4)")'"
+					           onmouseover="this.style.backgroundColor='@(parkParam == "Park" ? "rgba(0, 255, 0, 0.7)" : "rgba(255, 0, 0, 0.5)")'"
 					           onmouseout="this.style.backgroundColor='@(parkParam == "Park" ? "rgba(0, 128, 0, 1)" : "rgba(255, 0, 0, 1)")'"/>
 				    </form>
 				    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-primary">Edit</a>

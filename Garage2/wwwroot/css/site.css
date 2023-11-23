@@ -91,34 +91,28 @@ a.nav-link.text-dark:hover {
 dl.row dt,
 dl.row dd {
     display: inline-block;
-   
-
 }
 
 .form-control {
     text-align: center;
     margin: 0 auto;
 }
+
 #marginbutton {
     margin-bottom: 15px;
 }
-.even-row {
-    background-color: white; 
-    /*background-color: rgba(241, 235, 144, 0.1); */
-}
 
-.odd-row {
-    background-color: rgba(128, 128, 128, 0.1); /* Adjust the alpha value as needed */
-}
 .Park {
     background-color: green;
-    color: black;
+    color: white;
 }
+
 .UnPark {
     background-color: red;
-    color: black;
+    color: white;
 }
 
 #parkButton {
     transition: background-color 0.3s ease;
+    color: white;
 }
