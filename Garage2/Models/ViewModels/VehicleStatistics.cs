@@ -17,5 +17,5 @@ public class VehicleStatistics
     public Member Member { get; set; }
     [Display(Name = "Total Members")]
     public int NrOfMembers { get; set; }
-	public Dictionary<Membership, int> Memberships { get; set; } = new Dictionary<Membership, int>();
+    public Dictionary<Membership, int> Memberships { get; set; } = new Dictionary<Membership, int>();
 }

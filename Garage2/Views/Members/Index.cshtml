@@ -4,12 +4,12 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<h1>Members Overview</h1>
 
 <p>
     <a asp-action="Create" class="btn btn-primary">Create New</a>
 </p>
-<table class="table">
+<table class="table table-responsive">
     <thead>
         <tr>
             <th>
@@ -27,20 +27,21 @@
             <th>Links</th>
         </tr>
     </thead>
+
     <tbody>
         @foreach (var item in Model)
         {
             <tr>
-                <td>
+                <td class="align-middle">
                     @item.PersonNumber.InsertSeparator()
                 </td>
-                <td>
+                <td class="align-middle">
                     @Html.DisplayFor(modelItem => item.FirstName)
                 </td>
-                <td>
+                <td class="align-middle">
                     @Html.DisplayFor(modelItem => item.LastName)
                 </td>
-                <td>
+                <td class="align-middle">
                     @Html.DisplayFor(modelItem => item.Membership)
                 </td>
                 <td>

@@ -22,4 +22,6 @@ public interface IParkingLotManager
     /// <param name="parkingSpace">starting location of the space in ParkingLot</param>
     /// <param name="size">the number of partial spaces the vehicle occupies</param>
     void UnPark(int id, (int, int) parkingSpace, int size);
+
+    public int GetAvailableRegularSize(int size);
 }

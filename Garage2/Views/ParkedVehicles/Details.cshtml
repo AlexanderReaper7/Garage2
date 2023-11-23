@@ -9,75 +9,97 @@
 <h2><strong>Details</strong></h2>
 
 <div>
-	<h4>Parked Vehicle</h4>
-	<hr/>
-    <dl class="row">
-	    <dt class = "col-sm-2">
-		    @Html.DisplayNameFor(model => model.Member.FullName)
-	    </dt>
-	    <dd class = "col-sm-10">
-		    @Html.DisplayFor(model => model.Member.FullName)
-	    </dd>
-	    <dt class = "col-sm-2">
-		    @Html.DisplayNameFor(model => model.Member.PersonNumber)
-	    </dt>
-	    <dd class = "col-sm-10">
-		    @Html.DisplayFor(model => model.Member.PersonNumber)
-	    </dd>
-	    <dt class = "col-sm-2">
-		    @Html.DisplayNameFor(model => model.Member.Membership)
-	    </dt>
-	    <dd class = "col-sm-10">
-		    @Html.DisplayFor(model => model.Member.Membership)
-	    </dd>
-	    <dt class="col-sm-2">
-		    @Html.DisplayNameFor(model => model.RegistrationNumber)
-	    </dt>
-	    <dd class="col-sm-10">
-		    @Html.DisplayFor(model => model.RegistrationNumber)
-	    </dd>
-	    <dt class="col-sm-2">
-		    @Html.DisplayNameFor(model => model.VehicleType)
-	    </dt>
-	    <dd class="col-sm-10">
-		    @Html.DisplayFor(model => model.VehicleType.Name)
-	    </dd>
-	    <dt class="col-sm-2">
-		    @Html.DisplayNameFor(model => model.Color)
-	    </dt>
-	    <dd class="col-sm-10">
-		    @Html.DisplayFor(model => model.Color)
-	    </dd>
-	    <dt class="col-sm-2">
-		    @Html.DisplayNameFor(model => model.Brand)
-	    </dt>
-	    <dd class="col-sm-10">
-		    @Html.DisplayFor(model => model.Brand)
-	    </dd>
-	    <dt class="col-sm-2">
-		    @Html.DisplayNameFor(model => model.Model)
-	    </dt>
-	    <dd class="col-sm-10">
-		    @Html.DisplayFor(model => model.Model)
-	    </dd>
-	    <dt class="col-sm-2">
-		    @Html.DisplayNameFor(model => model.NumberOfWheels)
-	    </dt>
-	    <dd class="col-sm-10">
-		    @Html.DisplayFor(model => model.NumberOfWheels)
-	    </dd>
-	    <dt class="col-sm-2">
-		    @Html.DisplayNameFor(model => model.ArrivalTime)
-	    </dt>
-	    <dd class="col-sm-10">
-		    @Html.DisplayFor(model => model.ArrivalTime)
-	    </dd>
-	    <dt class="col-sm-2">
-		    @Html.DisplayNameFor(model => model.ParkingSpaceString)
-	    </dt>
-	    <dd class="col-sm-10">
-		    @Html.DisplayFor(model => model.ParkingSpaceString)
-	    </dd>
+    <h4>Parked Vehicle</h4>
+    <hr />
+    <dl class="row centerContent">
+        <div class="col-sm-12">
+            <dt>
+                @Html.DisplayNameFor(model => model.Member.FullName)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Member.FullName)
+            </dd>
+        </div>
+        <div class="col-sm-12">
+            <dt>
+                @Html.DisplayNameFor(model => model.Member.PersonNumber)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Member.PersonNumber)
+            </dd>
+        </div>
+        <div class="col-sm-12">
+            <dt>
+                @Html.DisplayNameFor(model => model.Member.Membership)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Member.Membership)
+            </dd>
+        </div>
+        <div class="col-sm-12">
+            <dt>
+                @Html.DisplayNameFor(model => model.RegistrationNumber)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.RegistrationNumber)
+            </dd>
+        </div>
+        <div class="col-sm-12">
+            <dt>
+                @Html.DisplayNameFor(model => model.VehicleType)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.VehicleType.Name)
+            </dd>
+        </div>
+        <div class="col-sm-12">
+            <dt>
+                @Html.DisplayNameFor(model => model.Color)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Color)
+            </dd>
+        </div>
+        <div class="col-sm-12">
+            <dt>
+                @Html.DisplayNameFor(model => model.Brand)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Brand)
+            </dd>
+        </div>
+        <div class="col-sm-12">
+            <dt>
+                @Html.DisplayNameFor(model => model.Model)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Model)
+            </dd>
+        </div>
+        <div class="col-sm-12">
+            <dt>
+                @Html.DisplayNameFor(model => model.NumberOfWheels)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.NumberOfWheels)
+            </dd>
+        </div>
+        <div class="col-sm-12">
+            <dt>
+                @Html.DisplayNameFor(model => model.ArrivalTime)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.ArrivalTime)
+            </dd>
+        </div>
+        <div class="col-sm-12">
+            <dt>
+                @Html.DisplayNameFor(model => model.ParkingSpaceString)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.ParkingSpaceString)
+            </dd>
+        </div>
     </dl>
 </div>
 <div class="btn-group">

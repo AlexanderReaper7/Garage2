@@ -11,39 +11,46 @@
 <h2><strong>@MessageToView.MessageToUser</strong></h2>
 <div>
     <h4>Member</h4>
-    <div>
-        <button class="btn btn-primary" asp-action="Edit" asp-route-id="@Model.PersonNumber">Edit</button>
-        <button class="btn btn-primary" asp-action="Delete" asp-route-id="@Model.PersonNumber">Delete</button>
-        <button class="btn btn-primary" asp-action="Index">Back to List</button>
-    </div>
-
     <hr />
-    <dl class="row">
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.PersonNumber)
-        </dt>
-        <dd class="col-sm-10">
-            @Model.PersonNumber.InsertSeparator()
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.FirstName)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.FirstName)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.LastName)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.LastName)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Membership)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Membership)
-        </dd>
+    <dl class="row centerContent">
+        <div class="col-sm-12">
+            <dt>
+                @Html.DisplayNameFor(model => model.PersonNumber)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.PersonNumber)
+            </dd>
+        </div>
+        <div class="col-sm-12">
+            <dt>
+                @Html.DisplayNameFor(model => model.FirstName)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.FirstName)
+            </dd>
+        </div>
+        <div class="col-sm-12">
+            <dt>
+                @Html.DisplayNameFor(model => model.LastName)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.LastName)
+            </dd>
+        </div>
+        <div class="col-sm-12">
+            <dt>
+                @Html.DisplayNameFor(model => model.Membership)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Membership)
+            </dd>
+        </div>
     </dl>
+    <div id="marginbutton">
+        <a asp-action="Edit" asp-route-id="@Model.PersonNumber" class="btn btn-primary">Edit</a>
+        <a asp-action="Delete" asp-route-id="@Model.PersonNumber" class="btn btn-primary">Delete</a>
+        <a asp-action="Index" class="btn btn-primary">Back to List</a>
+    </div>
     <h4>Registered Vehicles</h4>
     <hr />
     @if (Model.ParkedVehicle.Count != 0)
