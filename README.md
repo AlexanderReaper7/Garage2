@@ -28,3 +28,13 @@ The Details view for the Member shows the member´s regisered vehicles.
 
 The Details view for the ParkedVehicle shows the member the vehicle is registered to.
 
+<details>
+<summary>Other Group's Repositories</summary>
+- [Group 1](https://github.com/SushmaSrinivasan/Garage-3.0-group-1)
+- [Group 3](https://github.com/moon1204am/garage-3.0)
+- [Group 4](https://github.com/josukattoor/Garage-3-MVCEF)
+- [Group 5](https://github.com/samuellidstrom/Garage2.0_Group5)
+- [Group 6](https://github.com/Kasleets/Garage3)
+- [Group 7](https://github.com/EliasRafo/Garage3)
+- [Group 8](https://github.com/dornax/Ovning_14)
+</details>
