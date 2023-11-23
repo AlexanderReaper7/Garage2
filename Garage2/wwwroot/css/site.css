@@ -110,3 +110,15 @@ dl.row dd {
 .odd-row {
     background-color: rgba(128, 128, 128, 0.1); /* Adjust the alpha value as needed */
 }
+.Park {
+    background-color: green;
+    color: black;
+}
+.UnPark {
+    background-color: red;
+    color: black;
+}
+
+#parkButton {
+    transition: background-color 0.3s ease;
+}
