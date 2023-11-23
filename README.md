@@ -6,7 +6,8 @@
 
 ## [Övning 14: Garage 3.0](/Övning14_Garage3.0.pdf)
 
-## User stories
+<details>
+<summary><h2>User stories</h2></summary> 
 
 Then person using this website is the "Parking attendant" for the parking lot aka user.
 The Parking attendant can add/remove members, add/remove vehicles, and see the current state of the parking lot Etc.
@@ -27,4 +28,17 @@ When parking a vehicle the ParkingLotManager class figures out where to parke th
 The Details view for the Member shows the member´s regisered vehicles.
 
 The Details view for the ParkedVehicle shows the member the vehicle is registered to.
-
+</details>
+<details>
+<summary><h2>Other Group's Repositories</h2></summary>
+<ul>
+  <li><a href="https://github.com/SushmaSrinivasan/Garage-3.0-group-1">Grupp 1</a></li>
+  <li><a href="https://github.com/AlexanderReaper7/Garage2">Grupp 2 <- This is us!</a></li>
+  <li><a href="https://github.com/moon1204am/garage-3.0">Grupp 3</a></li>
+  <li><a href="https://github.com/josukattoor/Garage-3-MVCEF">Grupp 4</a></li>
+  <li><a href="https://github.com/samuellidstrom/Garage2.0_Group5">Grupp 5</a></li>
+  <li><a href="https://github.com/Kasleets/Garage3">Grupp 6</a></li>
+  <li><a href="https://github.com/EliasRafo/Garage3">Grupp 7</a></li>
+  <li><a href="https://github.com/dornax/Ovning_14">Grupp 8</a></li>
+</ul>
+</details>
