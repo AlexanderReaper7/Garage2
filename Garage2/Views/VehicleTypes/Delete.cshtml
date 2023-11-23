@@ -1,37 +1,37 @@
 ﻿@model Garage2.Models.VehicleType
 
 @{
-	ViewData["Title"] = "Delete";
+    ViewData["Title"] = "Delete";
 }
 
 <h1>Delete</h1>
 
 <h3>Are you sure you want to delete this?</h3>
 <div>
-	<h4>VehicleType</h4>
-	<hr />
-	<dl class="row centerContent">
-		<div class="col-sm-12">
-			<dt>
-				@Html.DisplayNameFor(model => model.Name)
-			</dt>
-			<dd>
-				@Html.DisplayFor(model => model.Name)
-			</dd>
-		</div >
-		<div class="col-sm-12">
-			<dt>
-				@Html.DisplayNameFor(model => model.Size)
-			</dt>
-			<dd>
-				@Html.DisplayFor(model => model.Size)
-			</dd>
-		</div>
-	</dl>
+    <h4>VehicleType</h4>
+    <hr />
+    <dl class="row centerContent">
+        <div class="col-sm-12">
+            <dt>
+                @Html.DisplayNameFor(model => model.Name)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Name)
+            </dd>
+        </div>
+        <div class="col-sm-12">
+            <dt>
+                @Html.DisplayNameFor(model => model.Size)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Size)
+            </dd>
+        </div>
+    </dl>
 
-	<form asp-action="Delete">
-		<input type="hidden" asp-for="Name" />
-		<input type="submit" value="Delete" class="btn btn-danger" /> |
-		<a asp-action="Index">Back to List</a>
-	</form>
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="Name" />
+        <input type="submit" value="Delete" class="btn btn-danger" /> |
+        <a asp-action="Index">Back to List</a>
+    </form>
 </div>

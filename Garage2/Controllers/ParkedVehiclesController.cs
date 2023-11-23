@@ -91,7 +91,8 @@ public class ParkedVehiclesController : Controller
             vehicles = b ? vehicles.Where(v => v.ParkingSpace != 0) : vehicles.Where(v => v.ParkingSpace == 0);
         }
 
-        if (vehicleTypes is { Length: > 0 }){
+        if (vehicleTypes is { Length: > 0 })
+        {
             foreach (var vehicleType in vehicleTypes)
             {
                 vehicles = vehicles.Where(v => v.VehicleType.Name == vehicleType);
@@ -163,7 +164,7 @@ public class ParkedVehiclesController : Controller
 
             await context.SaveChangesAsync();
 
-			messageToView.ShowMessageInView("Parked Info:");
+            messageToView.ShowMessageInView("Parked Info:");
             return View("Details", parkedVehicle);
         }
         return View(parkedVehicle);
@@ -278,8 +279,8 @@ public class ParkedVehiclesController : Controller
             }
 
 
-			messageToView.ShowMessageInView("New edited info:");
-			return View("Details", parkedVehicle);
+            messageToView.ShowMessageInView("New edited info:");
+            return View("Details", parkedVehicle);
         }
         return View(parkedVehicle);
     }
@@ -393,20 +394,20 @@ public class ParkedVehiclesController : Controller
         availableParkingLotsViewModel.AvailableParkingLotsMediumSize = parkingLotManager.GetAvailableRegularSize(6);
         availableParkingLotsViewModel.AvailableParkingLotsLargeSize = parkingLotManager.GetAvailableRegularSize(9);
 
-	    return View("AvailableLots", availableParkingLotsViewModel);
+        return View("AvailableLots", availableParkingLotsViewModel);
     }
 
-	private Dictionary<Membership, int> GetTotalMemberships()
+    private Dictionary<Membership, int> GetTotalMemberships()
     {
-		var membershipCounts = context.Member
-			.GroupBy(p => p.Membership)
-			.ToDictionary(
-				group => group.Key,
-				group => group.Count()
-			);
+        var membershipCounts = context.Member
+            .GroupBy(p => p.Membership)
+            .ToDictionary(
+                group => group.Key,
+                group => group.Count()
+            );
 
-		return membershipCounts;
-	}
+        return membershipCounts;
+    }
 
     public Dictionary<string, int> VehicleCount()
     {

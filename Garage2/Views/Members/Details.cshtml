@@ -2,121 +2,121 @@
 @model Garage2.Models.Entities.Member
 @inject Garage2.Services.IMessageToView MessageToView
 @{
-	ViewData["Title"] = "Details";
+    ViewData["Title"] = "Details";
 }
 
 <h1>Details</h1>
 <h2><strong>@MessageToView.MessageToUser</strong></h2>
 <div>
-	<h4>Member</h4>
-	<hr />
-	<dl class="row centerContent">
-		<div class="col-sm-12">
-			<dt>
-				@Html.DisplayNameFor(model => model.PersonNumber)
-			</dt>
-			<dd>
-				@Html.DisplayFor(model => model.PersonNumber)
-			</dd>
-		</div>
-		<div class="col-sm-12">
-			<dt>
-				@Html.DisplayNameFor(model => model.FirstName)
-			</dt>
-			<dd>
-				@Html.DisplayFor(model => model.FirstName)
-			</dd>
-		</div>
-		<div class="col-sm-12">
-			<dt>
-				@Html.DisplayNameFor(model => model.LastName)
-			</dt>
-			<dd>
-				@Html.DisplayFor(model => model.LastName)
-			</dd>
-		</div>
-		<div class="col-sm-12">
-			<dt>
-				@Html.DisplayNameFor(model => model.Membership)
-			</dt>
-			<dd>
-				@Html.DisplayFor(model => model.Membership)
-			</dd>
-		</div>
-	</dl>
-	<div id="marginbutton">
-		<a asp-action="Edit" asp-route-id="@Model?.PersonNumber" class="btn btn-primary">Edit</a>
-		<a asp-action="Delete" asp-route-id="@Model?.PersonNumber" class="btn btn-primary">Delete</a>
-		<a asp-action="Index" class="btn btn-primary">Back to List</a>
-	</div>
-	<h4>Registered Vehicles</h4>
-	<hr />
-	@if (Model.ParkedVehicle.Count != 0)
-	{
-		<table class="table-responsive text-center">
-			<thead>
-				<tr>
-					<th>
-						@Html.DisplayNameFor(Model => Model.ParkedVehicle.First().RegistrationNumber)
-					</th>
-					<th>
-						@Html.DisplayNameFor(Model => Model.ParkedVehicle.First().VehicleTypeName)
-					</th>
-					<th>
-						@Html.DisplayNameFor(Model => Model.ParkedVehicle.First().Model)
-					</th>
-					<th>
-						@Html.DisplayNameFor(Model => Model.ParkedVehicle.First().Color)
-					</th>
-					<th>
-						@Html.DisplayNameFor(Model => Model.ParkedVehicle.First().ParkingSpace)
-					</th>
-					<th>Links</th>
-				</tr>
-			</thead>
-			<tbody>
-				@foreach (var item in Model.ParkedVehicle)
-				{
-					<tr>
-						<td>
-							@Html.DisplayFor(modelItem => item.RegistrationNumber)
-						</td>
-						<td>
-							@Html.DisplayFor(modelItem => item.VehicleType.Name)
-						</td>
-						<td>
-							@Html.DisplayFor(modelItem => item.Model)
-						</td>
-						<td>
-							@Html.DisplayFor(modelItem => item.Color)
-						</td>
-						<td>
-							@Html.DisplayFor(modelItem => item.ParkingSpaceString)
-						</td>
-						<td>
+    <h4>Member</h4>
+    <hr />
+    <dl class="row centerContent">
+        <div class="col-sm-12">
+            <dt>
+                @Html.DisplayNameFor(model => model.PersonNumber)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.PersonNumber)
+            </dd>
+        </div>
+        <div class="col-sm-12">
+            <dt>
+                @Html.DisplayNameFor(model => model.FirstName)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.FirstName)
+            </dd>
+        </div>
+        <div class="col-sm-12">
+            <dt>
+                @Html.DisplayNameFor(model => model.LastName)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.LastName)
+            </dd>
+        </div>
+        <div class="col-sm-12">
+            <dt>
+                @Html.DisplayNameFor(model => model.Membership)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Membership)
+            </dd>
+        </div>
+    </dl>
+    <div id="marginbutton">
+        <a asp-action="Edit" asp-route-id="@Model?.PersonNumber" class="btn btn-primary">Edit</a>
+        <a asp-action="Delete" asp-route-id="@Model?.PersonNumber" class="btn btn-primary">Delete</a>
+        <a asp-action="Index" class="btn btn-primary">Back to List</a>
+    </div>
+    <h4>Registered Vehicles</h4>
+    <hr />
+    @if (Model.ParkedVehicle.Count != 0)
+    {
+        <table class="table-responsive text-center">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(Model => Model.ParkedVehicle.First().RegistrationNumber)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(Model => Model.ParkedVehicle.First().VehicleTypeName)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(Model => Model.ParkedVehicle.First().Model)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(Model => Model.ParkedVehicle.First().Color)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(Model => Model.ParkedVehicle.First().ParkingSpace)
+                    </th>
+                    <th>Links</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.ParkedVehicle)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.RegistrationNumber)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.VehicleType.Name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Model)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Color)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ParkingSpaceString)
+                        </td>
+                        <td>
 
-							<div class="btn-group">
-								@{
-									var parkParam = item.ParkingSpace == 0 ? "Park" : "UnPark";
-								}
-								<form asp-controller="ParkedVehicles" asp-action="@parkParam">
-									<input type="hidden" name="id" id="id" value="@item.Id" />
-									<input type="submit" value="@parkParam" class="btn btn-danger" />
-								</form>
+                            <div class="btn-group">
+                                @{
+                                    var parkParam = item.ParkingSpace == 0 ? "Park" : "UnPark";
+                                }
+                                <form asp-controller="ParkedVehicles" asp-action="@parkParam">
+                                    <input type="hidden" name="id" id="id" value="@item.Id" />
+                                    <input type="submit" value="@parkParam" class="btn btn-danger" />
+                                </form>
 
 
-								<a class="btn btn-primary" asp-controller="ParkedVehicles" asp-action="Details" asp-route-id="@item.Id">Details</a>
-								<a class="btn btn-primary" asp-controller="ParkedVehicles" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
-								<a class="btn btn-primary" asp-controller="ParkedVehicles" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-							</div>
-						</td>
-					</tr>
-				}
-			</tbody>
-		</table>
-	}
-	else
-	{
-		<h5>This Member Has No Registered Vehicles</h5>
-	}
+                                <a class="btn btn-primary" asp-controller="ParkedVehicles" asp-action="Details" asp-route-id="@item.Id">Details</a>
+                                <a class="btn btn-primary" asp-controller="ParkedVehicles" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                                <a class="btn btn-primary" asp-controller="ParkedVehicles" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <h5>This Member Has No Registered Vehicles</h5>
+    }
 </div>

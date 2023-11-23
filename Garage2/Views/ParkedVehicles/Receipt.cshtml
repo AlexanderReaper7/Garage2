@@ -3,45 +3,45 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Receipt</title>
+    <title>Receipt</title>
 </head>
 <body>
-	<h2><strong>Receipt</strong></h2>
+    <h2><strong>Receipt</strong></h2>
 
-	<h4>Receipt Details</h4>
-	<dl class="row centerContent">
-		<div class="col-sm-12">
-			<dt>Member</dt>
-			<dd>@Model.Member.FullName</dd>
-		</div>
-		<div class="col-sm-12">
-			<dt>Birth Number</dt>
-			<dd>@Model.Member.PersonNumber</dd>
-		</div>
-		<div class="col-sm-12">
-			<dt>Registration Number</dt>
-			<dd>@Model.RegistrationNumber</dd>
-		</div>
-		<div class="col-sm-12">
-			<dt>Check Out Time</dt>
-			<dd>@Model.CheckOutTime</dd>
-		</div>
-		<div class="col-sm-12">
-			<dt>Price</dt>
-			<dd>@Model.Price.ToString("0.00")</dd>
-		</div>
+    <h4>Receipt Details</h4>
+    <dl class="row centerContent">
+        <div class="col-sm-12">
+            <dt>Member</dt>
+            <dd>@Model.Member.FullName</dd>
+        </div>
+        <div class="col-sm-12">
+            <dt>Birth Number</dt>
+            <dd>@Model.Member.PersonNumber</dd>
+        </div>
+        <div class="col-sm-12">
+            <dt>Registration Number</dt>
+            <dd>@Model.RegistrationNumber</dd>
+        </div>
+        <div class="col-sm-12">
+            <dt>Check Out Time</dt>
+            <dd>@Model.CheckOutTime</dd>
+        </div>
+        <div class="col-sm-12">
+            <dt>Price</dt>
+            <dd>@Model.Price.ToString("0.00")</dd>
+        </div>
 
-		<div class="col-sm-12">
-			<dt>Parking Lot</dt>
-			<dd>@Model.ParkingSpaceString</dd>
-		</div>
+        <div class="col-sm-12">
+            <dt>Parking Lot</dt>
+            <dd>@Model.ParkingSpaceString</dd>
+        </div>
 
-	</dl>
+    </dl>
 
-	<!-- Add any additional content for your receipt -->
+    <!-- Add any additional content for your receipt -->
 
-	<button class="btn btn-primary" onclick="window.print()">Print Receipt</button>
+    <button class="btn btn-primary" onclick="window.print()">Print Receipt</button>
 
-	<a class="btn btn-primary" asp-action="Index">Back to List</a>
+    <a class="btn btn-primary" asp-action="Index">Back to List</a>
 </body>
 </html>

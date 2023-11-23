@@ -1,117 +1,117 @@
 ﻿@model Garage2.Models.ViewModels.VehicleStatistics
 
 @{
-	ViewData["Title"] = "Statistics";
+    ViewData["Title"] = "Statistics";
 }
 
 <h2><strong>Statistics</strong></h2>
 <div>
-	<a asp-action="Index">Back to List</a>
+    <a asp-action="Index">Back to List</a>
 </div>
 <table class="table">
-	<thead>
-		<tr>
-			<th>
-				@Html.DisplayNameFor(model => model.NrOfMembers)
-			</th>
-		</tr>
-	</thead>
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.NrOfMembers)
+            </th>
+        </tr>
+    </thead>
 
-	<tbody>
+    <tbody>
 
-		<tr>
-			<td>
-				@Html.DisplayFor(model => model.NrOfMembers)
-			</td>
+        <tr>
+            <td>
+                @Html.DisplayFor(model => model.NrOfMembers)
+            </td>
 
-		</tr>
+        </tr>
 
-	</tbody>
+    </tbody>
 </table>
 
 <table class="table">
-	<thead>
-		<tr>
-			<th>
-				@Html.DisplayNameFor(model => model.Memberships)
-			</th>
-		</tr>
-	</thead>
-	<tbody>
-		@foreach (var kvp in Model.Memberships)
-		{
-			<tr>
-				<td>
-					@Html.DisplayFor(model => kvp.Key)
-					@Html.DisplayFor(model => kvp.Value)
-				</td>
-			</tr>
-		}
-	</tbody>
-
-</table>
-
-<table class="table">
-	<thead>
-		<tr>
-			<th>
-				@Html.DisplayNameFor(model => model.VehicleType)
-			</th>
-		</tr>
-	</thead>
-	<tbody>
-		@foreach (var kvp in Model.VehicleCounts)
-		{
-			<tr>
-				<td>
-					@Html.DisplayFor(model => kvp.Key)
-					@Html.DisplayFor(model => kvp.Value)
-				</td>
-			</tr>
-		}
-	</tbody>
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Memberships)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var kvp in Model.Memberships)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(model => kvp.Key)
+                    @Html.DisplayFor(model => kvp.Value)
+                </td>
+            </tr>
+        }
+    </tbody>
 
 </table>
 
 <table class="table">
-	<thead>
-		<tr>
-			<th>
-				@Html.DisplayNameFor(model => model.NumberOfWheels)
-			</th>
-		</tr>
-	</thead>
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.VehicleType)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var kvp in Model.VehicleCounts)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(model => kvp.Key)
+                    @Html.DisplayFor(model => kvp.Value)
+                </td>
+            </tr>
+        }
+    </tbody>
 
-	<tbody>
-
-		<tr>
-			<td>
-				@Html.DisplayFor(model => model.NumberOfWheels)
-			</td>
-
-		</tr>
-
-	</tbody>
 </table>
 
 <table class="table">
-	<thead>
-		<tr>
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.NumberOfWheels)
+            </th>
+        </tr>
+    </thead>
 
-			<th>
-				@Html.DisplayNameFor(model => model.Price)
-			</th>
-		</tr>
-	</thead>
+    <tbody>
 
-	<tbody>
+        <tr>
+            <td>
+                @Html.DisplayFor(model => model.NumberOfWheels)
+            </td>
 
-		<tr>
-			<td>
-				@Html.DisplayFor(model => model.Price)
-			</td>
+        </tr>
 
-		</tr>
+    </tbody>
+</table>
 
-	</tbody>
+<table class="table">
+    <thead>
+        <tr>
+
+            <th>
+                @Html.DisplayNameFor(model => model.Price)
+            </th>
+        </tr>
+    </thead>
+
+    <tbody>
+
+        <tr>
+            <td>
+                @Html.DisplayFor(model => model.Price)
+            </td>
+
+        </tr>
+
+    </tbody>
 </table>
