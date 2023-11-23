@@ -13,9 +13,9 @@ namespace Garage2.Extensions
             var serviceProvider = scope.ServiceProvider;
             var db = serviceProvider.GetRequiredService<Garage2Context>();
 
-            //If there isn't any parkedVehicles in the database erase it and instantiate defaults
-             //await db.Database.EnsureDeletedAsync();
-            //run all the migrations, if the database doesnt exist create it, if it exist, just update the database
+            // If there isn't any parkedVehicles in the database erase it and instantiate defaults
+            // await db.Database.EnsureDeletedAsync();
+            // Run all the migrations, if the database doesn't exist create it, if it exist, just update the database
             await db.Database.MigrateAsync();
 
             try
