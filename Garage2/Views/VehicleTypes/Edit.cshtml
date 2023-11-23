@@ -32,7 +32,22 @@
         </form>
     </div>
 </div>
-
+<!-- Modal -->
+<div class="modal fade" id="changesModal" tabindex="-1" role="dialog" aria-labelledby="changesModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="changesModalLabel">Changes Made</h5>
+            </div>
+            <div class="modal-body">
+                <p id="changesMessage"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" id="changesModalCloseButton">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
 @section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");

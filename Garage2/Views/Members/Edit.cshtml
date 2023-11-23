@@ -36,13 +36,31 @@
                 <input type="submit" value="Save" class="btn btn-primary m-3" />
                 <a class="btn btn-primary m-3" asp-action="Index">Back to List</a>
             </div>
+            <input type="hidden" id="personNumber" value="@Model.PersonNumber" />
+            <input type="hidden" id="firstName" value="@Model.FirstName" />
+            <input type="hidden" id="lastName" value="@Model.LastName" />
+            <input type="hidden" id="membership" value="@Model.Membership" />
         </form>
     </div>
 </div>
 
-@* <div>
-    <a class="btn btn-primary" asp-action="Index">Back to List</a>
-</div> *@
+
+<!-- Modal -->
+<div class="modal fade" id="changesModal" tabindex="-1" role="dialog" aria-labelledby="changesModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="changesModalLabel">Changes Made</h5>
+            </div>
+            <div class="modal-body">
+                <p id="changesMessage"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" id="changesModalCloseButton">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 @section Scripts {
     <script href="~/js/validation/FirstNameIsNotLastName.js"></script>
