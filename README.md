@@ -6,7 +6,8 @@
 
 ## [Övning 14: Garage 3.0](/Övning14_Garage3.0.pdf)
 
-## User stories
+<details>
+<summary><h2>User stories</h2></summary> 
 
 Then person using this website is the "Parking attendant" for the parking lot aka user.
 The Parking attendant can add/remove members, add/remove vehicles, and see the current state of the parking lot Etc.
@@ -27,7 +28,7 @@ When parking a vehicle the ParkingLotManager class figures out where to parke th
 The Details view for the Member shows the member´s regisered vehicles.
 
 The Details view for the ParkedVehicle shows the member the vehicle is registered to.
-
+</details>
 <details>
 <summary><h2>Other Group's Repositories</h2></summary>
 <ul>
