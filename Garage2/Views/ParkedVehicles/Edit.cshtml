@@ -67,5 +67,51 @@
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+	@{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+	<script>
+		$(document).ready(function () {
+			// Store the initial values of the editable fields
+			var initialValues = {
+				RegistrationNumber: "@Model.RegistrationNumber",
+				Color: "@Model.Color",
+				Brand: "@Model.Brand",
+				Model: "@Model.Model",
+				NumberOfWheels: "@Model.NumberOfWheels"
+				// Add other properties as needed
+			};
+
+			// Track changes when the user edits a field
+			$('input').on('input', function () {
+				var fieldName = $(this).attr('name');
+				if (initialValues[fieldName] !== $(this).val()) {
+					$(this).addClass('edited');
+				} else {
+					$(this).removeClass('edited');
+				}
+			});
+
+			// Show a pop-up when the form is submitted
+			$('form').submit(function (e) {
+				e.preventDefault(); // Prevent the form from submitting normally
+
+				var changedFields = $('input.edited');
+
+				if (changedFields.length > 0) {
+					// Build a message displaying the changes
+					var message = "You have made these changes :\n";
+					changedFields.each(function () {
+						var fieldName = $(this).attr('name');
+						message += fieldName + ": " + initialValues[fieldName] + " => " + $(this).val() + "\n";
+					});
+
+
+					// Show a Bootstrap alert with the message
+					alert(message);
+				}
+
+				// Continue with form submission or other actions
+				this.submit();
+			});
+		});
+	</script>
 }
