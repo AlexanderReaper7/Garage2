@@ -226,20 +226,8 @@
                 </td>
                 <td>
                     <div class="btn-group">
-                        @{
-                            var parkParam = item.ParkingSpace == 0 ? "Park" : "UnPark";
-                        }
-                        @* // Only show Park button if there are available lots
-                        // But always UnPark button if the vehicle is parked *@
-                        @if (parkParam == "UnPark" || AvailableLotsService.IsAvailable(item.VehicleType.Size))
-                        {
-                            <form asp-action="@parkParam">
-                                <input type="hidden" name="id" id="id" value="@item.Id" />
-                                <input type="submit" value="@parkParam" class="btn @parkParam" id="parkButton"
-                                       onmouseover="this.style.backgroundColor='@(parkParam == "Park" ? "rgba(0, 255, 0, 0.7)" : "rgba(255, 0, 0, 0.5)")'"
-                                       onmouseout="this.style.backgroundColor='@(parkParam == "Park" ? "rgba(0, 128, 0, 1)" : "rgba(255, 0, 0, 1)")'" />
-                            </form>
-                        }
+                        @await Html.PartialAsync("_ParkButton", item)
+
                         <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-primary">Edit</a>
                         <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-primary">Details</a>
                         <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-primary">Delete</a>

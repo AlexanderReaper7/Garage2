@@ -98,18 +98,8 @@
                         <td>
 
                             <div class="btn-group">
-                                @{
-                                    var parkParam = item.ParkingSpace == 0 ? "Park" : "UnPark";
-                                }
-                                @* // Only show Park button if there are available lots
-                        // But always UnPark button if the vehicle is parked *@
-                                @if (parkParam == "UnPark" || AvailableLotsService.IsAvailable(item.VehicleType.Size))
-                                {
-                                    <form asp-controller="ParkedVehicles" asp-action="@parkParam">
-                                        <input type="hidden" name="id" id="id" value="@item.Id" />
-                                        <input type="submit" value="@parkParam" class="btn btn-danger" />
-                                    </form>
-                                }
+                                @await Html.PartialAsync("_ParkButton", item)
+
                                 <a asp-controller="ParkedVehicles" asp-action="Edit" asp-route-id="@item.Id" class="btn btn-primary">Edit</a>
                                 <a asp-controller="ParkedVehicles" asp-action="Details" asp-route-id="@item.Id" class="btn btn-primary">Details</a>
                                 <a asp-controller="ParkedVehicles" asp-action="Delete" asp-route-id="@item.Id" class="btn btn-primary">Delete</a>
