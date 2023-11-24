@@ -72,7 +72,7 @@ public class ParkedVehiclesController : Controller
             _ => vehicles.OrderBy(v => v.RegistrationNumber)
         };
 
-        return View("Index", await vehicles.ToListAsync());
+        return View(await vehicles.ToListAsync());
     }
 
     private static IQueryable<ParkedVehicle> ApplyFilters(IQueryable<ParkedVehicle> vehicles, string? regNum = null,
@@ -137,7 +137,7 @@ public class ParkedVehiclesController : Controller
     // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create([Bind("Id,RegistrationNumber,VehicleType,Color,Brand,Model,NumberOfWheels,ArrivalTime,ParkingSpace,ParkingSubSpace")] ParkedVehicle parkedVehicle)
+    public async Task<IActionResult> Create([Bind("MemberPersonNumber,RegistrationNumber,VehicleTypeName,Color,Brand,Model,NumberOfWheels")] ParkedVehicle parkedVehicle)
     {
         // normalize the registration number
         string[] parts = parkedVehicle.RegistrationNumber.ToUpperInvariant().Split(' ');
@@ -151,6 +151,34 @@ public class ParkedVehiclesController : Controller
 
         if (ModelState.IsValid)
         {
+            // Normalize the person number
+            if (string.IsNullOrEmpty(parkedVehicle.MemberPersonNumber))
+            {
+                ModelState.AddModelError("MemberPersonNumber", "Member person number is required");
+                return View(parkedVehicle);
+            }
+
+            var temp = PersonNumber.TryNormalize(parkedVehicle.MemberPersonNumber);
+            if (temp == null)
+            {
+                ModelState.AddModelError("MemberPersonNumber", "Invalid person number");
+                return View(parkedVehicle);
+            }
+            parkedVehicle.MemberPersonNumber = temp;
+            // Ensure the member exists
+            parkedVehicle.Member = await context.Member.FindAsync(parkedVehicle.MemberPersonNumber);
+            if (parkedVehicle.Member == null)
+            {
+                ModelState.AddModelError("MemberPersonNumber", "Member does not exist");
+                return View(parkedVehicle);
+            }
+            // Ensure the vehicle type exists
+            parkedVehicle.VehicleType = await context.VehicleType.FindAsync(parkedVehicle.VehicleTypeName);
+            if (parkedVehicle.VehicleType == null)
+            {
+                ModelState.AddModelError("VehicleTypeName", "Vehicle type does not exist");
+                return View(parkedVehicle);
+            }
             // Check for duplicate registration number
             if (context.ParkedVehicle.Any(v => v.RegistrationNumber == parkedVehicle.RegistrationNumber))
             {
@@ -163,7 +191,7 @@ public class ParkedVehiclesController : Controller
             context.Add(parkedVehicle);
 
             await context.SaveChangesAsync();
-
+            parkedVehicle = context.ParkedVehicle.Include(p => p.Member).Include(p => p.VehicleType).First(p => p.Id == parkedVehicle.Id);
             messageToView.ShowMessageInView("Parked Info:");
             return View("Details", parkedVehicle);
         }

@@ -16,16 +16,22 @@
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
+                <label asp-for="MemberPersonNumber" class="control-label"></label>
+                <input asp-for="MemberPersonNumber" class="form-control" />
+                <span asp-validation-for="MemberPersonNumber" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
                 <label asp-for="RegistrationNumber" class="control-label"></label>
                 <input asp-for="RegistrationNumber" class="form-control" />
                 <span asp-validation-for="RegistrationNumber" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="VehicleType" class="control-label"></label>
-                <select asp-for="VehicleType" class="form-control" asp-items="@service.AvailableTypesAsSelectList()">
+                <label asp-for="VehicleTypeName" class="control-label"></label>
+                <select asp-for="VehicleTypeName" class="form-control" asp-items="@service.AvailableTypesAsSelectList()">
                     <option selected="selected" value="">Select Type</option>
                 </select>
-                <span asp-validation-for="VehicleType" class="text-danger"></span>
+                <span asp-validation-for="VehicleTypeName" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Color" class="control-label"></label>
