@@ -4,7 +4,7 @@
 * text=auto
 
 # Ignore the wwwroot/lib folder for Linguist 
-Garage2/wwwroot/lib* linguist-vendored
+Garage2/wwwroot/lib/* linguist-vendored
 
 ###############################################################################
 # Set default behavior for command prompt diff.
