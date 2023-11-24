@@ -5,7 +5,7 @@
 
 # Ignore the wwwroot/lib folder for Linguist 
 Garage2/wwwroot/lib/* linguist-vendored
-
+lux-bootstrap.css linguist-vendored
 ###############################################################################
 # Set default behavior for command prompt diff.
 #
