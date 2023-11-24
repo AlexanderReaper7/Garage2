@@ -1,7 +1,7 @@
 ﻿@model Garage2.Models.Entities.ParkedVehicle
 @inject Garage2.Services.IAvailableLotsService AvailableLotsService
 @{
-    var isParked = Model.ParkingSpace != 0;
+    var isParked = Model.ParkingSpace == 0;
     var parkParam = isParked ? "Park" : "UnPark";
 }
 @* Only show Park button if there are available lots,But always UnPark button if the vehicle is parked *@
