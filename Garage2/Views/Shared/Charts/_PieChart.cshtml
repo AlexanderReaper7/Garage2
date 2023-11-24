@@ -1,0 +1,37 @@
+﻿@model Dictionary<string, int>
+@{
+    // REMEMBER TO IMPORT _Setup.cshtml
+    // Many thanks to group 3 for the idea
+    // Generate a semi-unique ID so we can use it multiple times on the same page
+    var id = "PieChart" + Random.Shared.Next(); 
+}
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var ctx = document.getElementById('@id').getContext('2d');
+        var @(id) = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: @Html.Raw(Json.Serialize(Model.Keys)),
+                datasets: [{
+                    data: @Html.Raw(Json.Serialize(Model.Values)),
+                    borderWidth: 1
+                }]
+            },
+            plugins: {
+                deferred: {
+                    //xOffset: 150,   // defer until x px of the canvas width are inside the viewport
+                    yOffset: '50%', // defer until x % of the canvas height are inside the viewport
+                    delay: 300      // delay of x ms after the canvas is considered inside the viewport
+                },
+                autocolors: {
+                    mode: 'label'
+                }
+            },
+            options: {
+                responsive: true
+            }
+        });
+    });
+</script>
+
+<canvas id="@id" width="400" height="400"></canvas>

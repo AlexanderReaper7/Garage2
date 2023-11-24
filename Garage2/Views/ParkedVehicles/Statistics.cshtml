@@ -3,112 +3,32 @@
 @{
     ViewData["Title"] = "Statistics";
 }
+@await Html.PartialAsync("Charts/_Setup")
 
 <h2><strong>Statistics</strong></h2>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.NrOfMembers)
-            </th>
-        </tr>
-    </thead>
 
-    <tbody>
 
-        <tr>
-            <td>
-                @Html.DisplayFor(model => model.NrOfMembers)
-            </td>
+<h3>Vehicles</h3>
 
-        </tr>
-
-    </tbody>
-</table>
-
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Memberships)
-            </th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var kvp in Model.Memberships)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(model => kvp.Key)
-                    @Html.DisplayFor(model => kvp.Value)
-                </td>
-            </tr>
-        }
-    </tbody>
-
-</table>
-
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.VehicleType)
-            </th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var kvp in Model.VehicleCounts)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(model => kvp.Key)
-                    @Html.DisplayFor(model => kvp.Value)
-                </td>
-            </tr>
-        }
-    </tbody>
-
-</table>
-
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.NumberOfWheels)
-            </th>
-        </tr>
-    </thead>
-
-    <tbody>
-
-        <tr>
-            <td>
-                @Html.DisplayFor(model => model.NumberOfWheels)
-            </td>
-
-        </tr>
-
-    </tbody>
-</table>
-
-<table class="table">
-    <thead>
-        <tr>
-
-            <th>
-                @Html.DisplayNameFor(model => model.Price)
-            </th>
-        </tr>
-    </thead>
-
-    <tbody>
-
-        <tr>
-            <td>
-                @Html.DisplayFor(model => model.Price)
-            </td>
-
-        </tr>
-
-    </tbody>
-</table>
+<div class="row d-flex justify-content-center">
+    <div class="col-md-6 col-lg-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">By Type</h5>
+                <p class="card-text">
+                    @await Html.PartialAsync("Charts/_PieChart", Model.VehicleCounts)
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6 col-lg-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">By wheel count</h5>
+                <p class="card-text">
+                    @await Html.PartialAsync("Charts/_PieChart", Model.VehicleCounts)
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
