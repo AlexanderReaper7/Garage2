@@ -2,11 +2,7 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js@3.0/dist/chart.min.js"></script>
 @* deferred plugin *@
 <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-deferred@2.0/dist/chartjs-plugin-deferred.min.js"></script>
-@* auto colors plugin *@
-<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-autocolors"></script>
 @* Register globally *@
 <script>
     Chart.register(ChartDeferred);
-    autocolors = window['chartjs-plugin-autocolors'];
-    Chart.register(autocolors);
 </script>
