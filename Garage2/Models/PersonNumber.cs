@@ -31,6 +31,34 @@ public static class PersonNumber
     }
 
     /// <summary>
+    /// Formats a person number in the range 000101-0000 to 991231-9999 into
+    /// a string in the format YYYYMMDDXXXX
+    /// </summary>
+    /// <exception cref="ArgumentException"></exception>
+    public static string Normalize(string personNumber)
+    {
+        var temp = personNumber;
+        Normalize(ref temp);
+        return temp;
+    }
+    /// <summary>
+    /// Formats a person number in the range 000101-0000 to 991231-9999 into
+    /// a string in the format YYYYMMDDXXXX
+    /// </summary>
+    public static string? TryNormalize(string personNumber)
+    {
+        try
+        {
+            return Normalize(personNumber);
+        }
+        catch
+        {
+            return null;
+        }
+    }
+
+
+    /// <summary>
     /// Adds the century to a person number of the format YYMMDD[+|-]XXXX
     /// </summary>
     /// <param name="personNumber"></param>
